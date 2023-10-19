@@ -1,0 +1,23 @@
+# Ignore system and hidden files
+.DS_Store
+Thumbs.db
+
+# Ignore project-specific files/directories
+node_modules/
+build/
+dist/
+.env
+
+# Ignore log files and backup files
+*.log
+*.log.*
+*.bak
+*.swp
+
+# Ignore editor-specific files
+.vscode/
+.idea/
+
+# Ignore dependencies and lock files (you may customize this depending on your stack)
+package-lock.json
+yarn.lock
