@@ -3,6 +3,9 @@ const http = require("http");
 const socketIo = require("socket.io");
 const mongoose = require("mongoose");
 const User = require("./models/userSchema");
+const Message = require("./models/messageSchema");
+const ChatRoom = require("./models/chatRoomSchema");
+const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const dotenv = require("dotenv");
@@ -34,8 +37,7 @@ io.on("connection", (socket) => {
   });
 });
 
-const jwt = require("jsonwebtoken");
-
+// generate JWT token
 const generateToken = (user) => {
   const payload = { userId: user.id };
   const secret = "your-secret-key";
@@ -44,6 +46,7 @@ const generateToken = (user) => {
   return jwt.sign(payload, secret, options);
 };
 
+// verify JWT token
 const verifyToken = (token) => {
   const secret = "your-secret-key";
 
@@ -53,6 +56,20 @@ const verifyToken = (token) => {
   } catch (err) {
     return null;
   }
+};
+
+// auth middleware
+const requireAuth = (req, res, next) => {
+  const token = req.headers.authorization;
+
+  const userId = verifyToken(token);
+  if (!userId) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  // attach userId for future use
+  req.userId = userId;
+  next();
 };
 
 app.post("/register", (req, res) => {
