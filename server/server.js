@@ -5,11 +5,14 @@ const mongoose = require("mongoose");
 const User = require("./models/userSchema");
 const Message = require("./models/messageSchema");
 const ChatRoom = require("./models/chatRoomSchema");
+const apiRouter = require("./routes/api");
 const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const dotenv = require("dotenv");
 dotenv.config();
+
+const SECRET_KEY = process.env.TOKEN_SECRET_KEY;
 
 const app = express();
 const server = http.createServer(app);
@@ -40,18 +43,17 @@ io.on("connection", (socket) => {
 // generate JWT token
 const generateToken = (user) => {
   const payload = { userId: user.id };
-  const secret = "your-secret-key";
+
   const options = { expiresIn: "24h" };
 
-  return jwt.sign(payload, secret, options);
+  return jwt.sign(payload, SECRET_KEY, options);
 };
 
 // verify JWT token
 const verifyToken = (token) => {
-  const secret = "your-secret-key";
 
   try {
-    const decoded = jwt.verify(token, secret);
+    const decoded = jwt.verify(token, SECRET_KEY);
     return decoded.userId;
   } catch (err) {
     return null;
@@ -75,7 +77,7 @@ const requireAuth = (req, res, next) => {
 app.post("/register", (req, res) => {
   const { name, email, password } = req.body;
 
-  // Hash password before saving
+  // Hash password
   bcrypt.hash(password, 10, (err, hashedPassword) => {
     if (err) {
       return res.status(500).json({ error: "Error hashing password" });
@@ -110,13 +112,13 @@ app.post("/login", (req, res) => {
       return res.status(401).json({ error: "User not found" });
     }
 
-    // Verify the password
+    // verify the password
     user.comparePassword(password, (err, isMatch) => {
       if (err || !isMatch) {
         return res.status(401).json({ error: "Incorrect password" });
       }
 
-      // Generate a JWT token and send it back to the client
+      // generate a JWT token and send back to client
       const token = generateToken(user);
       res.json({ token });
     });
