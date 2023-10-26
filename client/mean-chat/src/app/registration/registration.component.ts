@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'; // Import required modules for forms
 import { Router } from '@angular/router'; // Import Router for navigation
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-registration',
@@ -10,7 +11,7 @@ import { Router } from '@angular/router'; // Import Router for navigation
 export class RegistrationComponent {
   registrationForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private router: Router, private http: HttpClient) {
     this.registrationForm = this.formBuilder.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -26,8 +27,17 @@ export class RegistrationComponent {
 
     const userData = this.registrationForm.value;
     // send userData to backend
-   
-    // navigate to the login page
-    this.router.navigate(['/login']);
+    this.http.post('/register', userData).subscribe({
+      next: (response: any) => {
+        const token = response.token;
+
+        localStorage.setItem('mean-chat-token', token);
+
+        this.router.navigate(['/chat']);
+      },
+      error: (error) => {
+        console.error('Registration error', error)
+      }
+    })
   }
 }
