@@ -33,7 +33,7 @@ export class RegistrationComponent {
 
         localStorage.setItem('mean-chat-token', token);
 
-        this.router.navigate(['/chat']);
+        this.router.navigate(['/home']);
       },
       error: (error) => {
         console.error('Registration error', error)

@@ -39,7 +39,7 @@ export class LoginComponent {
         localStorage.setItem('mean-chat-token', token);
 
         // navigate to user home page
-        this.router.navigate(['/chat']);
+        this.router.navigate(['/home']);
       },
       error: (error) => {
         // Handle authentication errors here
