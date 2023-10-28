@@ -8,6 +8,7 @@ import { LoginComponent } from './login/login.component';
 import { ChatComponent } from './chat/chat.component';
 import { HomeComponent } from './home/home.component';
 import { UserChatListComponent } from './user-chat-list/user-chat-list.component';
+import { ContactsComponent } from './contacts/contacts.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { UserChatListComponent } from './user-chat-list/user-chat-list.component
     LoginComponent,
     ChatComponent,
     HomeComponent,
-    UserChatListComponent
+    UserChatListComponent,
+    ContactsComponent
   ],
   imports: [
     BrowserModule,

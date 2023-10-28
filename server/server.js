@@ -13,6 +13,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const SECRET_KEY = process.env.TOKEN_SECRET_KEY;
+const PORT = process.env.PORT;
 
 const app = express();
 const server = http.createServer(app);
@@ -32,6 +33,7 @@ mongoose.Promise = global.Promise;
 // websocket setup
 io.on("connection", (socket) => {
   console.log("A user connected");
+  const userId = socket.handshake.query.userId;
 
   // Handle messages, room joining, etc.
 
