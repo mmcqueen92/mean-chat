@@ -33,24 +33,23 @@ mongoose.Promise = global.Promise;
 // websocket setup
 io.on("connection", async (socket) => {
   console.log("A user connected");
-  const userId = socket.handshake.query.userId;
 
+  // Handle token verification and user data retrieval
   try {
-    //  fetch user
-    const user = await User.findById(userId)
-      .populate({
-        path: "chatrooms",
-        populate: {
-          path: "messages",
-        },
-      })
-      .exec();
+    const userId = await verifyToken(socket.handshake.auth.token); // Extract the user ID from the token
 
-    // Emit the data to the connected client
-    socket.emit("initial-data", { user });
+    if (userId) {
+      const userData = await getUserData(userId);
+
+      // Emit the data to the connected client
+      socket.emit("initial-data", userData);
+    } else {
+      // Handle authentication error
+      socket.emit("authentication-error", "Authentication failed");
+    }
   } catch (error) {
-    console.error("Error fetching user data:", error);
-    // Handle errors here
+    console.error("Socket connection error:", error);
+    // Handle other errors here
   }
 
   socket.on("disconnect", () => {
@@ -68,13 +67,27 @@ const generateToken = (user) => {
 };
 
 // verify JWT token
-const verifyToken = (token) => {
-  try {
-    const decoded = jwt.verify(token, SECRET_KEY);
-    return decoded.userId;
-  } catch (err) {
-    return null;
-  }
+const verifyToken = (userToken) => {
+  return new Promise((resolve, reject) => {
+    jwt.verify(userToken, "your-secret-key", (err, decoded) => {
+      if (err) {
+        reject(err); // Token verification error
+      } else {
+        resolve(decoded.userId); // Successfully verified, resolve with the user ID
+      }
+    });
+  });
+};
+
+const getUserData = (userId) => {
+  return User.findById(userId)
+    .populate({
+      path: "chatrooms",
+      populate: {
+        path: "messages",
+      },
+    })
+    .exec();
 };
 
 // auth middleware
