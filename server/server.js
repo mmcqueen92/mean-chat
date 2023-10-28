@@ -31,11 +31,27 @@ mongoose
 mongoose.Promise = global.Promise;
 
 // websocket setup
-io.on("connection", (socket) => {
+io.on("connection", async (socket) => {
   console.log("A user connected");
   const userId = socket.handshake.query.userId;
 
-  // Handle messages, room joining, etc.
+  try {
+    //  fetch user
+    const user = await User.findById(userId)
+      .populate({
+        path: "chatrooms",
+        populate: {
+          path: "messages",
+        },
+      })
+      .exec();
+
+    // Emit the data to the connected client
+    socket.emit("initial-data", { user });
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    // Handle errors here
+  }
 
   socket.on("disconnect", () => {
     console.log("User disconnected");
@@ -53,7 +69,6 @@ const generateToken = (user) => {
 
 // verify JWT token
 const verifyToken = (token) => {
-
   try {
     const decoded = jwt.verify(token, SECRET_KEY);
     return decoded.userId;

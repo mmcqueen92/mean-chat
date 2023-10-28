@@ -15,6 +15,12 @@ const UserSchema = new Schema({
     type: String,
     required: [true, "The password field is required"],
   },
+  chatrooms: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "ChatRoom",
+    },
+  ],
 });
 
 UserSchema.methods.comparePassword = function (candidatePassword, callback) {
