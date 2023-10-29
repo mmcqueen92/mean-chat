@@ -33,7 +33,7 @@ mongoose.Promise = global.Promise;
 // track online users
 const userSockets = {};
 
-// websocket setup
+// socket connection
 io.on("connection", async (socket) => {
   console.log("A user connected");
 
@@ -42,7 +42,10 @@ io.on("connection", async (socket) => {
     const userId = await verifyToken(socket.handshake.auth.token); // Extract the user ID from the token
 
     if (userId) {
+      // add user to room identified by userId
       socket.join(userId);
+
+      // add user to userSockets to track online users
       userSockets[userId] = socket;
       const userData = await getUserData(userId);
 
