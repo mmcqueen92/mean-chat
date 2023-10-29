@@ -30,6 +30,9 @@ mongoose
 
 mongoose.Promise = global.Promise;
 
+// track online users
+const userSockets = {};
+
 // websocket setup
 io.on("connection", async (socket) => {
   console.log("A user connected");
@@ -39,6 +42,8 @@ io.on("connection", async (socket) => {
     const userId = await verifyToken(socket.handshake.auth.token); // Extract the user ID from the token
 
     if (userId) {
+      socket.join(userId);
+      userSockets[userId] = socket;
       const userData = await getUserData(userId);
 
       // Emit the data to the connected client
@@ -53,7 +58,9 @@ io.on("connection", async (socket) => {
   }
 
   socket.on("disconnect", () => {
+    delete userSockets[userId];
     console.log("User disconnected");
+
   });
 });
 
