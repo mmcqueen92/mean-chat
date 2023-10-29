@@ -165,6 +165,16 @@ app.post("/login", (req, res) => {
   });
 });
 
+app.post("/messages/new", (req, res) => {
+  const { text, recipientId } = req.body;
+
+  // create new message
+
+  // add to chatroom
+
+  res.json({ message: "Message sent successfully" });
+});
+
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
