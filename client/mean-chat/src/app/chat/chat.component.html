@@ -1,7 +1,27 @@
 <div class="chat-container">
-    <div>Messages list!</div>
-    <form>
-        <input type="text"/>
-        <button type="submit">Enter</button>
-    </form>
+  <div class="chat-header">
+    <!-- Add your chat header content here -->
+  </div>
+
+  <div class="chat-messages">
+    <!-- Display chat messages here -->
+    <!-- Example of displaying messages -->
+    <div class="message" *ngFor="let message of messages">
+      <div class="message-sender">{{ message.sender }}</div>
+      <div class="message-content">{{ message.text }}</div>
+    </div>
+  </div>
+
+  <div class="chat-input">
+    <input
+      type="text"
+      [(ngModel)]="messageText"
+      placeholder="Type your message..."
+    />
+    <!-- sendMessage() function definition required -->
+    <button (click)="sendMessage()" class="send-button">Send</button>
+  </div>
 </div>
+
+
+

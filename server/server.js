@@ -165,14 +165,40 @@ app.post("/login", (req, res) => {
   });
 });
 
-app.post("/messages/new", (req, res) => {
-  const { text, recipientId } = req.body;
+app.post("/messages/new", async (req, res) => {
+  try {
+    const { text, sender, chatRoom } = req.body;
 
-  // create new message
+    // create new message
+    const newMessage = new Message({
+      text,
+      sender,
+      chatRoom,
+    });
 
-  // add to chatroom
+    // save new message to db
+    await newMessage.save();
 
-  res.json({ message: "Message sent successfully" });
+    // add message id to corresponding chatroom's message array
+    const chatroom = await ChatRoom.findById(chatRoom);
+    chatroom.messages.push(newMessage._id);
+    await chatroom.save();
+
+    // get chatroom's participants
+    const participants = chatroom.participants;
+
+    // emit the message to the chatroom's participants
+    participants.forEach(async (participantId) => {
+      const participantSocket = userSockets[participantId];
+      if (participantSocket) {
+        participantSocket.emit("message", newMessage); // Emit the message to the user's socket
+      }
+    });
+
+    res.json({ message: "Message sent successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Error sending the message" });
+  }
 });
 
 server.listen(PORT, () => {
