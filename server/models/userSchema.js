@@ -15,12 +15,15 @@ const UserSchema = new Schema({
     type: String,
     required: [true, "The password field is required"],
   },
-  chatrooms: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "ChatRoom",
-    },
-  ],
+  chatrooms: {
+    type: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "ChatRoom",
+      },
+    ],
+    default: [],
+  },
 });
 
 UserSchema.methods.comparePassword = function (candidatePassword, callback) {
@@ -30,6 +33,6 @@ UserSchema.methods.comparePassword = function (candidatePassword, callback) {
   });
 };
 
-const User = mongoose.model('user', UserSchema);
+const User = mongoose.model("user", UserSchema);
 
 module.exports = User;

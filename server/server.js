@@ -5,7 +5,6 @@ const mongoose = require("mongoose");
 const User = require("./models/userSchema");
 const Message = require("./models/messageSchema");
 const ChatRoom = require("./models/chatRoomSchema");
-const apiRouter = require("./routes/api");
 const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
 const cors = require("cors");
