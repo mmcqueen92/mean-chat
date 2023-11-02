@@ -30,7 +30,7 @@ export class LoginComponent {
     const userData = this.loginForm.value;
 
     // send userData to backend
-    this.http.post('/login', userData).subscribe({
+    this.http.post('http://localhost:3001/login', userData).subscribe({
       next: (response: any) => {
         // successful response should return token
         const token = response.token;

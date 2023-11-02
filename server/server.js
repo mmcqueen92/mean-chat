@@ -147,30 +147,30 @@ app.post("/register", async (req, res) => {
   }
 });
 
-app.post("/login", (req, res) => {
-  const { email, password } = req.body;
+app.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-  User.findOne({ email }, (err, user) => {
-    if (err) {
-      return res.status(500).json({ error: "Error finding user" });
-    }
+    const user = await User.findOne({ email }).exec();
 
     if (!user) {
       return res.status(401).json({ error: "User not found" });
     }
 
-    // verify the password
-    user.comparePassword(password, (err, isMatch) => {
-      if (err || !isMatch) {
-        return res.status(401).json({ error: "Incorrect password" });
-      }
+    const isMatch = await user.comparePassword(password);
 
-      // generate a JWT token and send back to client
-      const token = generateToken(user);
-      res.json({ token });
-    });
-  });
+    if (!isMatch) {
+      return res.status(401).json({ error: "Incorrect password" });
+    }
+
+    const token = generateToken(user);
+    res.json({ token });
+  } catch (error) {
+    console.error("Error during login:", error);
+    res.status(500).json({ error: "Error during login" });
+  }
 });
+
 
 app.post("/messages/new", async (req, res) => {
   try {
