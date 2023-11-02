@@ -1,11 +1,12 @@
 const express = require("express");
 const http = require("http");
-const socketIo = require("socket.io");
 const mongoose = require("mongoose");
 const User = require("./models/userSchema");
 const Message = require("./models/messageSchema");
 const ChatRoom = require("./models/chatRoomSchema");
+const socketIo = require("socket.io");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const dotenv = require("dotenv");
@@ -15,11 +16,15 @@ const SECRET_KEY = process.env.TOKEN_SECRET_KEY;
 const PORT = process.env.PORT;
 
 const app = express();
-const server = http.createServer(app);
-const io = socketIo(server);
-
-app.use(bodyParser.json());
 app.use(cors());
+app.use(bodyParser.json());
+const server = http.createServer(app);
+const io = socketIo(server, {
+  cors: {
+    origin: "http://localhost:4200",
+    methods: ["GET", "POST"],
+  },
+});
 
 // connect to DB
 mongoose
@@ -35,19 +40,16 @@ const userSockets = {};
 // socket connection
 io.on("connection", async (socket) => {
   console.log("A user connected");
-
+  let userId;
   // Handle token verification and user data retrieval
   try {
-    const userId = await verifyToken(socket.handshake.auth.token); // Extract the user ID from the token
-
+    userId = await verifyToken(socket.handshake.auth.token); // Extract the user ID from the token
     if (userId) {
       // add user to room identified by userId
       socket.join(userId);
-
       // add user to userSockets to track online users
       userSockets[userId] = socket;
       const userData = await getUserData(userId);
-
       // Emit the data to the connected client
       socket.emit("initial-data", userData);
     } else {
@@ -62,7 +64,6 @@ io.on("connection", async (socket) => {
   socket.on("disconnect", () => {
     delete userSockets[userId];
     console.log("User disconnected");
-
   });
 });
 
@@ -78,7 +79,7 @@ const generateToken = (user) => {
 // verify JWT token
 const verifyToken = (userToken) => {
   return new Promise((resolve, reject) => {
-    jwt.verify(userToken, "your-secret-key", (err, decoded) => {
+    jwt.verify(userToken, SECRET_KEY, (err, decoded) => {
       if (err) {
         reject(err); // Token verification error
       } else {
@@ -88,15 +89,22 @@ const verifyToken = (userToken) => {
   });
 };
 
-const getUserData = (userId) => {
-  return User.findById(userId)
-    .populate({
-      path: "chatrooms",
-      populate: {
-        path: "messages",
-      },
-    })
-    .exec();
+const getUserData = async (userId) => {
+  try {
+    const userData = await User.findById(userId)
+      .populate({
+        path: "chatrooms",
+        populate: {
+          path: "messages",
+        },
+      })
+      .exec();
+    return userData;
+  } catch (error) {
+    // Handle any potential errors that might occur during the database query
+    console.error("Error fetching user data:", error);
+    throw error; // Re-throw the error to handle it at a higher level
+  }
 };
 
 // auth middleware
@@ -113,30 +121,30 @@ const requireAuth = (req, res, next) => {
   next();
 };
 
-app.post("/register", (req, res) => {
+app.post("/register", async (req, res) => {
   const { name, email, password } = req.body;
 
-  // Hash password
-  bcrypt.hash(password, 10, (err, hashedPassword) => {
-    if (err) {
-      return res.status(500).json({ error: "Error hashing password" });
-    }
+  try {
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Create a new user with the hashed password
     const user = new User({
       name,
       email,
-      password: hashedPassword,
+      hashedPassword,
     });
 
-    user.save((err, user) => {
-      if (err) {
-        return res.status(400).json({ error: "Error registering user" });
-      }
+    // Save the user to the database
+    await user.save();
 
-      const token = generateToken(user);
-      res.json({ token });
-    });
-  });
+    // Generate and send the token
+    const token = generateToken(user);
+    res.json({ token });
+  } catch (error) {
+    console.error("Error registering user:", error);
+    res.status(500).json({ error: "Error registering user" });
+  }
 });
 
 app.post("/login", (req, res) => {

@@ -13,13 +13,13 @@ const UserSchema = new Schema({
   },
   hashedPassword: {
     type: String,
-    required: [true, "The password field is required"],
+    required: [true, "The hashedPassword field is required"],
   },
   chatrooms: {
     type: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "ChatRoom",
+        ref: "chatRoom",
       },
     ],
     default: [],

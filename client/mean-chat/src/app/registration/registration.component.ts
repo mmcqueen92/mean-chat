@@ -27,7 +27,7 @@ export class RegistrationComponent {
 
     const userData = this.registrationForm.value;
     // send userData to backend
-    this.http.post('/register', userData).subscribe({
+    this.http.post('http://localhost:3001/register', userData).subscribe({
       next: (response: any) => {
         const token = response.token;
 
