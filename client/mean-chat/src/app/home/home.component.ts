@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ChatListComponent } from '../chat-list/chat-list.component';
 import { ChatComponent } from '../chat/chat.component';
 import { ContactsComponent } from '../contacts/contacts.component';
@@ -18,13 +19,14 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private dataService: DataService,
-    private tokenService: TokenService
+    private tokenService: TokenService,
+    private router: Router,
   ) {}
 
   ngOnInit() {
     console.log('home component initialized');
     this.dataService.userData$.subscribe((data) => {
-      // Check for a valid token before initializing the WebSocket connection
+      // check for token
       if (this.tokenService.getToken()) {
         if (!this.webSocketInitialized) {
           this.socket = io('http://localhost:3001', {
@@ -37,21 +39,20 @@ export class HomeComponent implements OnInit {
           });
 
           this.socket.on('initial-data', (data) => {
-            console.log('we got initial-data baby!!!');
+            console.log('initial-data received');
             this.dataService.setUserData(data);
           });
 
           this.webSocketInitialized = true;
         }
-        // Establish the WebSocket connection
-
-
-        
       } else {
-        // Token is absent or invalid, prompt the user to log in or acquire a valid token
-        // You can implement a dialog, route to a login page, or display a message to the user
         console.log('Token is missing. Please log in.');
       }
     });
+  }
+
+  logout() {
+    this.tokenService.clearToken();
+    this.router.navigate(['/login']);
   }
 }

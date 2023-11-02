@@ -50,7 +50,7 @@ io.on("connection", async (socket) => {
       // add user to userSockets to track online users
       userSockets[userId] = socket;
       const userData = await getUserData(userId);
-      // Emit the data to the connected client
+      // emit data to connected client
       socket.emit("initial-data", userData);
     } else {
       // Handle authentication error
@@ -58,7 +58,7 @@ io.on("connection", async (socket) => {
     }
   } catch (error) {
     console.error("Socket connection error:", error);
-    // Handle other errors here
+    // handle errors
   }
 
   socket.on("disconnect", () => {

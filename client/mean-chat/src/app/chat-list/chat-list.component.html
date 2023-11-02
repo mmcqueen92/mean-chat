@@ -1,4 +1,5 @@
 <div class="chat-list-container">
+  <h3>Chat-List</h3>
   <div class="chat-list">
     <div *ngFor="let chatroom of chatrooms" class="chat-list-item" (click)="setActiveChat(chatroom)">
       {{ chatroom.name }}
