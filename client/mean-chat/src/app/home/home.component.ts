@@ -20,7 +20,7 @@ export class HomeComponent implements OnInit {
   constructor(
     private dataService: DataService,
     private tokenService: TokenService,
-    private router: Router,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -41,6 +41,7 @@ export class HomeComponent implements OnInit {
           this.socket.on('initial-data', (data) => {
             console.log('initial-data received');
             this.dataService.setUserData(data);
+            console.log("initial data: ", data)
           });
 
           this.webSocketInitialized = true;

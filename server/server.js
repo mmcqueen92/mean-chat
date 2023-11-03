@@ -81,6 +81,7 @@ const verifyToken = (userToken) => {
   return new Promise((resolve, reject) => {
     jwt.verify(userToken, SECRET_KEY, (err, decoded) => {
       if (err) {
+        console.error("Token verification error:", err);
         reject(err); // Token verification error
       } else {
         resolve(decoded.userId); // Successfully verified, resolve with the user ID
@@ -88,6 +89,7 @@ const verifyToken = (userToken) => {
     });
   });
 };
+
 
 const getUserData = async (userId) => {
   try {
@@ -98,6 +100,7 @@ const getUserData = async (userId) => {
           path: "messages",
         },
       })
+      .populate("contacts")
       .exec();
     return userData;
   } catch (error) {
@@ -108,10 +111,10 @@ const getUserData = async (userId) => {
 };
 
 // auth middleware
-const requireAuth = (req, res, next) => {
+const requireAuth = async (req, res, next) => {
   const token = req.headers.authorization;
 
-  const userId = verifyToken(token);
+  const userId = await verifyToken(token);
   if (!userId) {
     return res.status(401).json({ error: "Unauthorized" });
   }
@@ -171,11 +174,44 @@ app.post("/login", async (req, res) => {
   }
 });
 
-
-app.post("/messages/new", async (req, res) => {
+app.post("/add-contact", async (req, res, next) => {
   try {
-    const { text, sender, chatRoom } = req.body;
+    const currentUserId = await verifyToken(req.headers.authorization) // The authenticated user's ID
+    if (!currentUserId) {
+      return res.status(404).json({error: "Authorization error"})
+    }
+    const { newContactEmail } = req.body;
 
+    // Validate request body
+    if (!newContactEmail) {
+      return res.status(400).json({ error: "New contact email is required" });
+    }
+
+    // Find the user with the provided email
+    const newContactUser = await User.findOne({ email: newContactEmail });
+
+    // Check if the user exists
+    if (!newContactUser) {
+      return res.status(404).json({ error: "User with that email not found" });
+    }
+
+    // Add the new contact to the user's contacts list
+    const currentUser = await User.findById(currentUserId);
+    currentUser.contacts.push(newContactUser._id);
+
+    // Save the updated user
+    await currentUser.save();
+
+    res.json({ message: "Contact added successfully" });
+  } catch (error) {
+    console.error("Error adding contact:", error);
+    res.status(500).json({ error: "Error adding contact" });
+  }
+});
+
+app.post("/messages/new", async (req, res, next) => {
+  const { text, sender, chatRoom } = req.body;
+  try {
     // create new message
     const newMessage = new Message({
       text,

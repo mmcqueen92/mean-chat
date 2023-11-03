@@ -25,6 +25,15 @@ const UserSchema = new Schema({
     ],
     default: [],
   },
+  contacts: {
+    type: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user",
+      },
+    ],
+    default: [],
+  }
 });
 
 UserSchema.methods.comparePassword = async function (candidatePassword) {
