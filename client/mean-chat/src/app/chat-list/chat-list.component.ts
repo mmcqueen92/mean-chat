@@ -15,6 +15,7 @@ export class ChatListComponent implements OnInit {
     this.dataService.userData$.subscribe((userData) => {
       if (userData) {
         this.chatrooms = userData.chatrooms;
+        console.log("CHATROOMS: ", this.chatrooms)
       } else {
         this.chatrooms = [];
       }

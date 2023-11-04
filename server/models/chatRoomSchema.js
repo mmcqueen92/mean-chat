@@ -6,15 +6,17 @@ const ChatRoomSchema = new Schema({
   participants: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "user",
     },
   ],
-  messages: [
+  messages: {
+    type: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Message",
+      ref: "message",
     },
   ],
+default: []},
 });
 
 const ChatRoom = mongoose.model('chatRoom', ChatRoomSchema)

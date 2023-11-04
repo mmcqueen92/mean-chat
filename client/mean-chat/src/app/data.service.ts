@@ -18,4 +18,8 @@ export class DataService {
   setActiveChat(chat: any) {
     this.activeChatSubject.next(chat);
   }
+
+  getUserData() {
+    return this.userDataSubject.value;
+  }
 }

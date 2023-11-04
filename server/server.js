@@ -90,25 +90,29 @@ const verifyToken = (userToken) => {
   });
 };
 
-
 const getUserData = async (userId) => {
   try {
     const userData = await User.findById(userId)
       .populate({
         path: "chatrooms",
-        populate: {
-          path: "messages",
-        },
+        populate: [
+          {
+            path: "messages",
+          },
+          {
+            path: "participants",
+          },
+        ],
       })
       .populate("contacts")
       .exec();
     return userData;
   } catch (error) {
-    // Handle any potential errors that might occur during the database query
     console.error("Error fetching user data:", error);
-    throw error; // Re-throw the error to handle it at a higher level
+    throw error;
   }
 };
+
 
 // auth middleware
 const requireAuth = async (req, res, next) => {
@@ -176,9 +180,9 @@ app.post("/login", async (req, res) => {
 
 app.post("/add-contact", async (req, res, next) => {
   try {
-    const currentUserId = await verifyToken(req.headers.authorization) // The authenticated user's ID
+    const currentUserId = await verifyToken(req.headers.authorization); // The authenticated user's ID
     if (!currentUserId) {
-      return res.status(404).json({error: "Authorization error"})
+      return res.status(404).json({ error: "Authorization error" });
     }
     const { newContactEmail } = req.body;
 
@@ -208,6 +212,37 @@ app.post("/add-contact", async (req, res, next) => {
     res.status(500).json({ error: "Error adding contact" });
   }
 });
+
+app.post("/create-chat", async (req, res, next) => {
+  const { participants } = req.body;
+
+  try {
+    // Create a new chatroom with the provided participants
+    const chatRoom = new ChatRoom({
+      participants,
+    });
+
+    // Save the chatroom to the database
+    const savedChatRoom = await chatRoom.save();
+
+    for (const participantId of participants) {
+      // Find the participant user
+      const user = await User.findById(participantId);
+
+      if (user) {
+        // Add the chatroom's _id to the user's chatrooms array
+        user.chatrooms.push(savedChatRoom._id);
+        await user.save();
+      }
+    }
+
+    res.json(savedChatRoom);
+  } catch (error) {
+    console.error("Error creating chat room:", error);
+    res.status(500).json({ error: "Error creating chat room" });
+  }
+});
+
 
 app.post("/messages/new", async (req, res, next) => {
   const { text, sender, chatRoom } = req.body;
