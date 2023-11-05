@@ -1,8 +1,24 @@
 <div class="chat-list-container">
   <h3>Chat-List</h3>
   <div class="chat-list">
-    <div *ngFor="let chatroom of chatrooms" class="chat-list-item" (click)="setActiveChat(chatroom)">
-      Chatroom name: {{ chatroom.name }}
+    <div
+      *ngFor="let chatroom of chatrooms; let last = last"
+      class="chat-list-item"
+      (click)="setActiveChat(chatroom)"
+    >
+      <ng-container
+        *ngFor="
+          let participant of chatroom.participants;
+          let lastParticipant = last
+        "
+      >
+        <span *ngIf="participant._id !== (dataService.userData$ | async)?._id">
+          {{ participant.name }}
+          <span *ngIf="!lastParticipant && chatroom.participants.length > 2"
+            >,
+          </span>
+        </span>
+      </ng-container>
     </div>
   </div>
 </div>

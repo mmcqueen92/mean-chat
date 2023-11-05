@@ -12,18 +12,28 @@ export class ChatComponent implements OnInit {
   messageText: string = '';
   recipientId: string = '';
   messages: any[] = [];
+  participants: any[] = [];
+  activeChat: any;
 
   constructor(private dataService: DataService, private http: HttpClient) {}
 
   ngOnInit(): void {
     this.dataService.activeChat$.subscribe((activeChat) => {
+      this.activeChat = activeChat;
       // Update the chat component based on the active chat
       if (activeChat) {
         // Update the UI with messages, participants, etc.
         this.messages = activeChat.messages;
+
+        this.participants = activeChat.participants.filter(
+          (participant: any) => {
+            return participant._id !== this.dataService.getUserData()._id;
+          }
+        );
       } else {
         // Handle the case when no chat is active
         this.messages = [];
+        this.participants = [];
       }
     });
   }

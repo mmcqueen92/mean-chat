@@ -1,7 +1,13 @@
-<div class="chat-container">
+<div class="chat-container" *ngIf="activeChat">
   <div class="chat-header">
-    <!-- chatroom name/title -->
-    
+    <h2>
+      <ng-container
+        *ngFor="let participant of participants; let last = last"
+      >
+        {{ participant.name }}
+        <span *ngIf="!last">, </span>
+      </ng-container>
+    </h2>
   </div>
 
   <div class="chat-messages">
@@ -23,5 +29,4 @@
   </div>
 </div>
 
-
-
+<div class="no-chat-selected" *ngIf="!activeChat">No chat selected</div>

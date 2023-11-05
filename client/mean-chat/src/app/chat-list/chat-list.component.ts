@@ -8,8 +8,11 @@ import { DataService } from '../data.service';
 })
 export class ChatListComponent implements OnInit {
   chatrooms: any[] = [];
+  public dataService: DataService;
 
-  constructor(private dataService: DataService) {}
+  constructor(dataService: DataService) {
+    this.dataService = dataService;
+  }
 
   ngOnInit(): void {
     this.dataService.userData$.subscribe((userData) => {
