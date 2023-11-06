@@ -39,7 +39,6 @@ export class HomeComponent implements OnInit {
           });
 
           this.socket.on('initial-data', (data) => {
-            console.log('initial-data received');
             this.dataService.setUserData(data);
             console.log("initial data: ", data)
           });

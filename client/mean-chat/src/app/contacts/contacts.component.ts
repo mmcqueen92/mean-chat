@@ -26,15 +26,11 @@ export class ContactsComponent implements OnInit {
   }
 
   openChat(contact: any): void {
-    console.log(contact);
     const user = this.dataService.getUserData();
     const currentUserID = user._id;
     const selectedContactID = contact._id;
 
-    console.log('USER.CHATROOMS: ', user.chatrooms);
-
     const chatExists = user.chatrooms.find((chatRoom: any) => {
-      console.log("Checking chatrooms. current chatroom: ", chatRoom)
       let participantIds: any[] = [];
       const participants = chatRoom.participants;
 

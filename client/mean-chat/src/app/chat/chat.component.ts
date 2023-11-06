@@ -14,6 +14,7 @@ export class ChatComponent implements OnInit {
   messages: any[] = [];
   participants: any[] = [];
   activeChat: any;
+  currentUser: string = '';
 
   constructor(private dataService: DataService, private http: HttpClient) {}
 
@@ -36,12 +37,19 @@ export class ChatComponent implements OnInit {
         this.participants = [];
       }
     });
+
+    this.dataService.userData$.subscribe((userData) => {
+      if (userData) {
+        this.currentUser = userData._id;
+      }
+    })
   }
 
   sendMessage() {
     const messageData = {
       text: this.messageText,
-      recipientId: this.recipientId,
+      chatRoom: this.activeChat._id,
+      sender: this.currentUser
     };
 
     this.http
