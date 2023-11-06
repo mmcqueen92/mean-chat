@@ -22,4 +22,21 @@ export class DataService {
   getUserData() {
     return this.userDataSubject.value;
   }
+
+  handleMessage(messageData: any) {
+    const currentData = this.userDataSubject.value;
+    if (currentData && currentData.chatrooms) {
+      const chatroom = currentData.chatrooms.find(
+        (chat: any) => chat._id === messageData.chatRoom
+      );
+
+      if (chatroom) {
+        // Push the incoming message to the chatroom's messages array
+        chatroom.messages.push(messageData);
+
+        // Update user data
+        this.setUserData(currentData);
+      }
+    }
+  }
 }
