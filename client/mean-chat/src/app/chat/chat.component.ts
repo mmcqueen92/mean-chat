@@ -15,24 +15,42 @@ export class ChatComponent implements OnInit {
   participants: any[] = [];
   activeChat: any;
   currentUser: string = '';
+  participantData: any[] = [];
 
   constructor(private dataService: DataService, private http: HttpClient) {}
+
+  getSenderData(senderId: string) {
+    const sender = this.activeChat.participants.find((participant: any) => {
+      return participant._id === senderId;
+    });
+
+    if (sender) {
+      return { _id: sender._id, name: sender.name };
+    }
+
+    return null; // Handle the case where sender data is not found
+  }
 
   ngOnInit(): void {
     this.dataService.activeChat$.subscribe((activeChat) => {
       this.activeChat = activeChat;
-      // Update the chat component based on the active chat
+
       if (activeChat) {
-        // Update the UI with messages, participants, etc.
-        this.messages = activeChat.messages;
+        this.messages = activeChat.messages.map((message: any) => ({
+          ...message,
+          sender: this.getSenderData(message.sender),
+        }));
+
+        this.participantData = activeChat.participants;
 
         this.participants = activeChat.participants.filter(
           (participant: any) => {
             return participant._id !== this.dataService.getUserData()._id;
           }
         );
+        console.log('MESSAGES: ', this.messages);
+        console.log('PARTICIPANTS DATA: ', this.participantData);
       } else {
-        // Handle the case when no chat is active
         this.messages = [];
         this.participants = [];
       }
@@ -42,14 +60,14 @@ export class ChatComponent implements OnInit {
       if (userData) {
         this.currentUser = userData._id;
       }
-    })
+    });
   }
 
   sendMessage() {
     const messageData = {
       text: this.messageText,
       chatRoom: this.activeChat._id,
-      sender: this.currentUser
+      sender: this.currentUser,
     };
 
     this.http
