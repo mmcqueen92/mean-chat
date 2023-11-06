@@ -24,18 +24,22 @@ export class DataService {
   }
 
   handleMessage(messageData: any) {
+
     const currentData = this.userDataSubject.value;
     if (currentData && currentData.chatrooms) {
-      const chatroom = currentData.chatrooms.find(
+
+      const chatroomIndex = currentData.chatrooms.findIndex(
         (chat: any) => chat._id === messageData.chatRoom
       );
 
-      if (chatroom) {
+      if (chatroomIndex > -1) {
+
         // Push the incoming message to the chatroom's messages array
-        chatroom.messages.push(messageData);
+        currentData.chatrooms[chatroomIndex].messages.push(messageData)
 
         // Update user data
         this.setUserData(currentData);
+        this.setActiveChat(currentData.chatrooms[chatroomIndex]);
       }
     }
   }

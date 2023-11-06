@@ -48,8 +48,7 @@ export class ChatComponent implements OnInit {
             return participant._id !== this.dataService.getUserData()._id;
           }
         );
-        console.log('MESSAGES: ', this.messages);
-        console.log('PARTICIPANTS DATA: ', this.participantData);
+
       } else {
         this.messages = [];
         this.participants = [];
