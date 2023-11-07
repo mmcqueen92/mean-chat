@@ -74,7 +74,7 @@ export class ContactsComponent implements OnInit {
     const headers = new HttpHeaders().set('Authorization', `${token}`);
 
     this.http
-      .post('http://localhost:3001/add-contact', newContactEmail, { headers })
+      .post('http://localhost:3001/add-contact', {newContactEmail}, { headers })
       .subscribe({
         next: (response: any) => {
           console.log('Contact added?', response);

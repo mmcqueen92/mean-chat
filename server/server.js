@@ -203,8 +203,12 @@ app.post("/add-contact", async (req, res, next) => {
     const currentUser = await User.findById(currentUserId);
     currentUser.contacts.push(newContactUser._id);
 
-    // Save the updated user
+    // Add user to newcontactuser's contacts list
+
+    newContactUser.contacts.push(currentUser._id);
+    // Save the updated users
     await currentUser.save();
+    await newContactUser.save();
 
     res.json({ message: "Contact added successfully" });
   } catch (error) {
