@@ -55,6 +55,7 @@ export class HomeComponent implements OnInit {
 
   logout() {
     this.tokenService.clearToken();
+    this.dataService.clearAllData();
     this.router.navigate(['/login']);
   }
 }
