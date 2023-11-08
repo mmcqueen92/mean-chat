@@ -4,6 +4,12 @@
       <ng-container *ngFor="let participant of participants; let last = last">
         {{ participant.name }}
         <span *ngIf="!last">, </span>
+        <button
+          *ngIf="!participant.inUserContacts"
+          (click)="addToContacts(participant.email)"
+        >
+          Add to Contacts
+        </button>
       </ng-container>
     </h2>
   </div>

@@ -24,23 +24,32 @@ export class DataService {
   }
 
   handleMessage(messageData: any) {
-
     const currentData = this.userDataSubject.value;
     if (currentData && currentData.chatrooms) {
-
       const chatroomIndex = currentData.chatrooms.findIndex(
         (chat: any) => chat._id === messageData.chatRoom
       );
 
       if (chatroomIndex > -1) {
-
         // Push the incoming message to the chatroom's messages array
-        currentData.chatrooms[chatroomIndex].messages.push(messageData)
+        currentData.chatrooms[chatroomIndex].messages.push(messageData);
 
         // Update user data
         this.setUserData(currentData);
         this.setActiveChat(currentData.chatrooms[chatroomIndex]);
       }
+    }
+  }
+
+  handleContact(contact: any) {
+    const currentData = this.userDataSubject.value;
+    if (
+      !currentData.contacts.find(
+        (existingContact: any) => existingContact._id === contact._id
+      )
+    ) {
+      currentData.contacts.push(contact);
+      this.setUserData(currentData);
     }
   }
 }

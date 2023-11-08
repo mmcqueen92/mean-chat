@@ -78,6 +78,7 @@ export class ContactsComponent implements OnInit {
       .subscribe({
         next: (response: any) => {
           console.log('Contact added?', response);
+          this.dataService.handleContact(response.newContact);
         },
         error: (error) => {
           console.error('Error: ', error);
