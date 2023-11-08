@@ -16,8 +16,10 @@ export class ChatListComponent implements OnInit {
 
   ngOnInit(): void {
     this.dataService.userData$.subscribe((userData) => {
+      console.log("updating userdata?")
       if (userData) {
         this.chatrooms = userData.chatrooms;
+        console.log("new chatrooms in chat-list: ", this.chatrooms)
       } else {
         this.chatrooms = [];
       }

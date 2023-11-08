@@ -225,6 +225,10 @@ app.post("/create-chat", async (req, res, next) => {
     // Save the chatroom to the database
     const savedChatRoom = await chatRoom.save();
 
+    const populatedChatRoom = await ChatRoom.findById(savedChatRoom._id)
+      .populate("participants")
+      .exec();
+
     for (const participantId of participants) {
       // Find the participant user
       const user = await User.findById(participantId);
@@ -236,7 +240,7 @@ app.post("/create-chat", async (req, res, next) => {
       }
     }
 
-    res.json(savedChatRoom);
+    res.json(populatedChatRoom);
   } catch (error) {
     console.error("Error creating chat room:", error);
     res.status(500).json({ error: "Error creating chat room" });

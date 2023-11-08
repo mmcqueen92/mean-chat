@@ -60,6 +60,8 @@ export class ContactsComponent implements OnInit {
         .subscribe({
           next: (response: any) => {
             console.log('Chat created?', response);
+            // CREATE HANDLENEWCHAT METHOD IN DATASERVICE
+            this.dataService.handleNewChat(response);
           },
           error: (error) => {
             console.error('Chat creation error: ', error);
