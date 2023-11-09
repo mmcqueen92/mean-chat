@@ -30,6 +30,7 @@
       type="text"
       [(ngModel)]="messageText"
       placeholder="Type your message..."
+      (keyup.enter)="sendMessage()"
     />
 
     <button (click)="sendMessage()" class="send-button">Send</button>

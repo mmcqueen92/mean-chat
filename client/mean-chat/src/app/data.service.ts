@@ -53,6 +53,17 @@ export class DataService {
     }
   }
 
+  handleContactDeletion(deletedContactId: string) {
+    const currentData = this.userDataSubject.value;
+
+    // Remove the deleted contact from the contacts array
+    currentData.contacts = currentData.contacts.filter(
+      (contact: any) => contact._id !== deletedContactId
+    );
+
+    this.setUserData(currentData);
+  }
+
   handleNewChat(chatroom: any) {
     const currentData = this.userDataSubject.value;
     if (currentData.chatrooms) {

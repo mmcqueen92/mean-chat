@@ -213,6 +213,36 @@ app.post("/add-contact", async (req, res, next) => {
   }
 });
 
+app.post("/delete-contact", async (req, res, next) => {
+  try {
+    const currentUserId = await verifyToken(req.headers.authorization); // The authenticated user's ID
+    if (!currentUserId) {
+      return res.status(404).json({ error: "Authorization error" });
+    }
+    const { contactId } = req.body;
+
+    // Validate request body
+    if (!contactId) {
+      return res.status(400).json({ error: "Contact ID is required" });
+    }
+
+    // Find the user and remove the contact from the contacts list
+    const currentUser = await User.findById(currentUserId);
+    currentUser.contacts.pull(contactId);
+
+    // Save the updated user
+    await currentUser.save();
+
+    res.json({
+      message: "Contact deleted successfully",
+      deletedContactId: contactId,
+    });
+  } catch (error) {
+    console.error("Error deleting contact:", error);
+    res.status(500).json({ error: "Error deleting contact" });
+  }
+});
+
 app.post("/create-chat", async (req, res, next) => {
   const { participants } = req.body;
 

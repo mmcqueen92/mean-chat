@@ -15,6 +15,7 @@
       <li *ngFor="let contact of contacts">
         {{ contact.name }}
         <button (click)="openChat(contact)">Chat</button>
+        <button (click)="deleteContact(contact._id)">Delete Contact</button>
       </li>
     </ul>
   </div>

@@ -47,7 +47,7 @@ export class ContactsComponent implements OnInit {
     });
     if (chatExists) {
       this.dataService.setActiveChat(chatExists);
-      console.log("CHATEXISTS:", chatExists);
+      console.log('CHATEXISTS:', chatExists);
     } else {
       const token = this.tokenService.getToken();
       const headers = new HttpHeaders().set('Authorization', `${token}`);
@@ -76,7 +76,11 @@ export class ContactsComponent implements OnInit {
     const headers = new HttpHeaders().set('Authorization', `${token}`);
 
     this.http
-      .post('http://localhost:3001/add-contact', {newContactEmail}, { headers })
+      .post(
+        'http://localhost:3001/add-contact',
+        { newContactEmail },
+        { headers }
+      )
       .subscribe({
         next: (response: any) => {
           console.log('Contact added?', response);
@@ -89,5 +93,22 @@ export class ContactsComponent implements OnInit {
 
     // clear input field
     this.newContactEmail = '';
+  }
+
+  deleteContact(contactId: string): void {
+    const token = this.tokenService.getToken();
+    const headers = new HttpHeaders().set('Authorization', `${token}`);
+
+    this.http
+      .post('http://localhost:3001/delete-contact', { contactId }, { headers })
+      .subscribe({
+        next: (response: any) => {
+          console.log('Contact deleted?', response);
+          this.dataService.handleContactDeletion(response.deletedContactId);
+        },
+        error: (error) => {
+          console.error('Error: ', error);
+        },
+      });
   }
 }
