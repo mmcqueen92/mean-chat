@@ -1,5 +1,18 @@
 <div class="chat-list-container">
   <h3>Chat-List</h3>
+  <div *ngIf="!createGroupChatForm">
+    <button (click)="toggleGroupChatForm()">Create Group Chat</button>
+  </div>
+  <div *ngIf="createGroupChatForm">
+    <button (click)="toggleGroupChatForm()">Discard</button>
+    <ul>
+      <li *ngFor="let contact of contacts">
+        {{  contact.name  }}
+        <button *ngIf="!this.newGroupChat.includes(contact._id)" (click)="addToGroupChat(contact._id)">Add to Chat</button>
+        <button *ngIf="this.newGroupChat.includes(contact._id)" (click)="removeFromGroupChat(contact._id)">Remove from Chat</button>
+      </li>
+    </ul>
+  </div>
   <div class="chat-list">
     <div
       *ngFor="let chatroom of chatrooms; let last = last"

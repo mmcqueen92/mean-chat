@@ -54,10 +54,8 @@ export class ChatComponent implements OnInit {
             return participant._id !== this.dataService.getUserData()._id;
           }
         );
-        console.log('PARTICIPANTS: ', this.participants);
 
         if (this.participants && this.currentUser) {
-          console.log('PARTICIPANTS + CURRENTUSER');
 
           this.participants = this.participants.map((participant: any) => {
             participant.inUserContacts = this.currentUser.contacts.some(
@@ -66,7 +64,6 @@ export class ChatComponent implements OnInit {
             return participant;
           });
 
-          console.log('Updated PARTICIPANTS: ', this.participants);
         }
       } else {
         this.messages = [];

@@ -8,7 +8,10 @@ import { DataService } from '../data.service';
 })
 export class ChatListComponent implements OnInit {
   chatrooms: any[] = [];
+  contacts: any[] = [];
   public dataService: DataService;
+  createGroupChatForm = false;
+  newGroupChat: any[] = [];
 
   constructor(dataService: DataService) {
     this.dataService = dataService;
@@ -16,16 +19,30 @@ export class ChatListComponent implements OnInit {
 
   ngOnInit(): void {
     this.dataService.userData$.subscribe((userData) => {
-      console.log("updating userdata?")
       if (userData) {
         this.chatrooms = userData.chatrooms;
-        console.log("new chatrooms in chat-list: ", this.chatrooms)
+        this.contacts = userData.contacts;
       } else {
         this.chatrooms = [];
       }
     });
   }
+
   setActiveChat(chat: any) {
     this.dataService.setActiveChat(chat);
+  }
+
+  toggleGroupChatForm() {
+    !this.createGroupChatForm
+      ? (this.createGroupChatForm = true)
+      : (this.createGroupChatForm = false);
+  }
+
+  addToGroupChat(id: string) {
+    this.newGroupChat.push(id);
+  }
+
+  removeFromGroupChat(id: string) {
+    this.newGroupChat = this.newGroupChat.filter((el) => el !== id);
   }
 }
