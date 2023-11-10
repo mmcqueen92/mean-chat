@@ -4,12 +4,17 @@
     <button (click)="toggleGroupChatForm()">Create Group Chat</button>
   </div>
   <div *ngIf="createGroupChatForm">
+    <div>
+      <label for="new_group_name">Title: </label>
+      <input type="text" id="new_group_name" name="new_group_name" [(ngModel)]="newGroupName"/>
+    </div>
+    <button (click)="createGroupChat()">Create</button>
     <button (click)="toggleGroupChatForm()">Discard</button>
     <ul>
       <li *ngFor="let contact of contacts">
         {{  contact.name  }}
-        <button *ngIf="!this.newGroupChat.includes(contact._id)" (click)="addToGroupChat(contact._id)">Add to Chat</button>
-        <button *ngIf="this.newGroupChat.includes(contact._id)" (click)="removeFromGroupChat(contact._id)">Remove from Chat</button>
+        <button *ngIf="!this.newGroupParticipants.includes(contact._id)" (click)="addToGroupChat(contact._id)">Add to Chat</button>
+        <button *ngIf="this.newGroupParticipants.includes(contact._id)" (click)="removeFromGroupChat(contact._id)">Remove from Chat</button>
       </li>
     </ul>
   </div>

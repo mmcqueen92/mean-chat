@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DataService } from '../data.service';
+import { TokenService } from '../token.service';
 
 @Component({
   selector: 'app-chat-list',
@@ -11,9 +13,14 @@ export class ChatListComponent implements OnInit {
   contacts: any[] = [];
   public dataService: DataService;
   createGroupChatForm = false;
-  newGroupChat: any[] = [];
+  newGroupParticipants: string[] = [];
+  newGroupName: string = '';
 
-  constructor(dataService: DataService) {
+  constructor(
+    dataService: DataService,
+    private http: HttpClient,
+    private tokenService: TokenService
+  ) {
     this.dataService = dataService;
   }
 
@@ -33,16 +40,43 @@ export class ChatListComponent implements OnInit {
   }
 
   toggleGroupChatForm() {
-    !this.createGroupChatForm
-      ? (this.createGroupChatForm = true)
-      : (this.createGroupChatForm = false);
+    if (!this.createGroupChatForm) {
+      this.createGroupChatForm = true;
+    } else {
+      this.createGroupChatForm = false;
+      this.newGroupParticipants = [];
+      this.newGroupName = '';
+    }
   }
 
   addToGroupChat(id: string) {
-    this.newGroupChat.push(id);
+    this.newGroupParticipants.push(id);
   }
 
   removeFromGroupChat(id: string) {
-    this.newGroupChat = this.newGroupChat.filter((el) => el !== id);
+    this.newGroupParticipants = this.newGroupParticipants.filter(
+      (el) => el !== id
+    );
+  }
+
+  createGroupChat() {
+    const token = this.tokenService.getToken();
+    const headers = new HttpHeaders().set('Authorization', `${token}`);
+    const participants = this.newGroupParticipants;
+
+    this.http.post(
+      `http://localhost:3001/create-group-chat`,
+      { participants },
+      { headers }
+    )
+    .subscribe({
+      next: (response: any) => {
+        console.log("GROUP CHAT CREATED?: ", response);
+
+      },
+      error: (error) => {
+        console.error("Group chat creation error: ", error);
+      }
+    })
   }
 }
