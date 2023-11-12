@@ -63,20 +63,21 @@ export class ChatListComponent implements OnInit {
     const token = this.tokenService.getToken();
     const headers = new HttpHeaders().set('Authorization', `${token}`);
     const participants = this.newGroupParticipants;
+    const chatName = this.newGroupName;
 
-    this.http.post(
-      `http://localhost:3001/create-group-chat`,
-      { participants },
-      { headers }
-    )
-    .subscribe({
-      next: (response: any) => {
-        console.log("GROUP CHAT CREATED?: ", response);
-
-      },
-      error: (error) => {
-        console.error("Group chat creation error: ", error);
-      }
-    })
+    this.http
+      .post(
+        `http://localhost:3001/create-group-chat`,
+        { participants, chatName },
+        { headers }
+      )
+      .subscribe({
+        next: (response: any) => {
+          console.log('GROUP CHAT CREATED?: ', response);
+        },
+        error: (error) => {
+          console.error('Group chat creation error: ', error);
+        },
+      });
   }
 }

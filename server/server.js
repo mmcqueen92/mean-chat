@@ -113,7 +113,6 @@ const getUserData = async (userId) => {
   }
 };
 
-
 // auth middleware
 const requireAuth = async (req, res, next) => {
   const token = req.headers.authorization;
@@ -206,7 +205,10 @@ app.post("/add-contact", async (req, res, next) => {
     // Save the updated users
     await currentUser.save();
 
-    res.json({ message: "Contact added successfully", newContact: newContactUser });
+    res.json({
+      message: "Contact added successfully",
+      newContact: newContactUser,
+    });
   } catch (error) {
     console.error("Error adding contact:", error);
     res.status(500).json({ error: "Error adding contact" });
@@ -277,6 +279,39 @@ app.post("/create-chat", async (req, res, next) => {
   }
 });
 
+app.post("/create-group-chat", requireAuth, async (req, res, next) => {
+  const userId = req.userId;
+  const { participants, chatName } = req.body;
+
+  try {
+    participants.push(userId);
+    const chatRoom = new ChatRoom({
+      participants,
+      name: chatName,
+    });
+
+    const savedChatRoom = await chatRoom.save();
+
+    const populatedChatRoom = await ChatRoom.findById(savedChatRoom._id)
+      .populate("participants")
+      .exec();
+
+    for (const participantId of participants) {
+      // Find the participant user
+      const user = await User.findById(participantId);
+
+      if (user) {
+        // Add the chatroom's _id to the user's chatrooms array
+        user.chatrooms.push(savedChatRoom._id);
+        await user.save();
+      }
+    }
+    res.json(populatedChatRoom);
+  } catch (error) {
+    console.error("Error creating group chat: ", error);
+    res.status(500).json({ error: "Error creating group chat" });
+  }
+});
 
 app.post("/messages/new", async (req, res, next) => {
   const { text, sender, chatRoom } = req.body;
