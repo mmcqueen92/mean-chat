@@ -6,15 +6,30 @@
   <div *ngIf="createGroupChatForm">
     <div>
       <label for="new_group_name">Title: </label>
-      <input type="text" id="new_group_name" name="new_group_name" [(ngModel)]="newGroupName"/>
+      <input
+        type="text"
+        id="new_group_name"
+        name="new_group_name"
+        [(ngModel)]="newGroupName"
+      />
     </div>
     <button (click)="createGroupChat()">Create</button>
     <button (click)="toggleGroupChatForm()">Discard</button>
     <ul>
       <li *ngFor="let contact of contacts">
-        {{  contact.name  }}
-        <button *ngIf="!this.newGroupParticipants.includes(contact._id)" (click)="addToGroupChat(contact._id)">Add to Chat</button>
-        <button *ngIf="this.newGroupParticipants.includes(contact._id)" (click)="removeFromGroupChat(contact._id)">Remove from Chat</button>
+        {{ contact.name }}
+        <button
+          *ngIf="!this.newGroupParticipants.includes(contact._id)"
+          (click)="addToGroupChat(contact._id)"
+        >
+          Add to Chat
+        </button>
+        <button
+          *ngIf="this.newGroupParticipants.includes(contact._id)"
+          (click)="removeFromGroupChat(contact._id)"
+        >
+          Remove from Chat
+        </button>
       </li>
     </ul>
   </div>
@@ -24,19 +39,24 @@
       class="chat-list-item"
       (click)="setActiveChat(chatroom)"
     >
-      <ng-container
-        *ngFor="
-          let participant of chatroom.participants;
-          let lastParticipant = last
-        "
-      >
-        <span *ngIf="participant._id !== (dataService.userData$ | async)?._id">
-          {{ participant.name }}
-          <span *ngIf="!lastParticipant && chatroom.participants.length > 2"
-            >,
+      <h2 *ngIf="chatroom.name">{{ chatroom.name }}</h2>
+      <h2 *ngIf="!chatroom.name">
+        <ng-container
+          *ngFor="
+            let participant of chatroom.participants;
+            let lastParticipant = last
+          "
+        >
+          <span
+            *ngIf="participant._id !== (dataService.userData$ | async)?._id"
+          >
+            {{ participant.name }}
+            <span *ngIf="!lastParticipant && chatroom.participants.length > 2"
+              >,
+            </span>
           </span>
-        </span>
-      </ng-container>
+        </ng-container>
+      </h2>
     </div>
   </div>
 </div>
