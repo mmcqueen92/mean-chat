@@ -19,7 +19,6 @@ export class ContactsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log('Contacts component initialized');
     this.dataService.userData$.subscribe((data) => {
       this.contacts = data?.contacts;
     });
@@ -47,7 +46,6 @@ export class ContactsComponent implements OnInit {
     });
     if (chatExists) {
       this.dataService.setActiveChat(chatExists);
-      console.log('CHATEXISTS:', chatExists);
     } else {
       const token = this.tokenService.getToken();
       const headers = new HttpHeaders().set('Authorization', `${token}`);
@@ -59,7 +57,6 @@ export class ContactsComponent implements OnInit {
         .post('http://localhost:3001/create-chat', body, { headers })
         .subscribe({
           next: (response: any) => {
-            console.log('Chat created?', response);
             this.dataService.handleNewChat(response);
           },
           error: (error) => {
@@ -82,7 +79,6 @@ export class ContactsComponent implements OnInit {
       )
       .subscribe({
         next: (response: any) => {
-          console.log('Contact added?', response);
           this.dataService.handleContact(response.newContact);
         },
         error: (error) => {
@@ -102,7 +98,6 @@ export class ContactsComponent implements OnInit {
       .post('http://localhost:3001/delete-contact', { contactId }, { headers })
       .subscribe({
         next: (response: any) => {
-          console.log('Contact deleted?', response);
           this.dataService.handleContactDeletion(response.deletedContactId);
         },
         error: (error) => {

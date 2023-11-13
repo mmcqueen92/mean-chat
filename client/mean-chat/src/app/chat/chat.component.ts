@@ -39,7 +39,6 @@ export class ChatComponent implements OnInit {
   ngOnInit(): void {
     this.dataService.activeChat$.subscribe((activeChat) => {
       this.activeChat = activeChat;
-      console.log('ACTIVE CHAT: ', this.activeChat);
 
       if (activeChat) {
         this.messages = activeChat.messages.map((message: any) => ({
@@ -74,7 +73,6 @@ export class ChatComponent implements OnInit {
     this.dataService.userData$.subscribe((userData) => {
       if (userData) {
         this.currentUser = userData;
-        console.log('CURRENT USER: ', this.currentUser);
       }
     });
   }
@@ -95,7 +93,6 @@ export class ChatComponent implements OnInit {
   }
 
   addToContacts(contactEmail: string) {
-    console.log(contactEmail);
     const token = this.tokenService.getToken();
     const headers = new HttpHeaders().set('Authorization', `${token}`);
     const newContactEmail = contactEmail;
@@ -108,7 +105,6 @@ export class ChatComponent implements OnInit {
       )
       .subscribe({
         next: (response: any) => {
-          console.log('Contact added?', response.newContact);
           this.dataService.handleContact(response.newContact);
         },
         error: (error) => {

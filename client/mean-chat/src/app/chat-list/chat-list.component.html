@@ -1,7 +1,7 @@
 <div class="chat-list-container">
   <h3>Chat-List</h3>
   <div *ngIf="!createGroupChatForm">
-    <button (click)="toggleGroupChatForm()">Create Group Chat</button>
+    <button (click)="toggleGroupChatForm()">Create New Chat</button>
   </div>
   <div *ngIf="createGroupChatForm">
     <div>
@@ -15,6 +15,14 @@
     </div>
     <button (click)="createGroupChat()">Create</button>
     <button (click)="toggleGroupChatForm()">Discard</button>
+    <!-- search contacts here -->
+    <app-search-bar
+      (searchQueryChanged)="onSearchQueryChanged($event)"
+    ></app-search-bar>
+    <app-search-display
+      [filteredContacts]="filteredContacts"
+    ></app-search-display>
+
     <ul>
       <li *ngFor="let contact of contacts">
         {{ contact.name }}

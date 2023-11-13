@@ -67,7 +67,6 @@ export class DataService {
   handleNewChat(chatroom: any) {
     const currentData = this.userDataSubject.value;
     if (currentData.chatrooms) {
-      console.log('new chatroom: ', chatroom);
       currentData.chatrooms.push(chatroom);
       this.setUserData(currentData);
       this.setActiveChat(chatroom);

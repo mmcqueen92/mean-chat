@@ -10,6 +10,8 @@ import { HomeComponent } from './home/home.component';
 import { ChatListComponent } from './chat-list/chat-list.component';
 import { ContactsComponent } from './contacts/contacts.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SearchBarComponent } from './search-bar/search-bar.component';
+import { SearchDisplayComponent } from './search-display/search-display.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +22,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     HomeComponent,
     ChatListComponent,
     ContactsComponent,
+    SearchBarComponent,
+    SearchDisplayComponent,
 
   ],
   imports: [

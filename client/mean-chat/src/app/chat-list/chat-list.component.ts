@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DataService } from '../data.service';
 import { TokenService } from '../token.service';
+import { SearchBarComponent } from '../search-bar/search-bar.component';
+import { SearchDisplayComponent } from '../search-display/search-display.component';
 
 @Component({
   selector: 'app-chat-list',
@@ -15,6 +17,7 @@ export class ChatListComponent implements OnInit {
   createGroupChatForm = false;
   newGroupParticipants: string[] = [];
   newGroupName: string = '';
+  filteredContacts: any[] = [];
 
   constructor(
     dataService: DataService,
@@ -47,6 +50,15 @@ export class ChatListComponent implements OnInit {
       this.newGroupParticipants = [];
       this.newGroupName = '';
     }
+  }
+
+  onSearchQueryChanged(searchQuery: any) {
+    // Implement your logic to filter contacts based on the search query
+    this.filteredContacts = this.contacts.filter((contact) => {
+      // Check if the name contains the searchQuery as a substring (case-insensitive)
+      return contact.name.toLowerCase().includes(searchQuery.toLowerCase());
+    });
+    console.log("FILTERED CONTACTS: ", this.filteredContacts)
   }
 
   addToGroupChat(id: string) {

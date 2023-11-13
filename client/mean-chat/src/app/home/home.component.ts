@@ -24,7 +24,6 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    console.log('home component initialized');
     this.dataService.userData$.subscribe((data) => {
       // check for token
       if (this.tokenService.getToken()) {
@@ -35,14 +34,12 @@ export class HomeComponent implements OnInit {
             },
           });
           this.socket.on('message', (data) => {
-            console.log('MESSAGE: ', data);
             // handle incoming messages here
             this.dataService.handleMessage(data);
           });
 
           this.socket.on('initial-data', (data) => {
             this.dataService.setUserData(data);
-            console.log("initial data: ", data)
           });
 
           this.webSocketInitialized = true;
