@@ -24,7 +24,7 @@
     ></app-search-display>
 
     <ul>
-      <li *ngFor="let contact of contacts">
+      <li *ngFor="let contact of filteredContacts">
         {{ contact.name }}
         <button
           *ngIf="!this.newGroupParticipants.includes(contact._id)"
