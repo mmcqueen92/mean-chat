@@ -53,12 +53,11 @@ export class ChatListComponent implements OnInit {
   }
 
   onSearchQueryChanged(searchQuery: any) {
-    // Implement your logic to filter contacts based on the search query
+    
     this.filteredContacts = this.contacts.filter((contact) => {
-      // Check if the name contains the searchQuery as a substring (case-insensitive)
+      // check if name contains searchQuery as a substring (case-insensitive)
       return contact.name.toLowerCase().includes(searchQuery.toLowerCase());
     });
-    console.log("FILTERED CONTACTS: ", this.filteredContacts)
   }
 
   addToGroupChat(id: string) {
@@ -86,6 +85,7 @@ export class ChatListComponent implements OnInit {
       .subscribe({
         next: (response: any) => {
           console.log('GROUP CHAT CREATED?: ', response);
+          this.dataService.handleNewChat(response);
         },
         error: (error) => {
           console.error('Group chat creation error: ', error);
