@@ -314,6 +314,33 @@ app.post("/create-group-chat", requireAuth, async (req, res, next) => {
   }
 });
 
+app.post("/promote-to-admin", requireAuth, async (req, res, next) => {
+  try {
+    const userId = req.userId;
+    const { chatRoomId, chatMemberId } = req.body;
+
+    const chatRoom = await ChatRoom.findById(chatRoomId);
+
+    if (!chatRoom) {
+      return res.status(404).json({ error: "Chat room not found" });
+    }
+
+    if (!chatRoom.admins.includes(userId)) {
+      return res.status(401).json({
+        error: "Unauthorized - You are not the owner of this chat room",
+      });
+    }
+
+    chatRoom.admins.push(chatMemberId);
+    await chatRoom.save();
+    res.json({ message: "Promoted to admin" });
+
+  } catch(error) {
+    console.error("Error promoting to admin: ", error);
+    res.status(500).json({ error: "Error promoting to admin" });
+  }
+})
+
 app.post("/delete-chatroom", requireAuth, async (req, res, next) => {
   try {
     const userId = req.userId;
@@ -328,7 +355,7 @@ app.post("/delete-chatroom", requireAuth, async (req, res, next) => {
     }
 
     // Check if the user is the owner of the chat room
-    if (chatRoom.owner.toString() !== userId) {
+    if (!chatRoom.admins.includes(userId)) {
       return res.status(401).json({
         error: "Unauthorized - You are not the owner of this chat room",
       });

@@ -17,6 +17,7 @@ export class ChatComponent implements OnInit {
   activeChat: any;
   currentUser: any = {};
   participantData: any[] = [];
+  promoteMembers: boolean = false;
 
   constructor(
     private dataService: DataService,
@@ -117,18 +118,49 @@ export class ChatComponent implements OnInit {
 
     console.log('DELETING CHATROOM: ', chatRoomId);
 
-    this.http.post(
-      'http://localhost:3001/delete-chatroom',
-      { chatRoomId },
-      { headers }
-    )
+    this.http
+      .post(
+        'http://localhost:3001/delete-chatroom',
+        { chatRoomId },
+        { headers }
+      )
       .subscribe({
         next: (response: any) => {
-          console.log("DELETED CHATROOM?: ", response);
+          console.log('DELETED CHATROOM?: ', response);
+          // CREATE HANDLEDELETEDCHATROOM IN DATASERVICE
         },
         error: (error) => {
           console.error('Error: ', error);
-        }
-      })
+        },
+      });
+  }
+
+  togglePromoteMembers() {
+    this.promoteMembers
+      ? (this.promoteMembers = false)
+      : (this.promoteMembers = true);
+  }
+
+  promoteToAdmin(chatMemberId: string) {
+    console.log('PROMOTING: ', chatMemberId);
+    const chatRoomId = this.activeChat._id;
+
+    const token = this.tokenService.getToken();
+    const headers = new HttpHeaders().set('Authorization', `${token}`);
+
+    this.http
+      .post(
+        'http://localhost:3001/promote-to-admin',
+        { chatRoomId, chatMemberId },
+        { headers }
+      )
+      .subscribe({
+        next: (response: any) => {
+          console.log('PROMOTED?: ', response);
+        },
+        error: (error) => {
+          console.error('Error: ', error);
+        },
+      });
   }
 }
