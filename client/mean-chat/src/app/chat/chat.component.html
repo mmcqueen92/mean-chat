@@ -12,7 +12,7 @@
         </button>
       </ng-container>
     </h2>
-    <div *ngIf="activeChat.owner === currentUser._id">
+    <div *ngIf="activeChat.admins.includes(currentUser._id)">
       <button (click)="deleteChatRoom(activeChat._id)">Delete Chatroom</button>
     </div>
   </div>

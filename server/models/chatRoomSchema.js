@@ -3,7 +3,15 @@ const Schema = mongoose.Schema;
 
 const ChatRoomSchema = new Schema({
   name: String, // chat room name
-  owner: mongoose.Schema.Types.ObjectId,
+  admins: {
+    type: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user",
+      },
+    ],
+    default: [],
+  },
   participants: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -12,14 +20,15 @@ const ChatRoomSchema = new Schema({
   ],
   messages: {
     type: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "message",
-    },
-  ],
-default: []},
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "message",
+      },
+    ],
+    default: [],
+  },
 });
 
-const ChatRoom = mongoose.model('chatRoom', ChatRoomSchema)
+const ChatRoom = mongoose.model("chatRoom", ChatRoomSchema);
 
 module.exports = ChatRoom;
