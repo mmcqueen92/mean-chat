@@ -84,7 +84,6 @@ export class ChatListComponent implements OnInit {
       )
       .subscribe({
         next: (response: any) => {
-          console.log('GROUP CHAT CREATED?: ', response);
           this.dataService.handleNewChat(response);
         },
         error: (error) => {

@@ -286,6 +286,7 @@ app.post("/create-group-chat", requireAuth, async (req, res, next) => {
   try {
     participants.push(userId);
     const chatRoom = new ChatRoom({
+      owner: userId,
       participants,
       name: chatName,
     });

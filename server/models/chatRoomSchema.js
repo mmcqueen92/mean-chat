@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 const ChatRoomSchema = new Schema({
   name: String, // chat room name
+  owner: mongoose.Schema.Types.ObjectId,
   participants: [
     {
       type: mongoose.Schema.Types.ObjectId,
