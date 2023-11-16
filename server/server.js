@@ -314,6 +314,36 @@ app.post("/create-group-chat", requireAuth, async (req, res, next) => {
   }
 });
 
+app.post("/delete-chatroom", requireAuth, async (req, res, next) => {
+  try {
+    const userId = req.userId;
+    const { chatRoomId } = req.body;
+
+    // Find the chat room
+    const chatRoom = await ChatRoom.findById(chatRoomId);
+
+    // Check if the chat room exists
+    if (!chatRoom) {
+      return res.status(404).json({ error: "Chat room not found" });
+    }
+
+    // Check if the user is the owner of the chat room
+    if (chatRoom.owner.toString() !== userId) {
+      return res.status(401).json({
+        error: "Unauthorized - You are not the owner of this chat room",
+      });
+    }
+
+    // If the user is the owner, delete the chat room
+    await ChatRoom.deleteOne({ _id: chatRoomId });
+
+    res.json({ message: "Chat room deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting chat room:", error);
+    res.status(500).json({ error: "Error deleting chat room" });
+  }
+});
+
 app.post("/messages/new", async (req, res, next) => {
   const { text, sender, chatRoom } = req.body;
   try {

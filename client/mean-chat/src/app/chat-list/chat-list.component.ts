@@ -85,6 +85,9 @@ export class ChatListComponent implements OnInit {
       .subscribe({
         next: (response: any) => {
           this.dataService.handleNewChat(response);
+          this.createGroupChatForm = false;
+          this.newGroupName = '';
+          this.newGroupParticipants = [];
         },
         error: (error) => {
           console.error('Group chat creation error: ', error);

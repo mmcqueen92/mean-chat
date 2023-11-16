@@ -55,14 +55,12 @@ export class ChatComponent implements OnInit {
         );
 
         if (this.participants && this.currentUser) {
-
           this.participants = this.participants.map((participant: any) => {
             participant.inUserContacts = this.currentUser.contacts.some(
               (contact: any) => contact._id === participant._id
             );
             return participant;
           });
-
         }
       } else {
         this.messages = [];
@@ -111,5 +109,26 @@ export class ChatComponent implements OnInit {
           console.error('Error: ', error);
         },
       });
+  }
+
+  deleteChatRoom(chatRoomId: string) {
+    const token = this.tokenService.getToken();
+    const headers = new HttpHeaders().set('Authorization', `${token}`);
+
+    console.log('DELETING CHATROOM: ', chatRoomId);
+
+    this.http.post(
+      'http://localhost:3001/delete-chatroom',
+      { chatRoomId },
+      { headers }
+    )
+      .subscribe({
+        next: (response: any) => {
+          console.log("DELETED CHATROOM?: ", response);
+        },
+        error: (error) => {
+          console.error('Error: ', error);
+        }
+      })
   }
 }
