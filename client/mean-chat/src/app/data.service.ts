@@ -81,6 +81,15 @@ export class DataService {
     }    
   }
 
+  handleDeletedChat(chatRoomId: string) {
+    const currentData = this.userDataSubject.value;
+    currentData.chatrooms.filter((chatroom: any) => {
+      chatroom._id !== chatRoomId;
+    });
+    this.setUserData(currentData);
+    this.setActiveChat(null);
+  }
+
   clearAllData() {
     this.userDataSubject.next(null);
     this.activeChatSubject.next(null);

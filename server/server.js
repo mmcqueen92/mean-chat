@@ -364,7 +364,7 @@ app.post("/delete-chatroom", requireAuth, async (req, res, next) => {
     // If the user is the owner, delete the chat room
     await ChatRoom.deleteOne({ _id: chatRoomId });
 
-    res.json({ message: "Chat room deleted successfully" });
+    res.json({ message: "Chat room deleted successfully", chatRoomId });
   } catch (error) {
     console.error("Error deleting chat room:", error);
     res.status(500).json({ error: "Error deleting chat room" });

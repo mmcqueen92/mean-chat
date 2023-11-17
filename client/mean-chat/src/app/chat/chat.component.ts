@@ -129,6 +129,7 @@ export class ChatComponent implements OnInit {
         next: (response: any) => {
           console.log('DELETED CHATROOM?: ', response);
           // CREATE HANDLEDELETEDCHATROOM IN DATASERVICE
+          this.dataService.handleDeletedChat(response.chatRoomId);
         },
         error: (error) => {
           console.error('Error: ', error);
