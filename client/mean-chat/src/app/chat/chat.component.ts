@@ -39,6 +39,7 @@ export class ChatComponent implements OnInit {
 
   ngOnInit(): void {
     this.dataService.activeChat$.subscribe((activeChat) => {
+      console.log("ACTIVECHAT SUBSCRIPTION")
       this.activeChat = activeChat;
 
       if (activeChat) {
@@ -142,9 +143,7 @@ export class ChatComponent implements OnInit {
   }
 
   promoteToAdmin(chatMemberId: string) {
-    console.log('PROMOTING: ', chatMemberId);
     const chatRoomId = this.activeChat._id;
-
     const token = this.tokenService.getToken();
     const headers = new HttpHeaders().set('Authorization', `${token}`);
 
@@ -156,7 +155,8 @@ export class ChatComponent implements OnInit {
       )
       .subscribe({
         next: (response: any) => {
-          console.log('PROMOTED?: ', response);
+          this.dataService.handleNewAdmin(response);
+          this.promoteMembers = false;
         },
         error: (error) => {
           console.error('Error: ', error);

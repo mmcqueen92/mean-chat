@@ -73,6 +73,14 @@ export class DataService {
     }
   }
 
+  handleNewAdmin(chatroom: any) {
+    const currentActiveChat = this.activeChatSubject.value;
+    if (currentActiveChat) {
+      currentActiveChat.admins = chatroom.admins;
+      this.setActiveChat(currentActiveChat);
+    }    
+  }
+
   clearAllData() {
     this.userDataSubject.next(null);
     this.activeChatSubject.next(null);

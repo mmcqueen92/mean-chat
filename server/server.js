@@ -333,7 +333,7 @@ app.post("/promote-to-admin", requireAuth, async (req, res, next) => {
 
     chatRoom.admins.push(chatMemberId);
     await chatRoom.save();
-    res.json({ message: "Promoted to admin" });
+    res.json(chatRoom);
 
   } catch(error) {
     console.error("Error promoting to admin: ", error);
