@@ -346,22 +346,22 @@ app.post("/delete-chatroom", requireAuth, async (req, res, next) => {
     const userId = req.userId;
     const { chatRoomId } = req.body;
 
-    // Find the chat room
+    // find the chat room
     const chatRoom = await ChatRoom.findById(chatRoomId);
 
-    // Check if the chat room exists
+    // check if chat room exists
     if (!chatRoom) {
       return res.status(404).json({ error: "Chat room not found" });
     }
 
-    // Check if the user is the owner of the chat room
+    // check if user is owner of chatroom
     if (!chatRoom.admins.includes(userId)) {
       return res.status(401).json({
         error: "Unauthorized - You are not the owner of this chat room",
       });
     }
 
-    // If the user is the owner, delete the chat room
+    // if the user is owner, delete chat room
     await ChatRoom.deleteOne({ _id: chatRoomId });
 
     res.json({ message: "Chat room deleted successfully", chatRoomId });

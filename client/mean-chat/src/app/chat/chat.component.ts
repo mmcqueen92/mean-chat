@@ -1,4 +1,3 @@
-// chat.component.ts
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../data.service';
 import { TokenService } from '../token.service';
@@ -34,7 +33,7 @@ export class ChatComponent implements OnInit {
       return { _id: sender._id, name: sender.name };
     }
 
-    return null; // Handle the case where sender data is not found
+    return null; // if sender data is not found
   }
 
   ngOnInit(): void {
@@ -117,8 +116,6 @@ export class ChatComponent implements OnInit {
     const token = this.tokenService.getToken();
     const headers = new HttpHeaders().set('Authorization', `${token}`);
 
-    console.log('DELETING CHATROOM: ', chatRoomId);
-
     this.http
       .post(
         'http://localhost:3001/delete-chatroom',
@@ -127,8 +124,6 @@ export class ChatComponent implements OnInit {
       )
       .subscribe({
         next: (response: any) => {
-          console.log('DELETED CHATROOM?: ', response);
-          // CREATE HANDLEDELETEDCHATROOM IN DATASERVICE
           this.dataService.handleDeletedChat(response.chatRoomId);
         },
         error: (error) => {
