@@ -366,7 +366,7 @@ app.post("/leave-chat", requireAuth, async (req, res, next) => {
       $pull: {chatrooms: chatRoomId}
     });
 
-    res.json({ message: "Left chat successfully" });
+    res.json({ message: "Left chat successfully", chatRoomId });
   } catch (error) {
     console.error("Error leaving chat: ", error);
     res.status(500).json({ error: "Error leaving chat" });

@@ -78,12 +78,12 @@ export class DataService {
     if (currentActiveChat) {
       currentActiveChat.admins = chatroom.admins;
       this.setActiveChat(currentActiveChat);
-    }    
+    }
   }
 
-  handleDeletedChat(chatRoomId: string) {
+  removeChat(chatRoomId: string) {
     const currentData = this.userDataSubject.value;
-    currentData.chatrooms.filter((chatroom: any) => {
+    currentData.chatrooms = currentData.chatrooms.filter((chatroom: any) => {
       chatroom._id !== chatRoomId;
     });
     this.setUserData(currentData);

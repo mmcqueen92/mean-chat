@@ -123,7 +123,7 @@ export class ChatComponent implements OnInit {
       )
       .subscribe({
         next: (response: any) => {
-          this.dataService.handleDeletedChat(response.chatRoomId);
+          this.dataService.removeChat(response.chatRoomId);
         },
         error: (error) => {
           console.error('Error: ', error);
@@ -172,7 +172,7 @@ export class ChatComponent implements OnInit {
       )
       .subscribe({
         next: (response: any) => {
-          console.log("LEAVECHAT RESPONSE: ", response)
+          this.dataService.removeChat(response.chatRoomId);
         },
         error: (error) => {
           console.error('error: ', error);
