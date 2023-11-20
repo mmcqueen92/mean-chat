@@ -32,6 +32,7 @@ export class ChatListComponent implements OnInit {
       if (userData) {
         this.chatrooms = userData.chatrooms;
         this.contacts = userData.contacts;
+        this.filteredContacts = userData.contacts;
       } else {
         this.chatrooms = [];
       }
