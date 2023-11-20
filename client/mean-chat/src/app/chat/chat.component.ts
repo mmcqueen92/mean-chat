@@ -38,7 +38,6 @@ export class ChatComponent implements OnInit {
 
   ngOnInit(): void {
     this.dataService.activeChat$.subscribe((activeChat) => {
-      console.log("ACTIVECHAT SUBSCRIPTION")
       this.activeChat = activeChat;
 
       if (activeChat) {
@@ -156,6 +155,27 @@ export class ChatComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error: ', error);
+        },
+      });
+  }
+
+  leaveChat() {
+    const token = this.tokenService.getToken();
+    const headers = new HttpHeaders().set('Authorization', `${token}`);
+    const chatRoomId = this.activeChat._id;
+
+    this.http
+      .post(
+        'http://localhost:3001/leave-chat',
+        { chatRoomId },
+        { headers }
+      )
+      .subscribe({
+        next: (response: any) => {
+          console.log("LEAVECHAT RESPONSE: ", response)
+        },
+        error: (error) => {
+          console.error('error: ', error);
         },
       });
   }

@@ -334,12 +334,44 @@ app.post("/promote-to-admin", requireAuth, async (req, res, next) => {
     chatRoom.admins.push(chatMemberId);
     await chatRoom.save();
     res.json(chatRoom);
-
-  } catch(error) {
+  } catch (error) {
     console.error("Error promoting to admin: ", error);
     res.status(500).json({ error: "Error promoting to admin" });
   }
-})
+});
+
+app.post("/leave-chat", requireAuth, async (req, res, next) => {
+  try {
+    const userId = req.userId;
+    const { chatRoomId } = req.body;
+
+    const chatRoom = await ChatRoom.findById(chatRoomId);
+
+    if (!chatRoom) {
+      return res.status(404).json({ error: "Chat room not found" });
+    }
+
+    if (chatRoom.admins.length === 1 && chatRoom.admins.includes(userId)) {
+      return res.status(500).json({
+        error:
+          "Current user is only admin of chat. Promote another member before you leave.",
+      });
+    }
+
+    await ChatRoom.findByIdAndUpdate(chatRoomId, {
+      $pull: { admins: userId, participants: userId },
+    });
+
+    await User.findByIdAndUpdate(userId, {
+      $pull: {chatrooms: chatRoomId}
+    });
+
+    res.json({ message: "Left chat successfully" });
+  } catch (error) {
+    console.error("Error leaving chat: ", error);
+    res.status(500).json({ error: "Error leaving chat" });
+  }
+});
 
 app.post("/delete-chatroom", requireAuth, async (req, res, next) => {
   try {

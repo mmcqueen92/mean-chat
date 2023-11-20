@@ -30,6 +30,9 @@
       </h2>
       <button (click)="togglePromoteMembers()">Promote Members</button>
     </div>
+    <div>
+      <button (click)="leaveChat()">Leave Chat</button>
+    </div>
     <div *ngIf="activeChat.admins.includes(currentUser._id)">
       <button (click)="deleteChatRoom(activeChat._id)">Delete Chatroom</button>
     </div>
