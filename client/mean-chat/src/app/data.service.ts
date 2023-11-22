@@ -98,7 +98,7 @@ export class DataService {
   removeChat(chatRoomId: string) {
     const currentData = this.userDataSubject.value;
     currentData.chatrooms = currentData.chatrooms.filter((chatroom: any) => {
-      chatroom._id !== chatRoomId;
+      return chatroom._id !== chatRoomId;
     });
     this.setUserData(currentData);
     this.setActiveChat(null);
