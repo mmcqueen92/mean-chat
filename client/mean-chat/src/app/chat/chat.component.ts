@@ -39,8 +39,8 @@ export class ChatComponent implements OnInit {
   ngOnInit(): void {
     this.dataService.activeChat$.subscribe((activeChat) => {
       this.activeChat = activeChat;
-
       if (activeChat) {
+
         this.messages = activeChat.messages.map((message: any) => ({
           ...message,
           sender: this.getSenderData(message.sender),

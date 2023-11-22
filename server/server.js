@@ -252,6 +252,7 @@ app.post("/create-chat", async (req, res, next) => {
     // Create a new chatroom with the provided participants
     const chatRoom = new ChatRoom({
       participants,
+      name: "User-User"
     });
 
     // Save the chatroom to the database
@@ -417,7 +418,8 @@ app.post("/messages/new", async (req, res, next) => {
     await newMessage.save();
 
     // add message id to corresponding chatroom's message array
-    const chatroom = await ChatRoom.findById(chatRoom);
+    const chatroom = await ChatRoom.findById(chatRoom).populate("participants");
+
     chatroom.messages.push(newMessage._id);
     await chatroom.save();
 
@@ -425,10 +427,10 @@ app.post("/messages/new", async (req, res, next) => {
     const participants = chatroom.participants;
 
     // emit the message to the chatroom's participants
-    participants.forEach(async (participantId) => {
-      const participantSocket = userSockets[participantId];
+    participants.forEach(async (participant) => {
+      const participantSocket = userSockets[participant._id];
       if (participantSocket) {
-        participantSocket.emit("message", newMessage); // Emit the message to the user's socket
+        participantSocket.emit("message", {newMessage, chatroom}); // Emit the message to the user's socket
       }
     });
 

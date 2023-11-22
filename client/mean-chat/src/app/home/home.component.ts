@@ -35,6 +35,7 @@ export class HomeComponent implements OnInit {
           });
           this.socket.on('message', (data) => {
             // handle incoming messages here
+            console.log("DATA UNFUCKED WITH: ", data)
             this.dataService.handleMessage(data);
           });
 
