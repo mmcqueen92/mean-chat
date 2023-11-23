@@ -1,0 +1,33 @@
+body {
+  font-family: 'Open Sans', sans-serif;
+  background-color: #ecf0f1;
+  color: #333;
+}
+
+.action-button {
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+h2 {
+  color: #333;
+}
+
+/* Input Style */
+input {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+/* Label Style */
+label {
+  display: block;
+  margin-bottom: 5px;
+}

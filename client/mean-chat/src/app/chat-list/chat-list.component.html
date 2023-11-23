@@ -1,9 +1,13 @@
 <div class="chat-list-container">
-  <h3>Chat-List</h3>
+  <h3>Chat List</h3>
+
+  <!-- Create New Chat Button -->
   <div *ngIf="!createGroupChatForm">
-    <button (click)="toggleGroupChatForm()">Create New Chat</button>
+    <button class="action-button" (click)="toggleGroupChatForm()">Create New Chat</button>
   </div>
-  <div *ngIf="createGroupChatForm">
+
+  <!-- Create Group Chat Form -->
+  <div *ngIf="createGroupChatForm" class="create-group-chat-form">
     <div>
       <label for="new_group_name">Title: </label>
       <input
@@ -13,26 +17,27 @@
         [(ngModel)]="newGroupName"
       />
     </div>
-    <button (click)="createGroupChat()">Create</button>
-    <button (click)="toggleGroupChatForm()">Discard</button>
-    <app-search-bar
-      (searchQueryChanged)="onSearchQueryChanged($event)"
-    ></app-search-bar>
-    <app-search-display
-      [filteredContacts]="filteredContacts"
-    ></app-search-display>
+    <button class="action-button" (click)="createGroupChat()">Create</button>
+    <button class="action-button" (click)="toggleGroupChatForm()">Discard</button>
 
-    <ul>
+    <!-- Search Bar and Display -->
+    <app-search-bar (searchQueryChanged)="onSearchQueryChanged($event)"></app-search-bar>
+    <app-search-display [filteredContacts]="filteredContacts"></app-search-display>
+
+    <!-- Participants List -->
+    <ul class="participants-list">
       <li *ngFor="let contact of filteredContacts">
         {{ contact.name }}
         <button
           *ngIf="!this.newGroupParticipants.includes(contact._id)"
+          class="action-button"
           (click)="addToGroupChat(contact._id)"
         >
           Add to Chat
         </button>
         <button
           *ngIf="this.newGroupParticipants.includes(contact._id)"
+          class="action-button"
           (click)="removeFromGroupChat(contact._id)"
         >
           Remove from Chat
@@ -40,6 +45,8 @@
       </li>
     </ul>
   </div>
+
+  <!-- Chat List -->
   <div class="chat-list">
     <div
       *ngFor="let chatroom of chatrooms; let last = last"
@@ -48,19 +55,10 @@
     >
       <h2 *ngIf="chatroom.name && (chatroom.name !== 'User-User')">{{ chatroom.name }}</h2>
       <h2 *ngIf="chatroom.name === 'User-User'">
-        <ng-container
-          *ngFor="
-            let participant of chatroom.participants;
-            let lastParticipant = last
-          "
-        >
-          <span
-            *ngIf="participant._id !== (dataService.userData$ | async)?._id"
-          >
+        <ng-container *ngFor="let participant of chatroom.participants; let lastParticipant = last">
+          <span *ngIf="participant._id !== (dataService.userData$ | async)?._id">
             {{ participant.name }}
-            <span *ngIf="!lastParticipant && chatroom.participants.length > 2"
-              >,
-            </span>
+            <span *ngIf="!lastParticipant && chatroom.participants.length > 2">, </span>
           </span>
         </ng-container>
       </h2>
