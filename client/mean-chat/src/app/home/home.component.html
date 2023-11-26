@@ -1,5 +1,7 @@
 <div class="home-container">
-  <button (click)="logout()">Logout</button>
+  <div class="home-top">
+    <button class="btn btn-logout" (click)="logout()">Logout</button>
+  </div>
   <div class="main-container">
     <app-chat-list></app-chat-list>
     <app-chat></app-chat>
