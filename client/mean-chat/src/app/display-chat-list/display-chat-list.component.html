@@ -1,0 +1,24 @@
+<div class="chat-list">
+  <div
+    *ngFor="let chatroom of currentUser.chatrooms; let last = last"
+    class="chat-list-item"
+    (click)="setActiveChat(chatroom)"
+  >
+    <h2 *ngIf="chatroom.name && chatroom.name !== 'User-User'">
+      {{ chatroom.name }}
+    </h2>
+    <h2 *ngIf="chatroom.name === 'User-User'">
+      <ng-container
+        *ngFor="
+          let participant of chatroom.participants;
+          let lastParticipant = last
+        "
+      >
+        <span *ngIf="participant._id !== currentUser._id">
+            {{ participant.name }}
+            <span *ngIf="!lastParticipant && chatroom.participants.length > 2">, </span>
+          </span>
+      </ng-container>
+    </h2>
+  </div>
+</div>
