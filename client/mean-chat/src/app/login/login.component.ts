@@ -10,6 +10,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class LoginComponent {
   loginForm: FormGroup;
+  errorMessage: string = '';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -44,6 +45,7 @@ export class LoginComponent {
       error: (error) => {
         // Handle authentication errors here
         console.error('Authentication error', error);
+        this.errorMessage = "Authentication Error";
         // You can display an error message to the user
       },
     });

@@ -1,22 +1,22 @@
 <div class="chat-container" *ngIf="activeChat">
   <div class="chat-header">
     <div *ngIf="this.promoteMembers">
-      <h2>
+      <h3>
         <ng-container *ngFor="let participant of participants; let last = last">
           {{ participant.name }}
-          <span *ngIf="!last">, </span>
           <button
             *ngIf="!activeChat.admins.includes(participant._id)"
             (click)="promoteToAdmin(participant._id)"
           >
             Promote to Admin
           </button>
+          <span *ngIf="!last">, </span>
         </ng-container>
-      </h2>
+      </h3>
       <button (click)="togglePromoteMembers()">Cancel</button>
     </div>
     <div *ngIf="!this.promoteMembers">
-      <h2>
+      <h3>
         <ng-container *ngFor="let participant of participants; let last = last">
           {{ participant.name }}
           <span *ngIf="!last">, </span>
@@ -27,7 +27,7 @@
             Add to Contacts
           </button>
         </ng-container>
-      </h2>
+      </h3>
       <button
         *ngIf="activeChat.admins && activeChat.admins.includes(currentUser._id)"
         (click)="togglePromoteMembers()"

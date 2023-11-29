@@ -11,4 +11,7 @@
     <button type="submit" class="action-button">Login</button>
   </form>
   <p>Don't have an account? <a [routerLink]="['/register']">Register here</a></p>
+  <div *ngIf="errorMessage">
+    <p>{{errorMessage}}</p>
+  </div>
 </div>

@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ChatListComponent } from '../chat-list/chat-list.component';
-import { ChatComponent } from '../chat/chat.component';
-import { ContactsComponent } from '../contacts/contacts.component';
 import { DataService } from '../data.service';
 import { TokenService } from '../token.service';
 import { io, Socket } from 'socket.io-client';
