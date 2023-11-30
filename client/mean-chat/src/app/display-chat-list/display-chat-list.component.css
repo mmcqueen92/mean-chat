@@ -12,3 +12,11 @@
 .chat-list-item:hover {
   background-color: #f2f2f2; /* Change the background color on hover */
 }
+
+.participant-names {
+  display: flex; /* Use a flex container */
+}
+
+.participant-names span {
+  margin-right: 5px; /* Add some spacing between participant names */
+}

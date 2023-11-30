@@ -7,13 +7,13 @@
       {{ chatroom.name }}
     </div>
     <div *ngIf="!chatroom.name" class="chat-list-item">
-      <div
-        *ngFor="
-          let participant of chatroom.participants;
-          let lastParticipant = last
-        "
-      >
-        <span *ngIf="participant._id !== currentUser._id">
+      <div class="participant-names">
+        <span
+          *ngFor="
+            let participant of chatroom.filteredParticipants;
+            let lastParticipant = last
+          "
+        >
           {{ participant.name }}
           <span *ngIf="!lastParticipant && chatroom.participants.length > 2"
             >,

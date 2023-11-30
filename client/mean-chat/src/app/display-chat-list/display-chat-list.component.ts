@@ -13,7 +13,6 @@ export class DisplayChatListComponent implements OnInit {
     contacts: [],
     email: null,
     name: null,
-    
   };
 
   constructor(private dataService: DataService) {}
@@ -22,6 +21,12 @@ export class DisplayChatListComponent implements OnInit {
     this.dataService.userData$.subscribe((userData) => {
       if (userData) {
         this.currentUser = userData;
+
+        for (const chatroom of this.currentUser.chatrooms) {
+          chatroom.filteredParticipants = chatroom.participants.filter(
+            (participant: any) => participant._id !== this.currentUser._id
+          );
+        }
       }
     });
   }
