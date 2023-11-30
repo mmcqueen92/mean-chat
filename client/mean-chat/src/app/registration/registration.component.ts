@@ -10,6 +10,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class RegistrationComponent {
   registrationForm: FormGroup;
+  errorMessage: string = '';
 
   constructor(private formBuilder: FormBuilder, private router: Router, private http: HttpClient) {
     this.registrationForm = this.formBuilder.group({
@@ -22,6 +23,7 @@ export class RegistrationComponent {
 
   onSubmit() {
     if (this.registrationForm.invalid) {
+      this.errorMessage = "Please enter a valid username, email, and password (password must be at least 6 characters)"
       return;
     }
 
