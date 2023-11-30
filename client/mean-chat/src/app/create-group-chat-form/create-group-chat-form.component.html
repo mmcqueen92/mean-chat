@@ -1,37 +1,43 @@
-<div>
-  <label for="new_group_name">Title: </label>
-  <input
-    type="text"
-    id="new_group_name"
-    name="new_group_name"
-    [(ngModel)]="newGroupName"
-  />
+<div class="create-group-chat-form">
+  <div class="form-group">
+    <label for="new_group_name">Title: </label>
+    <input
+      type="text"
+      id="new_group_name"
+      name="new_group_name"
+      [(ngModel)]="newGroupName"
+    />
+  </div>
+
+  <!-- Search Bar and Display -->
+  <app-search-bar
+    (searchQueryChanged)="onSearchQueryChanged($event)"
+  ></app-search-bar>
+  <app-search-display
+    [filteredContacts]="filteredContacts"
+  ></app-search-display>
+
+  <!-- Participants List -->
+  <ul class="participants-list">
+    <li *ngFor="let contact of filteredContacts">
+      {{ contact.name }}
+      <button
+        *ngIf="!newGroupParticipants.includes(contact._id)"
+        class="action-button"
+        (click)="addToGroupChat(contact._id)"
+      >
+        Add to Chat
+      </button>
+      <button
+        *ngIf="newGroupParticipants.includes(contact._id)"
+        class="remove-button"
+        (click)="removeFromGroupChat(contact._id)"
+      >
+        Remove from Chat
+      </button>
+    </li>
+  </ul>
+  <button class="action-button create-button" (click)="createGroupChat()">
+    Create
+  </button>
 </div>
-<button class="action-button" (click)="createGroupChat()">Create</button>
-
-<!-- Search Bar and Display -->
-<app-search-bar
-  (searchQueryChanged)="onSearchQueryChanged($event)"
-></app-search-bar>
-<app-search-display [filteredContacts]="filteredContacts"></app-search-display>
-
-<!-- Participants List -->
-<ul class="participants-list">
-  <li *ngFor="let contact of filteredContacts">
-    {{ contact.name }}
-    <button
-      *ngIf="!this.newGroupParticipants.includes(contact._id)"
-      class="action-button"
-      (click)="addToGroupChat(contact._id)"
-    >
-      Add to Chat
-    </button>
-    <button
-      *ngIf="this.newGroupParticipants.includes(contact._id)"
-      class="action-button"
-      (click)="removeFromGroupChat(contact._id)"
-    >
-      Remove from Chat
-    </button>
-  </li>
-</ul>

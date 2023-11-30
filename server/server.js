@@ -252,7 +252,7 @@ app.post("/create-chat", async (req, res, next) => {
     // Create a new chatroom with the provided participants
     const chatRoom = new ChatRoom({
       participants,
-      name: "User-User"
+      name: ""
     });
 
     // Save the chatroom to the database
@@ -282,7 +282,7 @@ app.post("/create-chat", async (req, res, next) => {
 
 app.post("/create-group-chat", requireAuth, async (req, res, next) => {
   const userId = req.userId;
-  const { participants, chatName } = req.body;
+  let { participants, chatName } = req.body;
 
   try {
     participants.push(userId);

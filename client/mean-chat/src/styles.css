@@ -1,1 +1,60 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+  font-family: "Open Sans", sans-serif;
+  background-color: #ecf0f1;
+  color: #333;
+}
+
+.action-button {
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.action-button:hover {
+  background-color: #2980b9;
+}
+
+.remove-button {
+  background-color: #e74c3c; /* Red color for remove button */
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.remove-button:hover {
+  background-color: #c0392b; /* Darker red color on hover */
+}
+
+.side-section-container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  color: #333;
+}
+
+/* Input Style */
+input {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+/* Label Style */
+label {
+  display: block;
+  margin-bottom: 5px;
+}

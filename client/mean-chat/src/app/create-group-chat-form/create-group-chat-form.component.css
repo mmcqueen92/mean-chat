@@ -1,0 +1,48 @@
+.create-group-chat-form {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 20px;
+  margin: 20px 0px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.create-button {
+  background-color: #2ecc71; /* Green color for create button */
+}
+
+/* Style the input and label */
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.input-group input {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+/* Style the participants list */
+.participants-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.participants-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding: 10px;
+}
+
+.participants-list li button {
+  margin-left: 10px;
+}
+

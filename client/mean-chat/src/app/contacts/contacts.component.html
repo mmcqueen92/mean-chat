@@ -1,4 +1,4 @@
-<div class="contacts-container">
+<div class="side-section-container">
   <div class="new-contact-form">
     <h2>Add a Contact</h2>
     <form (ngSubmit)="addNewContact()">
@@ -6,7 +6,7 @@
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" [(ngModel)]="newContactEmail" required>
       </div>
-      <button type="submit">Add Contact</button>
+      <button type="submit" class="action-button">Add Contact</button>
     </form>
   </div>
   <div class="contacts-list">
