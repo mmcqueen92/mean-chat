@@ -25,6 +25,7 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.loginForm.invalid) {
+      this.errorMessage = 'Please enter a valid email and password';
       return;
     }
 
