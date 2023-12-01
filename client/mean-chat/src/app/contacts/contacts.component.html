@@ -4,19 +4,40 @@
     <form (ngSubmit)="addNewContact()">
       <div class="form-group">
         <label for="email">Email:</label>
-        <input type="email" id="email" name="email" [(ngModel)]="newContactEmail" required>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          [(ngModel)]="newContactEmail"
+          required
+        />
+        <button type="submit" class="action-button">Add Contact</button>
       </div>
-      <button type="submit" class="action-button">Add Contact</button>
     </form>
   </div>
   <div class="contacts-list">
     <h2>Contacts</h2>
-    <ul>
-      <li *ngFor="let contact of contacts">
-        {{ contact.name }}
-        <button class="action-button create-button" (click)="openChat(contact)">Chat</button>
-        <button class="action-button remove-button" (click)="deleteContact(contact._id)">Delete Contact</button>
-      </li>
-    </ul>
+
+    <div *ngFor="let contact of contacts">
+      <div class="contacts-list-item">
+        <div class="contact-name">
+          {{ contact.name }}
+        </div>
+        <div class="contact-buttons">
+          <button
+            class="action-button create-button"
+            (click)="openChat(contact)"
+          >
+            Chat
+          </button>
+          <button
+            class="action-button remove-button"
+            (click)="deleteContact(contact._id)"
+          >
+            Delete Contact
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
