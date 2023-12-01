@@ -6,17 +6,17 @@
   margin-top: 10px;
   margin-bottom: 10px;
   cursor: pointer;
-  transition: background-color 0.3s; /* Add a smooth transition effect */
+  transition: background-color 0.3s;
 }
 
 .chat-list-item:hover {
-  background-color: #f2f2f2; /* Change the background color on hover */
+  background-color: #f2f2f2;
 }
 
 .participant-names {
-  display: flex; /* Use a flex container */
+  display: flex;
 }
 
 .participant-names span {
-  margin-right: 5px; /* Add some spacing between participant names */
+  margin-right: 5px;
 }

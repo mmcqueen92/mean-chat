@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DataService } from '../data.service';
 import { TokenService } from '../token.service';
@@ -8,8 +8,8 @@ import { TokenService } from '../token.service';
   templateUrl: './create-group-chat-form.component.html',
   styleUrls: ['./create-group-chat-form.component.css'],
 })
-
 export class CreateGroupChatFormComponent implements OnInit {
+  @Input() toggleGroupChatForm!: () => void;
   chatrooms: any[] = [];
   contacts: any[] = [];
   filteredContacts: any[] = [];
@@ -36,7 +36,7 @@ export class CreateGroupChatFormComponent implements OnInit {
 
   onSearchQueryChanged(searchQuery: any) {
     this.filteredContacts = this.contacts.filter((contact) => {
-      // check if name contains searchQuery as a substring (case-insensitive)
+      // check if name contains searchQuery as a substring
       return contact.name.toLowerCase().includes(searchQuery.toLowerCase());
     });
   }
@@ -66,8 +66,7 @@ export class CreateGroupChatFormComponent implements OnInit {
       .subscribe({
         next: (response: any) => {
           this.dataService.handleNewChat(response);
-          this.newGroupName = '';
-          this.newGroupParticipants = [];
+          this.toggleGroupChatForm();
         },
         error: (error) => {
           console.error('Group chat creation error: ', error);

@@ -1,16 +1,21 @@
 <div class="side-section-container">
   <h3>Your Chats:</h3>
 
-  <!-- Create New Chat Button -->
+  <!-- create new chat button -->
   <div *ngIf="!createGroupChatForm">
-    <button class="action-button" (click)="toggleGroupChatForm()">Create New Chat</button>
+    <button class="action-button" (click)="toggleGroupChatForm()">
+      Create New Chat
+    </button>
     <app-display-chat-list></app-display-chat-list>
   </div>
 
-  <!-- Create Group Chat Form -->
+  <!-- create group chat form -->
   <div *ngIf="createGroupChatForm" class="create-group-chat-form">
-    <button class="action-button" (click)="toggleGroupChatForm()">Discard</button>
-    <app-create-group-chat-form></app-create-group-chat-form>
+    <button class="action-button" (click)="toggleGroupChatForm()">
+      Discard
+    </button>
+    <app-create-group-chat-form
+      [toggleGroupChatForm]="toggleGroupChatForm"
+    ></app-create-group-chat-form>
   </div>
-
 </div>

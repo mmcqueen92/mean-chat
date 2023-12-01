@@ -43,7 +43,7 @@ io.on("connection", async (socket) => {
   let userId;
   // Handle token verification and user data retrieval
   try {
-    userId = await verifyToken(socket.handshake.auth.token); // Extract the user ID from the token
+    userId = await verifyToken(socket.handshake.auth.token); // extract user ID from token
     if (userId) {
       // add user to room identified by userId
       socket.join(userId);
@@ -53,7 +53,7 @@ io.on("connection", async (socket) => {
       // emit data to connected client
       socket.emit("initial-data", userData);
     } else {
-      // Handle authentication error
+      // handle authentication error
       socket.emit("authentication-error", "Authentication failed");
     }
   } catch (error) {
@@ -179,30 +179,30 @@ app.post("/login", async (req, res) => {
 
 app.post("/add-contact", async (req, res, next) => {
   try {
-    const currentUserId = await verifyToken(req.headers.authorization); // The authenticated user's ID
+    const currentUserId = await verifyToken(req.headers.authorization);
     if (!currentUserId) {
       return res.status(404).json({ error: "Authorization error" });
     }
     const { newContactEmail } = req.body;
 
-    // Validate request body
+    // validate request body
     if (!newContactEmail) {
       return res.status(400).json({ error: "New contact email is required" });
     }
 
-    // Find the user with the provided email
+    // find user with provided email
     const newContactUser = await User.findOne({ email: newContactEmail });
 
-    // Check if the user exists
+    // check if the user exists
     if (!newContactUser) {
       return res.status(404).json({ error: "User with that email not found" });
     }
 
-    // Add the new contact to the user's contacts list
+    // add new contact to user's contacts list
     const currentUser = await User.findById(currentUserId);
     currentUser.contacts.push(newContactUser._id);
 
-    // Save the updated users
+    // save updated users
     await currentUser.save();
 
     res.json({
@@ -217,22 +217,22 @@ app.post("/add-contact", async (req, res, next) => {
 
 app.post("/delete-contact", async (req, res, next) => {
   try {
-    const currentUserId = await verifyToken(req.headers.authorization); // The authenticated user's ID
+    const currentUserId = await verifyToken(req.headers.authorization);
     if (!currentUserId) {
       return res.status(404).json({ error: "Authorization error" });
     }
     const { contactId } = req.body;
 
-    // Validate request body
+    // validate request body
     if (!contactId) {
       return res.status(400).json({ error: "Contact ID is required" });
     }
 
-    // Find the user and remove the contact from the contacts list
+    // find user and remove contact from contacts list
     const currentUser = await User.findById(currentUserId);
     currentUser.contacts.pull(contactId);
 
-    // Save the updated user
+    // save updated user
     await currentUser.save();
 
     res.json({
@@ -249,13 +249,12 @@ app.post("/create-chat", async (req, res, next) => {
   const { participants } = req.body;
 
   try {
-    // Create a new chatroom with the provided participants
+    // create new chatroom with the provided participants
     const chatRoom = new ChatRoom({
-      participants,
-      name: ""
+      participants
     });
 
-    // Save the chatroom to the database
+    // save chatroom to database
     const savedChatRoom = await chatRoom.save();
 
     const populatedChatRoom = await ChatRoom.findById(savedChatRoom._id)
@@ -263,11 +262,11 @@ app.post("/create-chat", async (req, res, next) => {
       .exec();
 
     for (const participantId of participants) {
-      // Find the participant user
+      // find user
       const user = await User.findById(participantId);
 
       if (user) {
-        // Add the chatroom's _id to the user's chatrooms array
+        // add chatroom's _id to user's chatrooms array
         user.chatrooms.push(savedChatRoom._id);
         await user.save();
       }
@@ -299,11 +298,11 @@ app.post("/create-group-chat", requireAuth, async (req, res, next) => {
       .exec();
 
     for (const participantId of participants) {
-      // Find the participant user
+
       const user = await User.findById(participantId);
 
       if (user) {
-        // Add the chatroom's _id to the user's chatrooms array
+        // add chatroom's _id to user's chatrooms array
         user.chatrooms.push(savedChatRoom._id);
         await user.save();
       }
@@ -430,7 +429,7 @@ app.post("/messages/new", async (req, res, next) => {
     participants.forEach(async (participant) => {
       const participantSocket = userSockets[participant._id];
       if (participantSocket) {
-        participantSocket.emit("message", {newMessage, chatroom}); // Emit the message to the user's socket
+        participantSocket.emit("message", {newMessage, chatroom});
       }
     });
 
