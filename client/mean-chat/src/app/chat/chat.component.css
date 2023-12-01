@@ -5,3 +5,34 @@
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
+.message {
+  background-color: #3498db;
+  color: #fff;
+  border-radius: 8px;
+  margin: 8px 0;
+  padding: 10px;
+  max-width: 70%;
+}
+
+.message-sender {
+  font-weight: bold;
+}
+
+.message-content {
+  margin-top: 5px;
+}
+
+.send-button {
+  background-color: #2ecc71; 
+  color: #fff; 
+  border: none; 
+  padding: 10px 15px; 
+  border-radius: 5px; 
+  cursor: pointer; 
+  transition: background-color 0.3s ease; 
+}
+
+.send-button:hover {
+  background-color: #27ae60; 
+}

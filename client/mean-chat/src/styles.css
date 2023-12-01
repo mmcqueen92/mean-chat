@@ -28,18 +28,30 @@ body {
   background-color: #27ae60;
 }
 
-.remove-button {
-  background-color: #e74c3c;
-  color: #fff;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-right: 10px;
+.warning-button {
+  background-color: #e67e22;
 }
 
-.remove-button:hover {
+.warning-button:hover {
+  background-color: #d35400;
+}
+
+.danger-button {
+  background-color: #e74c3c;
+}
+
+.danger-button:hover {
   background-color: #c0392b;
+}
+
+.settings-button {
+  background-color: #dcdcdc;
+  color: #333;
+  margin: 10px 0px;
+}
+
+.settings-button:hover {
+  background-color: #c0c0c0;
 }
 
 .side-section-container {

@@ -30,7 +30,7 @@
       </button>
       <button
         *ngIf="newGroupParticipants.includes(contact._id)"
-        class="remove-button"
+        class="action-button danger-button"
         (click)="removeFromGroupChat(contact._id)"
       >
         Remove from Chat

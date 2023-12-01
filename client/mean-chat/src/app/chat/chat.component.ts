@@ -17,6 +17,7 @@ export class ChatComponent implements OnInit {
   currentUser: any = {};
   participantData: any[] = [];
   promoteMembers: boolean = false;
+  chatControls: boolean = false;
 
   constructor(
     private dataService: DataService,
@@ -40,7 +41,6 @@ export class ChatComponent implements OnInit {
     this.dataService.activeChat$.subscribe((activeChat) => {
       this.activeChat = activeChat;
       if (activeChat) {
-
         this.messages = activeChat.messages.map((message: any) => ({
           ...message,
           sender: this.getSenderData(message.sender),
@@ -131,6 +131,12 @@ export class ChatComponent implements OnInit {
       });
   }
 
+  toggleChatControls() {
+    this.chatControls
+      ? (this.chatControls = false)
+      : (this.chatControls = true);
+  }
+
   togglePromoteMembers() {
     this.promoteMembers
       ? (this.promoteMembers = false)
@@ -165,11 +171,7 @@ export class ChatComponent implements OnInit {
     const chatRoomId = this.activeChat._id;
 
     this.http
-      .post(
-        'http://localhost:3001/leave-chat',
-        { chatRoomId },
-        { headers }
-      )
+      .post('http://localhost:3001/leave-chat', { chatRoomId }, { headers })
       .subscribe({
         next: (response: any) => {
           this.dataService.removeChat(response.chatRoomId);

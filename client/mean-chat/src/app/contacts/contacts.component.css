@@ -16,3 +16,7 @@
   cursor: pointer;
   transition: background-color 0.3s;
 }
+
+.new-contact-input {
+  margin-right: 10px;
+}

@@ -9,6 +9,7 @@
           id="email"
           name="email"
           [(ngModel)]="newContactEmail"
+          class="new-contact-input"
           required
         />
         <button type="submit" class="action-button">Add Contact</button>
@@ -31,7 +32,7 @@
             Chat
           </button>
           <button
-            class="action-button remove-button"
+            class="action-button danger-button"
             (click)="deleteContact(contact._id)"
           >
             Delete Contact
