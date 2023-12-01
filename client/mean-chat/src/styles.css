@@ -13,14 +13,23 @@ body {
   border-radius: 5px;
   cursor: pointer;
   margin-right: 10px;
+  transition: background-color 0.3s ease;
 }
 
 .action-button:hover {
   background-color: #2980b9;
 }
 
+.create-button {
+  background-color: #2ecc71;
+}
+
+.create-button:hover {
+  background-color: #27ae60;
+}
+
 .remove-button {
-  background-color: #e74c3c; /* Red color for remove button */
+  background-color: #e74c3c;
   color: #fff;
   border: none;
   padding: 10px 15px;
@@ -30,7 +39,7 @@ body {
 }
 
 .remove-button:hover {
-  background-color: #c0392b; /* Darker red color on hover */
+  background-color: #c0392b;
 }
 
 .side-section-container {
@@ -45,7 +54,6 @@ h2 {
   color: #333;
 }
 
-/* Input Style */
 input {
   padding: 8px;
   border: 1px solid #ddd;
@@ -53,7 +61,6 @@ input {
   margin-bottom: 10px;
 }
 
-/* Label Style */
 label {
   display: block;
   margin-bottom: 5px;

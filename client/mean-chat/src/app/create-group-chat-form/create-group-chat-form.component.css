@@ -10,10 +10,6 @@
   margin-bottom: 15px;
 }
 
-.create-button {
-  background-color: #2ecc71; /* Green color for create button */
-}
-
 /* Style the input and label */
 .input-group label {
   display: block;
