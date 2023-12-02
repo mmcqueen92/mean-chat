@@ -37,7 +37,11 @@
       >
         Promote Members
       </button>
-      <button *ngIf="activeChat.name !== 'User-User'" (click)="leaveChat()" class="action-button warning-button">
+      <button
+        *ngIf="activeChat.name !== 'User-User'"
+        (click)="leaveChat()"
+        class="action-button warning-button"
+      >
         Leave Chat
       </button>
       <button
@@ -48,27 +52,40 @@
         Delete Chatroom
       </button>
     </div>
-    <button class="action-button settings-button" (click)="toggleChatControls()">Chat Controls</button>
+    <button
+      class="action-button settings-button"
+      (click)="toggleChatControls()"
+    >
+      Chat Controls
+    </button>
   </div>
 
-  <div class="chat-messages">
+  <div class="chat-messages" #chatMessagesContainer>
     <!-- list of chat messages -->
-    <div class="message" *ngFor="let message of messages">
-      <div class="message-sender">{{ message.sender.name }}:</div>
-      <div class="message-content">{{ message.text }}</div>
+    <div class="message-container" *ngFor="let message of messages">
+      <div *ngIf="message.sender._id !== currentUser._id" class="participant-message">
+        <div class="message-sender">{{ message.sender.name }}:</div>
+        <div class="message-content">{{ message.text }}</div>
+      </div>
+      <div *ngIf="message.sender._id === currentUser._id" class="user-message">
+        <div class="message-sender">{{ message.sender.name }}:</div>
+        <div class="message-content">{{ message.text }}</div>
+      </div>
     </div>
     <div *ngIf="messages.length === 0" class="no-messages">
       Send a message to get started
     </div>
   </div>
 
-  <div class="chat-input">
-    <input
+  <div class="chat-input-container">
+    <textarea
       type="text"
+      rows="4"
       [(ngModel)]="messageText"
       placeholder="Type your message..."
       (keyup.enter)="sendMessage()"
-    />
+      class="chat-input"
+    ></textarea>
 
     <button (click)="sendMessage()" class="send-button">Send</button>
   </div>

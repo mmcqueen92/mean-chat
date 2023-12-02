@@ -45,7 +45,7 @@ export class ChatComponent implements OnInit {
           ...message,
           sender: this.getSenderData(message.sender),
         }));
-
+        this.messages.reverse();
         this.participantData = activeChat.participants;
 
         this.participants = activeChat.participants.filter(

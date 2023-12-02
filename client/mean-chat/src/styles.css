@@ -3,6 +3,8 @@ body {
   font-family: "Open Sans", sans-serif;
   background-color: #ecf0f1;
   color: #333;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .action-button {
@@ -55,7 +57,7 @@ body {
 }
 
 .side-section-container {
-  max-width: 800px;
+  width: 20vw;
   margin: 20px auto;
   padding: 20px;
   background-color: #fff;

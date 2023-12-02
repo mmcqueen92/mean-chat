@@ -251,7 +251,7 @@ app.post("/create-chat", async (req, res, next) => {
   try {
     // create new chatroom with the provided participants
     const chatRoom = new ChatRoom({
-      participants
+      participants,
     });
 
     // save chatroom to database
@@ -298,7 +298,6 @@ app.post("/create-group-chat", requireAuth, async (req, res, next) => {
       .exec();
 
     for (const participantId of participants) {
-
       const user = await User.findById(participantId);
 
       if (user) {
@@ -363,7 +362,7 @@ app.post("/leave-chat", requireAuth, async (req, res, next) => {
     });
 
     await User.findByIdAndUpdate(userId, {
-      $pull: {chatrooms: chatRoomId}
+      $pull: { chatrooms: chatRoomId },
     });
 
     res.json({ message: "Left chat successfully", chatRoomId });
@@ -429,7 +428,7 @@ app.post("/messages/new", async (req, res, next) => {
     participants.forEach(async (participant) => {
       const participantSocket = userSockets[participant._id];
       if (participantSocket) {
-        participantSocket.emit("message", {newMessage, chatroom});
+        participantSocket.emit("message", { newMessage, chatroom });
       }
     });
 
