@@ -62,7 +62,7 @@ export class ChatComponent implements OnInit {
             return participant;
           });
         }
-        console.log('PARTICIPANTS: ', this.participants);
+
       } else {
         this.messages = [];
         this.participants = [];

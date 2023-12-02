@@ -1,4 +1,7 @@
 <div class="side-section-container">
-  <app-new-contact-form></app-new-contact-form>
-  <app-contacts-list></app-contacts-list>
+  <h2>Contacts</h2>
+  <button *ngIf="!newContactForm" (click)="toggleNewContactForm()">Add New Contact</button>
+  <button *ngIf="newContactForm" (click)="toggleNewContactForm()">Back</button>
+  <app-new-contact-form *ngIf="newContactForm"></app-new-contact-form>
+  <app-contacts-list *ngIf="!newContactForm"></app-contacts-list>
 </div>
