@@ -58,6 +58,8 @@ body {
 
 .side-section-container {
   width: 20vw;
+  height: 80vh;
+  overflow: hidden;
   margin: 20px auto;
   padding: 20px;
   background-color: #fff;

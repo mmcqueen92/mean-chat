@@ -1,44 +1,4 @@
 <div class="side-section-container">
-  <div class="new-contact-form">
-    <h2>Add a Contact</h2>
-    <form (ngSubmit)="addNewContact()">
-      <div class="form-group">
-        <label for="email">Email:</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          [(ngModel)]="newContactEmail"
-          class="new-contact-input"
-          required
-        />
-        <button type="submit" class="action-button">Add Contact</button>
-      </div>
-    </form>
-  </div>
-  <div class="contacts-list">
-    <h2>Contacts</h2>
-
-    <div *ngFor="let contact of contacts">
-      <div class="contacts-list-item">
-        <div class="contact-name">
-          {{ contact.name }}
-        </div>
-        <div class="contact-buttons">
-          <button
-            class="action-button create-button"
-            (click)="openChat(contact)"
-          >
-            Chat
-          </button>
-          <button
-            class="action-button danger-button"
-            (click)="deleteContact(contact._id)"
-          >
-            Delete Contact
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <app-new-contact-form></app-new-contact-form>
+  <app-contacts-list></app-contacts-list>
 </div>

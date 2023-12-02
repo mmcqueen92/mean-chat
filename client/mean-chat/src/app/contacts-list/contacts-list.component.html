@@ -1,0 +1,21 @@
+<h2>Contacts</h2>
+<div class="contacts-list">
+  <div *ngFor="let contact of contacts">
+    <div class="contacts-list-item">
+      <div class="contact-name">
+        {{ contact.name }}
+      </div>
+      <div class="contact-buttons">
+        <button class="action-button create-button" (click)="openChat(contact)">
+          Chat
+        </button>
+        <button
+          class="action-button danger-button"
+          (click)="deleteContact(contact._id)"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

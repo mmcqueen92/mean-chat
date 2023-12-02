@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { TokenService } from '../token.service';
 import { DataService } from '../data.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
-  selector: 'app-contacts',
-  templateUrl: './contacts.component.html',
-  styleUrls: ['./contacts.component.css'],
+  selector: 'app-new-contact-form',
+  templateUrl: './new-contact-form.component.html',
+  styleUrls: ['./new-contact-form.component.css'],
 })
-export class ContactsComponent {
+export class NewContactFormComponent {
   newContactEmail: string = ''; // store email entered in form
 
   constructor(

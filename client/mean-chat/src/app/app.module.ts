@@ -14,6 +14,8 @@ import { SearchBarComponent } from './search-bar/search-bar.component';
 import { SearchDisplayComponent } from './search-display/search-display.component';
 import { CreateGroupChatFormComponent } from './create-group-chat-form/create-group-chat-form.component';
 import { DisplayChatListComponent } from './display-chat-list/display-chat-list.component';
+import { NewContactFormComponent } from './new-contact-form/new-contact-form.component';
+import { ContactsListComponent } from './contacts-list/contacts-list.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +30,8 @@ import { DisplayChatListComponent } from './display-chat-list/display-chat-list.
     SearchDisplayComponent,
     CreateGroupChatFormComponent,
     DisplayChatListComponent,
+    NewContactFormComponent,
+    ContactsListComponent,
 
   ],
   imports: [
