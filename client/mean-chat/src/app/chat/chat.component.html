@@ -1,5 +1,7 @@
 <div class="chat-container" *ngIf="activeChat">
+  <!-- chat header section -->
   <div class="chat-header">
+
     <div *ngIf="this.promoteMembers">
       <h3>
         <ng-container *ngFor="let participant of participants; let last = last">
@@ -15,17 +17,19 @@
       </h3>
       <button (click)="togglePromoteMembers()">Cancel</button>
     </div>
+
     <div *ngIf="!this.promoteMembers">
       <h3>
         <ng-container *ngFor="let participant of participants; let last = last">
           {{ participant.name }}
-          <span *ngIf="!last">, </span>
           <button
             *ngIf="!participant.inUserContacts"
             (click)="addToContacts(participant.email)"
+            title="Add to Contacts"
           >
-            Add to Contacts
+            +
           </button>
+          <span *ngIf="!last">, </span>
         </ng-container>
       </h3>
     </div>
@@ -60,10 +64,13 @@
     </button>
   </div>
 
-  <div class="chat-messages" #chatMessagesContainer>
-    <!-- list of chat messages -->
+  <!-- list of chat messages -->
+  <div class="chat-messages">
     <div class="message-container" *ngFor="let message of messages">
-      <div *ngIf="message.sender._id !== currentUser._id" class="participant-message">
+      <div
+        *ngIf="message.sender._id !== currentUser._id"
+        class="participant-message"
+      >
         <div class="message-sender">{{ message.sender.name }}:</div>
         <div class="message-content">{{ message.text }}</div>
       </div>
@@ -77,6 +84,7 @@
     </div>
   </div>
 
+  <!-- chat input section -->
   <div class="chat-input-container">
     <textarea
       type="text"
@@ -86,7 +94,6 @@
       (keyup.enter)="sendMessage()"
       class="chat-input"
     ></textarea>
-
     <button (click)="sendMessage()" class="send-button">Send</button>
   </div>
 </div>

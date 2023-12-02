@@ -62,6 +62,7 @@ export class ChatComponent implements OnInit {
             return participant;
           });
         }
+        console.log('PARTICIPANTS: ', this.participants);
       } else {
         this.messages = [];
         this.participants = [];
@@ -104,6 +105,11 @@ export class ChatComponent implements OnInit {
       .subscribe({
         next: (response: any) => {
           this.dataService.handleContact(response.newContact);
+          this.participants.forEach((participant) => {
+            if (participant.email === contactEmail) {
+              participant.inUserContacts = true;
+            }
+          });
         },
         error: (error) => {
           console.error('Error: ', error);
