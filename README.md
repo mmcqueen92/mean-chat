@@ -1,4 +1,4 @@
-~THIS PROJECT IS CURRENTLY IN PROGRESS~
+*THIS PROJECT IS CURRENTLY IN PROGRESS*
 
 This project was made with an AngularJS front-end and an ExpressJS/NodeJS back-end. It uses MongoDB for the database.
 
