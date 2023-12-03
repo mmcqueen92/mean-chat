@@ -49,7 +49,7 @@ body {
 .settings-button {
   background-color: #dcdcdc;
   color: #333;
-  margin: 10px 0px;
+  margin: 10px;
 }
 
 .settings-button:hover {

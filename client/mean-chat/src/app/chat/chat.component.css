@@ -8,6 +8,26 @@
   overflow: hidden;
 }
 
+.participants-container {
+  overflow-wrap: normal;
+  overflow-y: scroll;
+}
+
+.participant-item {
+  display: flex;
+  flex-direction: row;
+}
+
+.chat-buttons {
+  display: flex;
+  flex-direction: row;
+}
+
+.chat-controls {
+  display: flex;
+  align-items: center;
+}
+
 .message-container {
   display: grid;
   width: 100%;

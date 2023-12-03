@@ -2,8 +2,11 @@
   <!-- chat header section -->
   <div class="chat-header">
     <div *ngIf="this.promoteMembers">
-      <h3>
-        <ng-container *ngFor="let participant of participants; let last = last">
+      <h3 class="participants-container">
+        <ng-container
+          *ngFor="let participant of participants; let last = last"
+          class="participant-item"
+        >
           {{ participant.name }}
           <button
             *ngIf="!activeChat.admins.includes(participant._id)"
@@ -32,50 +35,54 @@
         </ng-container>
       </h3>
     </div>
-    <div class="chat-controls" *ngIf="chatControls">
+    <div class="chat-buttons">
       <button
-        *ngIf="
-          activeChat.admins &&
-          activeChat.admins.includes(currentUser._id) &&
-          !this.promoteMembers
-        "
-        (click)="togglePromoteMembers()"
-        class="action-button"
+        class="action-button settings-button"
+        (click)="toggleChatControls()"
       >
-        Promote Members
+        Chat Controls
       </button>
-      <button
-        *ngIf="
-          activeChat.admins &&
-          activeChat.admins.includes(currentUser._id) &&
-          this.promoteMembers
-        "
-        (click)="togglePromoteMembers()"
-        class="action-button"
-      >
-        Back
-      </button>
-      <button
-        *ngIf="activeChat.name !== 'User-User'"
-        (click)="leaveChat()"
-        class="action-button warning-button"
-      >
-        Leave Chat
-      </button>
-      <button
-        *ngIf="activeChat.admins && activeChat.admins.includes(currentUser._id)"
-        (click)="deleteChatRoom(activeChat._id)"
-        class="action-button danger-button"
-      >
-        Delete Chatroom
-      </button>
+      <div class="chat-controls" *ngIf="chatControls">
+        <button
+          *ngIf="
+            activeChat.admins &&
+            activeChat.admins.includes(currentUser._id) &&
+            !this.promoteMembers
+          "
+          (click)="togglePromoteMembers()"
+          class="action-button"
+        >
+          Promote Members
+        </button>
+        <button
+          *ngIf="
+            activeChat.admins &&
+            activeChat.admins.includes(currentUser._id) &&
+            this.promoteMembers
+          "
+          (click)="togglePromoteMembers()"
+          class="action-button"
+        >
+          Back
+        </button>
+        <button
+          *ngIf="activeChat.name !== 'User-User'"
+          (click)="leaveChat()"
+          class="action-button warning-button"
+        >
+          Leave Chat
+        </button>
+        <button
+          *ngIf="
+            activeChat.admins && activeChat.admins.includes(currentUser._id)
+          "
+          (click)="deleteChatRoom(activeChat._id)"
+          class="action-button danger-button"
+        >
+          Delete Chatroom
+        </button>
+      </div>
     </div>
-    <button
-      class="action-button settings-button"
-      (click)="toggleChatControls()"
-    >
-      Chat Controls
-    </button>
   </div>
 
   <!-- list of chat messages -->
