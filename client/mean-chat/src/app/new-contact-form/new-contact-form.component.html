@@ -1,17 +1,14 @@
 <div class="new-contact-form">
-  <h2>Add a Contact</h2>
-  <form (ngSubmit)="addNewContact()">
-    <div class="form-group">
-      <label for="email">Email:</label>
-      <input
-        type="email"
-        id="email"
-        name="email"
-        [(ngModel)]="newContactEmail"
-        class="new-contact-input"
-        required
-      />
-      <button type="submit" class="action-button">Add Contact</button>
-    </div>
+  <h2>Search for a user</h2>
+
+  <h3>New form</h3>
+
+  <form [formGroup]="searchForm">
+    <input type="text" formControlName="query" placeholder="Search users..." />
   </form>
+
+  <div *ngFor="let user of foundUsersList">
+    {{ user.name }} - {{ user.email }}
+    <button (click)="addNewContact(user.email)">Add Contact</button>
+  </div>
 </div>

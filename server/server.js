@@ -177,6 +177,24 @@ app.post("/login", async (req, res) => {
   }
 });
 
+app.post("/search-users", async (req, res, next) => {
+  try {
+    const { query } = req.body;
+
+    const users = await User.find({
+      $or: [
+        { name: { $regex: query, $options: "i" } },
+        { email: { $regex: query, $options: "i" } },
+      ],
+    });
+
+    res.json(users);
+  } catch (e) {
+    console.error("Error: ", e);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 app.post("/add-contact", async (req, res, next) => {
   try {
     const currentUserId = await verifyToken(req.headers.authorization);

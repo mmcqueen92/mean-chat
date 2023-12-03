@@ -9,7 +9,7 @@ import { Component } from '@angular/core';
 export class ContactsComponent {
   newContactForm: boolean = false;
 
-  toggleNewContactForm() {
+  toggleNewContactForm = () => {
     if(this.newContactForm) {
       this.newContactForm = false;
     } else {
