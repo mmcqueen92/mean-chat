@@ -1,7 +1,6 @@
 <div class="chat-container" *ngIf="activeChat">
   <!-- chat header section -->
   <div class="chat-header">
-
     <div *ngIf="this.promoteMembers">
       <h3>
         <ng-container *ngFor="let participant of participants; let last = last">
@@ -9,13 +8,13 @@
           <button
             *ngIf="!activeChat.admins.includes(participant._id)"
             (click)="promoteToAdmin(participant._id)"
+            class="action-button"
           >
-            Promote to Admin
+            Promote
           </button>
           <span *ngIf="!last">, </span>
         </ng-container>
       </h3>
-      <button (click)="togglePromoteMembers()">Cancel</button>
     </div>
 
     <div *ngIf="!this.promoteMembers">
@@ -35,11 +34,26 @@
     </div>
     <div class="chat-controls" *ngIf="chatControls">
       <button
-        *ngIf="activeChat.admins && activeChat.admins.includes(currentUser._id)"
+        *ngIf="
+          activeChat.admins &&
+          activeChat.admins.includes(currentUser._id) &&
+          !this.promoteMembers
+        "
         (click)="togglePromoteMembers()"
         class="action-button"
       >
         Promote Members
+      </button>
+      <button
+        *ngIf="
+          activeChat.admins &&
+          activeChat.admins.includes(currentUser._id) &&
+          this.promoteMembers
+        "
+        (click)="togglePromoteMembers()"
+        class="action-button"
+      >
+        Back
       </button>
       <button
         *ngIf="activeChat.name !== 'User-User'"

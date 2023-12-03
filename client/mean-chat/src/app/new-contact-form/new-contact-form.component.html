@@ -6,9 +6,12 @@
   <form [formGroup]="searchForm">
     <input type="text" formControlName="query" placeholder="Search users..." />
   </form>
-
-  <div *ngFor="let user of foundUsersList">
-    {{ user.name }} - {{ user.email }}
-    <button (click)="addNewContact(user.email)">Add Contact</button>
+  <div class="found-users">
+    <div *ngFor="let user of foundUsersList" class="found-user-item">
+      <div class="found-user-name">
+        {{ user.name }}
+      </div>
+      <button (click)="addNewContact(user.email)" class="action-button">Add Contact</button>
+    </div>
   </div>
 </div>

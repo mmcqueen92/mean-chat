@@ -42,7 +42,6 @@ export class NewContactFormComponent implements OnInit {
       .post('http://localhost:3001/search-users', { query }, { headers })
       .subscribe({
         next: (response: any) => {
-          console.log('SEARCH USERS RESPONSE: ', response);
           this.foundUsersList = response;
         },
       });
