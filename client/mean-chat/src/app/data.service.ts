@@ -47,7 +47,7 @@ export class DataService {
           this.setActiveChat(currentActiveChat);
         }
       } else {
-        messageData.chatroom.messages = [messageData.newMessage]
+        messageData.chatroom.messages = [messageData.newMessage];
         currentData.chatrooms.push(messageData.chatroom);
         this.setUserData(currentData);
       }
@@ -56,6 +56,8 @@ export class DataService {
 
   handleContact(contact: any) {
     const currentData = this.userDataSubject.value;
+    const activeChat = this.activeChatSubject.value;
+
     if (
       !currentData.contacts.find(
         (existingContact: any) => existingContact._id === contact._id
@@ -63,6 +65,27 @@ export class DataService {
     ) {
       currentData.contacts.push(contact);
       this.setUserData(currentData);
+    }
+
+    if (activeChat) {
+      const contactInActiveChat = activeChat.filteredParticipants.some(
+        (participant: any) => {
+          return participant.user._id === contact._id;
+        }
+      );
+
+      if (contactInActiveChat) {
+        activeChat.filteredParticipants = activeChat.filteredParticipants.map(
+          (participant: any) => {
+            if (participant.user._id === contact._id) {
+              participant.user.inUserContacts = true;
+              return participant;
+            } else {
+              return participant;
+            }
+          }
+        );
+      }
     }
   }
 

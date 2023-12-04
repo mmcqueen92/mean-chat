@@ -54,8 +54,12 @@ export class CreateGroupChatFormComponent implements OnInit {
   createGroupChat() {
     const token = this.tokenService.getToken();
     const headers = new HttpHeaders().set('Authorization', `${token}`);
-    const participants = this.newGroupParticipants;
+    const participantIds = this.newGroupParticipants;
     const chatName = this.newGroupName;
+
+    const participants = participantIds.map((participantId) => {
+      return {user: participantId}
+    })
 
     this.http
       .post(

@@ -9,8 +9,9 @@
 }
 
 .participants-container {
+  max-height: 15vh;
   overflow-wrap: normal;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .participant-item {
@@ -86,7 +87,7 @@
   flex-direction: column-reverse;
   justify-content: flex-start;
   height: 55vh;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .chat-input-container {

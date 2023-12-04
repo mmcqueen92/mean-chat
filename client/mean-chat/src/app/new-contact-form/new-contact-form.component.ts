@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { TokenService } from '../token.service';
 import { DataService } from '../data.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -37,12 +37,16 @@ export class NewContactFormComponent implements OnInit {
   searchUsers(query: string): void {
     const token = this.tokenService.getToken();
     const headers = new HttpHeaders().set('Authorization', `${token}`);
+    const userData = this.dataService.getUserData();
 
     this.http
       .post('http://localhost:3001/search-users', { query }, { headers })
       .subscribe({
         next: (response: any) => {
           this.foundUsersList = response;
+          this.foundUsersList = this.foundUsersList.filter((user:any) => {
+            return user._id !== userData._id && !userData.contacts.some((contact: any) => contact._id === user._id);
+          })
         },
       });
   }

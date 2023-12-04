@@ -14,8 +14,14 @@ const ChatRoomSchema = new Schema({
   },
   participants: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user",
+      },
+      lastVisit: {
+        type: Date,
+        default: null,
+      },
     },
   ],
   messages: {
@@ -26,6 +32,10 @@ const ChatRoomSchema = new Schema({
       },
     ],
     default: [],
+  },
+  lastUpdate: {
+    type: Date,
+    default: Date.now,
   },
 });
 

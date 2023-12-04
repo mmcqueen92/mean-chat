@@ -1,6 +1,6 @@
 .chat-list {
   height: 70vh;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .chat-list-item {

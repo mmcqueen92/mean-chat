@@ -24,7 +24,7 @@ export class DisplayChatListComponent implements OnInit {
 
         for (const chatroom of this.currentUser.chatrooms) {
           chatroom.filteredParticipants = chatroom.participants.filter(
-            (participant: any) => participant._id !== this.currentUser._id
+            (participant: any) => participant.user._id !== this.currentUser._id
           );
         }
       }
@@ -34,4 +34,6 @@ export class DisplayChatListComponent implements OnInit {
   setActiveChat(chat: any) {
     this.dataService.setActiveChat(chat);
   }
+
+  getLastTimestamp(chatroom: any) {}
 }

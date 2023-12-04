@@ -100,7 +100,7 @@ const getUserData = async (userId) => {
             path: "messages",
           },
           {
-            path: "participants",
+            path: "participants.user",
           },
         ],
       })
@@ -265,6 +265,9 @@ app.post("/delete-contact", async (req, res, next) => {
 
 app.post("/create-chat", async (req, res, next) => {
   const { participants } = req.body;
+  participants.forEach((participant) => {
+    participant.lastVisit = new Date();
+  });
 
   try {
     // create new chatroom with the provided participants
@@ -276,10 +279,12 @@ app.post("/create-chat", async (req, res, next) => {
     const savedChatRoom = await chatRoom.save();
 
     const populatedChatRoom = await ChatRoom.findById(savedChatRoom._id)
-      .populate("participants")
+      .populate("participants.user")
       .exec();
 
-    for (const participantId of participants) {
+    for (const participant of participants) {
+      const participantId = participant.user;
+
       // find user
       const user = await User.findById(participantId);
 
@@ -301,8 +306,13 @@ app.post("/create-group-chat", requireAuth, async (req, res, next) => {
   const userId = req.userId;
   let { participants, chatName } = req.body;
 
+  participants.forEach((participant) => {
+    participant.lastVisit = new Date();
+  });
+
   try {
-    participants.push(userId);
+    participants.push({ user: userId, lastVisit: new Date() });
+
     const chatRoom = new ChatRoom({
       admins: [userId],
       participants,
@@ -312,14 +322,15 @@ app.post("/create-group-chat", requireAuth, async (req, res, next) => {
     const savedChatRoom = await chatRoom.save();
 
     const populatedChatRoom = await ChatRoom.findById(savedChatRoom._id)
-      .populate("participants")
+      .populate("participants.user")
       .exec();
 
-    for (const participantId of participants) {
-      const user = await User.findById(participantId);
+    for (const participant of participants) {
+      const user = await User.findById(participant.user);
 
       if (user) {
         // add chatroom's _id to user's chatrooms array
+
         user.chatrooms.push(savedChatRoom._id);
         await user.save();
       }
@@ -434,7 +445,9 @@ app.post("/messages/new", async (req, res, next) => {
     await newMessage.save();
 
     // add message id to corresponding chatroom's message array
-    const chatroom = await ChatRoom.findById(chatRoom).populate("participants");
+    const chatroom = await ChatRoom.findById(chatRoom).populate(
+      "participants.user"
+    );
 
     chatroom.messages.push(newMessage._id);
     await chatroom.save();
@@ -444,7 +457,7 @@ app.post("/messages/new", async (req, res, next) => {
 
     // emit the message to the chatroom's participants
     participants.forEach(async (participant) => {
-      const participantSocket = userSockets[participant._id];
+      const participantSocket = userSockets[participant.user._id];
       if (participantSocket) {
         participantSocket.emit("message", { newMessage, chatroom });
       }

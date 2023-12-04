@@ -10,12 +10,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class ChatComponent implements OnInit {
   messageText: string = '';
-  recipients: any[] = [];
   messages: any[] = [];
   participants: any[] = [];
   activeChat: any;
   currentUser: any = {};
-  participantData: any[] = [];
   promoteMembers: boolean = false;
   chatControls: boolean = false;
 
@@ -27,11 +25,11 @@ export class ChatComponent implements OnInit {
 
   getSenderData(senderId: string) {
     const sender = this.activeChat.participants.find((participant: any) => {
-      return participant._id === senderId;
+      return participant.user._id === senderId;
     });
 
     if (sender) {
-      return { _id: sender._id, name: sender.name };
+      return { _id: sender._id, name: sender.user.name };
     }
 
     return null; // if sender data is not found
@@ -46,23 +44,22 @@ export class ChatComponent implements OnInit {
           sender: this.getSenderData(message.sender),
         }));
         this.messages.reverse();
-        this.participantData = activeChat.participants;
 
         this.participants = activeChat.participants.filter(
           (participant: any) => {
-            return participant._id !== this.dataService.getUserData()._id;
+            return participant.user._id !== this.dataService.getUserData()._id;
           }
         );
 
         if (this.participants && this.currentUser) {
           this.participants = this.participants.map((participant: any) => {
-            participant.inUserContacts = this.currentUser.contacts.some(
-              (contact: any) => contact._id === participant._id
+            participant.user.inUserContacts = this.currentUser.contacts.some(
+              (contact: any) => contact._id === participant.user._id
             );
             return participant;
           });
         }
-
+        console.log("ACTIVE CHAT: ", this.activeChat)
       } else {
         this.messages = [];
         this.participants = [];
@@ -106,8 +103,8 @@ export class ChatComponent implements OnInit {
         next: (response: any) => {
           this.dataService.handleContact(response.newContact);
           this.participants.forEach((participant) => {
-            if (participant.email === contactEmail) {
-              participant.inUserContacts = true;
+            if (participant.user.email === contactEmail) {
+              participant.user.inUserContacts = true;
             }
           });
         },

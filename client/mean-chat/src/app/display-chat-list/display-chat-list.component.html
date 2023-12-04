@@ -14,7 +14,7 @@
             let lastParticipant = last
           "
         >
-          {{ participant.name }}
+          {{ participant.user.name }}
           <span *ngIf="!lastParticipant && chatroom.participants.length > 2"
             >,
           </span>

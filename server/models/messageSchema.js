@@ -5,11 +5,11 @@ const MessageSchema = new Schema({
   text: String, // content
   sender: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User", // user who sent the message
+    ref: "user", // user who sent the message
   },
   chatRoom: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "ChatRoom", // chat room where the message was sent
+    ref: "chatRoom", // chat room where the message was sent
   },
   timestamp: {
     type: Date,

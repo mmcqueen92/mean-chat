@@ -32,10 +32,12 @@ export class HomeComponent implements OnInit {
           });
           this.socket.on('message', (data) => {
             // handle incoming messages here
+
             this.dataService.handleMessage(data);
           });
 
           this.socket.on('initial-data', (data) => {
+            console.log("INITIAL DATA: ", data)
             this.dataService.setUserData(data);
           });
 

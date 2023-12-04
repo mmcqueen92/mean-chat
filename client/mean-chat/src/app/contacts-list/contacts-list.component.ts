@@ -23,18 +23,18 @@ export class ContactsListComponent implements OnInit {
     });
   }
 
-  openChat(contact: any): void {
+  findChat(contact: any) {
     const user = this.dataService.getUserData();
     const currentUserID = user._id;
     const selectedContactID = contact._id;
 
-    const chatExists = user.chatrooms.find((chatRoom: any) => {
+    const chat = user.chatrooms.find((chatRoom: any) => {
       let participantIds: any[] = [];
       const participants = chatRoom.participants;
 
       // loop through participants, add the ._id of each participant to the participantsIds array
       participants.forEach((participant: any) => {
-        participantIds.push(participant._id);
+        participantIds.push(participant.user._id);
       });
 
       return (
@@ -43,13 +43,22 @@ export class ContactsListComponent implements OnInit {
         participantIds.includes(selectedContactID)
       );
     });
-    if (chatExists) {
-      this.dataService.setActiveChat(chatExists);
+
+    return chat ? chat : false;
+  }
+
+  openChat(contact: any): void {
+    const chat = this.findChat(contact);
+
+    if (chat) {
+      this.dataService.setActiveChat(chat);
     } else {
+      const user = this.dataService.getUserData();
       const token = this.tokenService.getToken();
       const headers = new HttpHeaders().set('Authorization', `${token}`);
+      const participants = [{ user: user._id }, { user: contact._id }];
       const body = {
-        participants: [currentUserID, selectedContactID],
+        participants,
       };
 
       this.http
@@ -57,6 +66,7 @@ export class ContactsListComponent implements OnInit {
         .subscribe({
           next: (response: any) => {
             this.dataService.handleNewChat(response);
+            console.log("RESPONSE: ", response)
           },
           error: (error) => {
             console.error('Chat creation error: ', error);
