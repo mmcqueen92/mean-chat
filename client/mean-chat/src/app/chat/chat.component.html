@@ -9,7 +9,7 @@
         >
           {{ participant.user.name }}
           <button
-            *ngIf="!activeChat.admins.includes(participant.user._id)"
+            *ngIf="!inActiveChatAdmins(participant.user._id)"
             (click)="promoteToAdmin(participant.user._id)"
             class="action-button"
           >
@@ -25,7 +25,7 @@
         <ng-container *ngFor="let participant of participants; let last = last">
           {{ participant.user.name }}
           <button
-            *ngIf="!participant.user.inUserContacts"
+            *ngIf="!inUserContacts(participant.user._id)"
             (click)="addToContacts(participant.user.email)"
             title="Add to Contacts"
           >
@@ -46,7 +46,7 @@
         <button
           *ngIf="
             activeChat.admins &&
-            activeChat.admins.includes(currentUser._id) &&
+            inActiveChatAdmins(currentUser._id) &&
             !this.promoteMembers
           "
           (click)="togglePromoteMembers()"
@@ -57,7 +57,7 @@
         <button
           *ngIf="
             activeChat.admins &&
-            activeChat.admins.includes(currentUser._id) &&
+            inActiveChatAdmins(currentUser._id) &&
             this.promoteMembers
           "
           (click)="togglePromoteMembers()"
@@ -74,7 +74,7 @@
         </button>
         <button
           *ngIf="
-            activeChat.admins && activeChat.admins.includes(currentUser._id)
+            activeChat.admins && inActiveChatAdmins(currentUser._id)
           "
           (click)="deleteChatRoom(activeChat._id)"
           class="action-button danger-button"
@@ -89,14 +89,14 @@
   <div class="chat-messages">
     <div class="message-container" *ngFor="let message of messages">
       <div
-        *ngIf="message.sender._id !== currentUser._id"
+        *ngIf="!sentByUser(message)"
         class="participant-message"
       >
-        <div class="message-sender">{{ message.sender.name }}:</div>
+        <div class="message-sender">{{ getMessageSenderName(message.sender) }}:</div>
         <div class="message-content">{{ message.text }}</div>
       </div>
-      <div *ngIf="message.sender._id === currentUser._id" class="user-message">
-        <div class="message-sender">{{ message.sender.user.name }}:</div>
+      <div *ngIf="sentByUser(message)" class="user-message">
+        <div class="message-sender">{{ getMessageSenderName(message.sender) }}:</div>
         <div class="message-content">{{ message.text }}</div>
       </div>
     </div>

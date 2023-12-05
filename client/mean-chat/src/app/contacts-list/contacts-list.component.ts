@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DataService } from '../data.service';
 import { TokenService } from '../token.service';
+import { User } from '../interfaces/user.interface';
+import { ChatRoom } from '../interfaces/chatroom.interface';
+import { ChatRoomParticipant } from '../interfaces/chatroom-participant.interface';
 
 @Component({
   selector: 'app-contacts-list',
@@ -9,7 +12,7 @@ import { TokenService } from '../token.service';
   styleUrls: ['./contacts-list.component.css'],
 })
 export class ContactsListComponent implements OnInit {
-  contacts: any;
+  contacts!: User[];
 
   constructor(
     private http: HttpClient,
@@ -23,17 +26,17 @@ export class ContactsListComponent implements OnInit {
     });
   }
 
-  findChat(contact: any) {
+  findChat(contact: User) {
     const user = this.dataService.getUserData();
     const currentUserID = user._id;
     const selectedContactID = contact._id;
 
-    const chat = user.chatrooms.find((chatRoom: any) => {
+    const chat = user.chatrooms.find((chatRoom: ChatRoom) => {
       let participantIds: any[] = [];
       const participants = chatRoom.participants;
 
       // loop through participants, add the ._id of each participant to the participantsIds array
-      participants.forEach((participant: any) => {
+      participants.forEach((participant: ChatRoomParticipant) => {
         participantIds.push(participant.user._id);
       });
 
@@ -47,7 +50,7 @@ export class ContactsListComponent implements OnInit {
     return chat ? chat : false;
   }
 
-  openChat(contact: any): void {
+  openChat(contact: User): void {
     const chat = this.findChat(contact);
 
     if (chat) {

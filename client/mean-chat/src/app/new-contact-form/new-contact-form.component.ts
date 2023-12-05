@@ -45,7 +45,7 @@ export class NewContactFormComponent implements OnInit {
       .subscribe({
         next: (response: any) => {
           this.foundUsersList = response;
-          this.foundUsersList = this.foundUsersList.filter((user:any) => {
+          this.foundUsersList = this.foundUsersList.filter((user: User) => {
             return user._id !== userData._id && !userData.contacts.some((contact: any) => contact._id === user._id);
           })
         },

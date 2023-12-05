@@ -3,6 +3,9 @@ import { DataService } from '../data.service';
 import { TokenService } from '../token.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User } from '../interfaces/user.interface';
+import { Message } from '../interfaces/message.interface';
+import { ChatRoom } from '../interfaces/chatroom.interface';
+import { ChatRoomParticipant } from '../interfaces/chatroom-participant.interface';
 
 @Component({
   selector: 'app-chat',
@@ -11,10 +14,10 @@ import { User } from '../interfaces/user.interface';
 })
 export class ChatComponent implements OnInit {
   messageText: string = '';
-  messages: any[] = [];
-  participants: any[] = [];
-  activeChat: any;
-  currentUser: any = {};
+  messages: Message[] = [];
+  participants: ChatRoomParticipant[] = [];
+  activeChat!: ChatRoom;
+  currentUser!: User;
   promoteMembers: boolean = false;
   chatControls: boolean = false;
 
@@ -25,42 +28,95 @@ export class ChatComponent implements OnInit {
   ) {}
 
   getSenderData(senderId: string) {
-    const sender = this.activeChat.participants.find((participant: any) => {
-      return participant.user._id === senderId;
-    });
+    const sender = this.activeChat.participants.find(
+      (participant: ChatRoomParticipant) => {
+        return participant.user._id === senderId;
+      }
+    );
 
     if (sender) {
-      return { _id: sender._id, name: sender.user.name };
+      return { _id: sender.user._id, name: sender.user.name };
     }
 
     return null; // if sender data is not found
+  }
+
+  inUserContacts(userId: string): boolean {
+    const currentUser = this.currentUser;
+
+    if (!currentUser || !currentUser.contacts) {
+      return false;
+    }
+
+    return currentUser.contacts.some((contact) =>
+      typeof contact === 'string' ? contact === userId : contact._id === userId
+    );
+  }
+
+  inActiveChatAdmins(userId: string): boolean {
+    const activeChat = this.activeChat;
+
+    if (!activeChat || !activeChat.admins) {
+      return false;
+    }
+
+    if (Array.isArray(activeChat.admins)) {
+      return activeChat.admins.some((admin) =>
+        typeof admin === 'string' ? admin === userId : admin._id === userId
+      );
+    }
+
+    return false;
+  }
+
+  sentByUser(message: Message): boolean {
+    const currentUser = this.currentUser;
+
+    if (!currentUser || !message || !message.sender) {
+      return false;
+    }
+
+    const messageSender = message.sender;
+
+    if (typeof messageSender === 'object' && '_id' in messageSender) {
+      return messageSender._id === currentUser._id;
+    }
+
+    if (typeof messageSender === 'string') {
+      return messageSender === currentUser._id;
+    }
+
+    return false;
+  }
+
+  messagePopulated(message: Message): boolean {
+    return typeof message.sender === 'string' ? false : true;
+  }
+
+  getMessageSenderName(sender: string | User): string {
+    return typeof sender === 'object' ? sender.name : sender;
   }
 
   ngOnInit(): void {
     this.dataService.activeChat$.subscribe((activeChat) => {
       this.activeChat = activeChat;
       if (activeChat) {
-        this.messages = activeChat.messages.map((message: any) => ({
+        this.messages = activeChat.messages.map((message: Message) => ({
           ...message,
-          sender: this.getSenderData(message.sender),
+          sender:
+            typeof message.sender === 'string'
+              ? this.getSenderData(message.sender)
+              : message.sender,
         }));
+
         this.messages.reverse();
 
         this.participants = activeChat.participants.filter(
-          (participant: any) => {
+          (participant: ChatRoomParticipant) => {
             return participant.user._id !== this.dataService.getUserData()._id;
           }
         );
 
-        if (this.participants && this.currentUser) {
-          this.participants = this.participants.map((participant: any) => {
-            participant.user.inUserContacts = this.currentUser.contacts.some(
-              (contact: any) => contact._id === participant.user._id
-            );
-            return participant;
-          });
-        }
-        console.log('ACTIVE CHAT: ', this.activeChat);
       } else {
         this.messages = [];
         this.participants = [];
@@ -103,11 +159,11 @@ export class ChatComponent implements OnInit {
       .subscribe({
         next: (response: User) => {
           this.dataService.handleContact(response);
-          this.participants.forEach((participant) => {
-            if (participant.user.email === contactEmail) {
-              participant.user.inUserContacts = true;
-            }
-          });
+          // this.participants.forEach((participant) => {
+          //   if (participant.user.email === contactEmail) {
+          //     participant.user.inUserContacts = true;
+          //   }
+          // });
         },
         error: (error) => {
           console.error('Error: ', error);

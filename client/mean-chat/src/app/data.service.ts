@@ -102,15 +102,6 @@ export class DataService {
     }
   }
 
-  inUserContacts(userId: string) {
-    const currentData = this.userDataSubject.value;
-
-     const isInContacts = currentData.some((item: User) => item._id === userId);
-
-     return isInContacts;
-
-  }
-
   handleContactDeletion(deletedContactId: string) {
     const currentData = this.userDataSubject.value;
 
@@ -141,7 +132,7 @@ export class DataService {
 
   removeChat(chatRoomId: string) {
     const currentData = this.userDataSubject.value;
-    currentData.chatrooms = currentData.chatrooms.filter((chatroom: any) => {
+    currentData.chatrooms = currentData.chatrooms.filter((chatroom: ChatRoom) => {
       return chatroom._id !== chatRoomId;
     });
     this.setUserData(currentData);
