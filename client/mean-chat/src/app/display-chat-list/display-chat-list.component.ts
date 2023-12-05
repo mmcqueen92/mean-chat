@@ -38,13 +38,44 @@ export class DisplayChatListComponent implements OnInit {
   }
 
   getNonUserParticipants(chatroom: string | ChatRoom): ChatRoomParticipant[] {
-    let nonUserParticipants = typeof chatroom === 'string' ? [] : chatroom.participants;
+    let nonUserParticipants =
+      typeof chatroom === 'string' ? [] : chatroom.participants;
 
-    nonUserParticipants = nonUserParticipants.filter((participant: ChatRoomParticipant) => {
-      return participant.user._id !== this.currentUser._id;
-    })
+    nonUserParticipants = nonUserParticipants.filter(
+      (participant: ChatRoomParticipant) => {
+        return participant.user._id !== this.currentUser._id;
+      }
+    );
 
     return nonUserParticipants;
+  }
+
+  unreadMessages(chatRoom: ChatRoom): boolean {
+    if(chatRoom.messages.length < 1) {
+      return false;
+    }
+
+    const userId = this.currentUser._id;
+
+    // Find the participant element in the participants array with a "user._id" value equal to userId
+    const participant = chatRoom.participants.find(
+      (participant) => participant.user._id === userId
+    );
+
+    if (participant) {
+      // Retrieve the "lastVisit" value from that element (date string)
+      const lastVisitDateString = participant.lastVisit;
+
+      // Compare the lastVisit date string to the chatRoom's "lastUpdate" date string
+      const lastVisitDate = new Date(lastVisitDateString);
+      const lastUpdateDate = new Date(chatRoom.lastUpdate);
+
+      // If the "lastVisit" date is earlier than "lastUpdate" date, return true
+      return lastVisitDate < lastUpdateDate;
+    }
+
+    // If participant is not found, consider it as having unread messages
+    return true;
   }
 
   setActiveChat(chat: ChatRoom) {

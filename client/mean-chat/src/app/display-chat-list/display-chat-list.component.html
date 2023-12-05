@@ -6,7 +6,10 @@
         (click)="setActiveChat(chatroom)"
       >
         <div *ngIf="chatroom.name" class="chat-list-item">
-          {{ chatroom.name }}
+          <div class="chat-list-item-name">
+            {{ chatroom.name }}
+          </div>
+          <div *ngIf="unreadMessages(chatroom)" class="unread-messages">Unread Messages</div>
         </div>
 
         <div *ngIf="!chatroom.name" class="chat-list-item">
@@ -23,6 +26,7 @@
               </span>
             </span>
           </div>
+          <div *ngIf="unreadMessages(chatroom)" class="unread-messages">Unread Messages</div>
         </div>
       </div>
     </div>
