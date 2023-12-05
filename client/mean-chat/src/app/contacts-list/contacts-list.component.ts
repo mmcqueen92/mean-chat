@@ -69,7 +69,6 @@ export class ContactsListComponent implements OnInit {
         .subscribe({
           next: (response: ChatRoom) => {
             this.dataService.handleNewChat(response);
-            console.log('RESPONSE: ', response);
           },
           error: (error) => {
             console.error('Chat creation error: ', error);

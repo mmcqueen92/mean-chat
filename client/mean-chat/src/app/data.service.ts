@@ -154,31 +154,31 @@ export class DataService {
       )
       .subscribe({
         next: (response: any) => {
-          console.log('Updated last visit: ', response);
           if (response.success) {
             // Find the chatroom with "_id" value equal to chatRoomId in currentData.chatrooms
             const chatroomIndex = currentData.chatrooms.findIndex(
               (chatroom: ChatRoom) => chatroom._id === chatRoomId
             );
+            
+            console.log("CHATROOM INDEX: ", chatroomIndex)
 
             if (chatroomIndex !== -1) {
               // Find the participant element with a "user" value equal to currentData._id
+              console.log("CHATROOM: ", currentData.chatrooms[chatroomIndex])
               const participantIndex = currentData.chatrooms[
                 chatroomIndex
               ].participants.findIndex(
                 (participant: ChatRoomParticipant) =>
-                  participant.user === currentData._id
+                  participant.user._id === currentData._id
               );
-
+                console.log("PARTICIPANT INDEX: ", participantIndex)
               if (participantIndex !== -1) {
                 // Update that element's "lastVisit" value with a new Date
                 currentData.chatrooms[chatroomIndex].participants[
                   participantIndex
                 ].lastVisit = new Date();
-                console.log('CURRENTDATA: ', currentData);
-
-
                 this.setUserData(currentData);
+                console.log("CURRENT DATA: ", currentData)
               }
             }
           }

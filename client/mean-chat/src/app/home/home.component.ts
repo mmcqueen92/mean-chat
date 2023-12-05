@@ -38,14 +38,13 @@ export class HomeComponent implements OnInit {
           });
 
           this.socket.on('initial-data', (data) => {
-            console.log("INITIAL DATA: ", data)
             this.dataService.setUserData(data);
           });
 
           this.webSocketInitialized = true;
         }
       } else {
-        console.log('Token is missing. Please log in.');
+        this.router.navigate(['/login']);
       }
     });
   }
