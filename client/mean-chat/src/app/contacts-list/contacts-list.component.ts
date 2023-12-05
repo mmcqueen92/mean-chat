@@ -65,11 +65,11 @@ export class ContactsListComponent implements OnInit {
       };
 
       this.http
-        .post('http://localhost:3001/create-chat', body, { headers })
+        .post<ChatRoom>('http://localhost:3001/create-chat', body, { headers })
         .subscribe({
-          next: (response: any) => {
+          next: (response: ChatRoom) => {
             this.dataService.handleNewChat(response);
-            console.log("RESPONSE: ", response)
+            console.log('RESPONSE: ', response);
           },
           error: (error) => {
             console.error('Chat creation error: ', error);
@@ -83,9 +83,13 @@ export class ContactsListComponent implements OnInit {
     const headers = new HttpHeaders().set('Authorization', `${token}`);
 
     this.http
-      .post('http://localhost:3001/delete-contact', { contactId }, { headers })
+      .post<{ message: string; deletedContactId: string }>(
+        'http://localhost:3001/delete-contact',
+        { contactId },
+        { headers }
+      )
       .subscribe({
-        next: (response: any) => {
+        next: (response: { message: string; deletedContactId: string }) => {
           this.dataService.handleContactDeletion(response.deletedContactId);
         },
         error: (error) => {

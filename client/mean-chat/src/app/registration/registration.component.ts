@@ -12,7 +12,11 @@ export class RegistrationComponent {
   registrationForm: FormGroup;
   errorMessage: string = '';
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private http: HttpClient) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private http: HttpClient
+  ) {
     this.registrationForm = this.formBuilder.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -20,26 +24,28 @@ export class RegistrationComponent {
     });
   }
 
-
   onSubmit() {
     if (this.registrationForm.invalid) {
-      this.errorMessage = "Please enter a valid username, email, and password (password must be at least 6 characters)"
+      this.errorMessage =
+        'Please enter a valid username, email, and password (password must be at least 6 characters)';
       return;
     }
 
     const userData = this.registrationForm.value;
     // send userData to backend
-    this.http.post('http://localhost:3001/register', userData).subscribe({
-      next: (response: any) => {
-        const token = response.token;
+    this.http
+      .post<{ token: string }>('http://localhost:3001/register', userData)
+      .subscribe({
+        next: (response: { token: string }) => {
+          const token = response.token;
 
-        localStorage.setItem('mean-chat-token', token);
+          localStorage.setItem('mean-chat-token', token);
 
-        this.router.navigate(['/home']);
-      },
-      error: (error) => {
-        console.error('Registration error', error)
-      }
-    })
+          this.router.navigate(['/home']);
+        },
+        error: (error) => {
+          console.error('Registration error', error);
+        },
+      });
   }
 }

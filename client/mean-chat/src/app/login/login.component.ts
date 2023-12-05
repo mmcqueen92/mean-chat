@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
-import { FormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
@@ -32,23 +37,25 @@ export class LoginComponent {
     const userData = this.loginForm.value;
 
     // send userData to backend
-    this.http.post('http://localhost:3001/login', userData).subscribe({
-      next: (response: any) => {
-        // successful response should return token
-        const token = response.token;
+    this.http
+      .post<{ token: string }>('http://localhost:3001/login', userData)
+      .subscribe({
+        next: (response: { token: string }) => {
+          // successful response should return token
+          const token = response.token;
 
-        // save token in localstorage
-        localStorage.setItem('mean-chat-token', token);
+          // save token in localstorage
+          localStorage.setItem('mean-chat-token', token);
 
-        // navigate to user home page
-        this.router.navigate(['/home']);
-      },
-      error: (error) => {
-        // Handle authentication errors here
-        console.error('Authentication error', error);
-        this.errorMessage = "Authentication Error";
-        // You can display an error message to the user
-      },
-    });
+          // navigate to user home page
+          this.router.navigate(['/home']);
+        },
+        error: (error) => {
+          // Handle authentication errors here
+          console.error('Authentication error', error);
+          this.errorMessage = 'Authentication Error';
+          // You can display an error message to the user
+        },
+      });
   }
 }

@@ -64,13 +64,13 @@ export class CreateGroupChatFormComponent implements OnInit {
     })
 
     this.http
-      .post(
+      .post<ChatRoom>(
         `http://localhost:3001/create-group-chat`,
         { participants, chatName },
         { headers }
       )
       .subscribe({
-        next: (response: any) => {
+        next: (response: ChatRoom) => {
           this.dataService.handleNewChat(response);
           this.toggleGroupChatForm();
         },

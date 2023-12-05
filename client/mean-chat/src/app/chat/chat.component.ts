@@ -116,7 +116,6 @@ export class ChatComponent implements OnInit {
             return participant.user._id !== this.dataService.getUserData()._id;
           }
         );
-
       } else {
         this.messages = [];
         this.participants = [];
@@ -176,13 +175,13 @@ export class ChatComponent implements OnInit {
     const headers = new HttpHeaders().set('Authorization', `${token}`);
 
     this.http
-      .post(
+      .post<{ message: string; chatRoomId: string }>(
         'http://localhost:3001/delete-chatroom',
         { chatRoomId },
         { headers }
       )
       .subscribe({
-        next: (response: any) => {
+        next: (response: { message: string; chatRoomId: string }) => {
           this.dataService.removeChat(response.chatRoomId);
         },
         error: (error) => {
@@ -209,13 +208,13 @@ export class ChatComponent implements OnInit {
     const headers = new HttpHeaders().set('Authorization', `${token}`);
 
     this.http
-      .post(
+      .post<ChatRoom>(
         'http://localhost:3001/promote-to-admin',
         { chatRoomId, chatMemberId },
         { headers }
       )
       .subscribe({
-        next: (response: any) => {
+        next: (response: ChatRoom) => {
           this.dataService.handleNewAdmin(response);
           this.promoteMembers = false;
         },
@@ -231,9 +230,13 @@ export class ChatComponent implements OnInit {
     const chatRoomId = this.activeChat._id;
 
     this.http
-      .post('http://localhost:3001/leave-chat', { chatRoomId }, { headers })
+      .post<{ message: string; chatRoomId: string }>(
+        'http://localhost:3001/leave-chat',
+        { chatRoomId },
+        { headers }
+      )
       .subscribe({
-        next: (response: any) => {
+        next: (response: { message: string; chatRoomId: string }) => {
           this.dataService.removeChat(response.chatRoomId);
         },
         error: (error) => {

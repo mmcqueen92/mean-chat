@@ -41,9 +41,9 @@ export class NewContactFormComponent implements OnInit {
     const userData = this.dataService.getUserData();
 
     this.http
-      .post('http://localhost:3001/search-users', { query }, { headers })
+      .post<User[]>('http://localhost:3001/search-users', { query }, { headers })
       .subscribe({
-        next: (response: any) => {
+        next: (response: User[]) => {
           this.foundUsersList = response;
           this.foundUsersList = this.foundUsersList.filter((user: User) => {
             return user._id !== userData._id && !userData.contacts.some((contact: User) => contact._id === user._id);
