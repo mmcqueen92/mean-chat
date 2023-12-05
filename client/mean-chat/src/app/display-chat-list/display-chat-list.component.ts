@@ -19,12 +19,14 @@ export class DisplayChatListComponent implements OnInit {
       if (userData) {
         this.currentUser = userData;
 
-        this.currentUser.chatrooms.sort((a: any, b: any) => {
-          const dateA = new Date(a.lastUpdate);
-          const dateB = new Date(b.lastUpdate);
+        if (this.isChatRoomObjectArray(this.currentUser.chatrooms)) {
+          this.currentUser.chatrooms.sort((a: ChatRoom, b: ChatRoom) => {
+            const dateA = new Date(a.lastUpdate);
+            const dateB = new Date(b.lastUpdate);
 
-          return dateB.getTime() - dateA.getTime();
-        });
+            return dateB.getTime() - dateA.getTime();
+          });
+        }
       }
     });
   }

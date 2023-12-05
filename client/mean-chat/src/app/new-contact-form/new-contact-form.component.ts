@@ -13,7 +13,7 @@ import { User } from '../interfaces/user.interface';
 })
 export class NewContactFormComponent implements OnInit {
   @Input() toggleNewContactForm!: () => void;
-  foundUsersList: any[] = [];
+  foundUsersList: User[] = [];
   searchForm!: FormGroup;
 
   constructor(
@@ -46,7 +46,7 @@ export class NewContactFormComponent implements OnInit {
         next: (response: any) => {
           this.foundUsersList = response;
           this.foundUsersList = this.foundUsersList.filter((user: User) => {
-            return user._id !== userData._id && !userData.contacts.some((contact: any) => contact._id === user._id);
+            return user._id !== userData._id && !userData.contacts.some((contact: User) => contact._id === user._id);
           })
         },
       });

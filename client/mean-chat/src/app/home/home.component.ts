@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { DataService } from '../data.service';
 import { TokenService } from '../token.service';
 import { io, Socket } from 'socket.io-client';
+import { User } from '../interfaces/user.interface';
 
 @Component({
   selector: 'app-home',
@@ -10,7 +11,7 @@ import { io, Socket } from 'socket.io-client';
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
-  userData: any;
+  userData!: User;
   private socket: Socket | null = null;
   private webSocketInitialized = false;
 
