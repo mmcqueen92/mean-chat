@@ -27,6 +27,38 @@ export class ChatComponent implements OnInit {
     private tokenService: TokenService
   ) {}
 
+  ngOnInit(): void {
+    this.dataService.activeChat$.subscribe((activeChat) => {
+      this.activeChat = activeChat;
+      if (activeChat) {
+        this.messages = activeChat.messages.map((message: Message) => ({
+          ...message,
+          sender:
+            typeof message.sender === 'string'
+              ? this.getSenderData(message.sender)
+              : message.sender,
+        }));
+
+        this.messages.reverse();
+
+        this.participants = activeChat.participants.filter(
+          (participant: ChatRoomParticipant) => {
+            return participant.user._id !== this.dataService.getUserData()._id;
+          }
+        );
+      } else {
+        this.messages = [];
+        this.participants = [];
+      }
+    });
+
+    this.dataService.userData$.subscribe((userData) => {
+      if (userData) {
+        this.currentUser = userData;
+      }
+    });
+  }
+
   getSenderData(senderId: string) {
     const sender = this.activeChat.participants.find(
       (participant: ChatRoomParticipant) => {
@@ -95,38 +127,6 @@ export class ChatComponent implements OnInit {
 
   getMessageSenderName(sender: string | User): string {
     return typeof sender === 'object' ? sender.name : sender;
-  }
-
-  ngOnInit(): void {
-    this.dataService.activeChat$.subscribe((activeChat) => {
-      this.activeChat = activeChat;
-      if (activeChat) {
-        this.messages = activeChat.messages.map((message: Message) => ({
-          ...message,
-          sender:
-            typeof message.sender === 'string'
-              ? this.getSenderData(message.sender)
-              : message.sender,
-        }));
-
-        this.messages.reverse();
-
-        this.participants = activeChat.participants.filter(
-          (participant: ChatRoomParticipant) => {
-            return participant.user._id !== this.dataService.getUserData()._id;
-          }
-        );
-      } else {
-        this.messages = [];
-        this.participants = [];
-      }
-    });
-
-    this.dataService.userData$.subscribe((userData) => {
-      if (userData) {
-        this.currentUser = userData;
-      }
-    });
   }
 
   sendMessage() {

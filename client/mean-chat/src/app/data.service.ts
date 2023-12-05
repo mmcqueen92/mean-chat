@@ -132,9 +132,11 @@ export class DataService {
 
   removeChat(chatRoomId: string) {
     const currentData = this.userDataSubject.value;
-    currentData.chatrooms = currentData.chatrooms.filter((chatroom: ChatRoom) => {
-      return chatroom._id !== chatRoomId;
-    });
+    currentData.chatrooms = currentData.chatrooms.filter(
+      (chatroom: ChatRoom) => {
+        return chatroom._id !== chatRoomId;
+      }
+    );
     this.setUserData(currentData);
     this.setActiveChat(null);
   }
@@ -142,6 +144,7 @@ export class DataService {
   updateLastVisit(chatRoomId: string) {
     const token = this.tokenService.getToken();
     const headers = new HttpHeaders().set('Authorization', `${token}`);
+    const currentData = this.userDataSubject.value;
 
     this.http
       .post(
@@ -153,7 +156,31 @@ export class DataService {
         next: (response: any) => {
           console.log('Updated last visit: ', response);
           if (response.success) {
-            // NEED TO FILL THIS PART IN
+            // Find the chatroom with "_id" value equal to chatRoomId in currentData.chatrooms
+            const chatroomIndex = currentData.chatrooms.findIndex(
+              (chatroom: ChatRoom) => chatroom._id === chatRoomId
+            );
+
+            if (chatroomIndex !== -1) {
+              // Find the participant element with a "user" value equal to currentData._id
+              const participantIndex = currentData.chatrooms[
+                chatroomIndex
+              ].participants.findIndex(
+                (participant: ChatRoomParticipant) =>
+                  participant.user === currentData._id
+              );
+
+              if (participantIndex !== -1) {
+                // Update that element's "lastVisit" value with a new Date
+                currentData.chatrooms[chatroomIndex].participants[
+                  participantIndex
+                ].lastVisit = new Date();
+                console.log('CURRENTDATA: ', currentData);
+
+
+                this.setUserData(currentData);
+              }
+            }
           }
         },
       });

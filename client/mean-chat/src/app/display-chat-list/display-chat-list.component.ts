@@ -37,8 +37,14 @@ export class DisplayChatListComponent implements OnInit {
     return chatrooms.every((chatroom) => typeof chatroom !== 'string');
   }
 
-  getParticipants(chatroom: string | ChatRoom): ChatRoomParticipant[] {
-    return typeof chatroom === 'string' ? [] : chatroom.participants;
+  getNonUserParticipants(chatroom: string | ChatRoom): ChatRoomParticipant[] {
+    let nonUserParticipants = typeof chatroom === 'string' ? [] : chatroom.participants;
+
+    nonUserParticipants = nonUserParticipants.filter((participant: ChatRoomParticipant) => {
+      return participant.user._id !== this.currentUser._id;
+    })
+
+    return nonUserParticipants;
   }
 
   setActiveChat(chat: ChatRoom) {

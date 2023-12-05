@@ -5,7 +5,7 @@
         *ngFor="let chatroom of currentUser.chatrooms"
         (click)="setActiveChat(chatroom)"
       >
-        <div class="chat-list-item" *ngIf="chatroom.name">
+        <div *ngIf="chatroom.name" class="chat-list-item">
           {{ chatroom.name }}
         </div>
 
@@ -13,7 +13,7 @@
           <div class="participant-names">
             <span
               *ngFor="
-                let participant of getParticipants(chatroom);
+                let participant of getNonUserParticipants(chatroom);
                 let lastParticipant = last
               "
             >
