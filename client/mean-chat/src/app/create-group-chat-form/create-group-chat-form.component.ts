@@ -2,6 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DataService } from '../data.service';
 import { TokenService } from '../token.service';
+import { ChatRoom } from '../interfaces/chatroom.interface';
+import { User } from '../interfaces/user.interface';
 
 @Component({
   selector: 'app-create-group-chat-form',
@@ -10,9 +12,9 @@ import { TokenService } from '../token.service';
 })
 export class CreateGroupChatFormComponent implements OnInit {
   @Input() toggleGroupChatForm!: () => void;
-  chatrooms: any[] = [];
-  contacts: any[] = [];
-  filteredContacts: any[] = [];
+  chatrooms: ChatRoom[] = [];
+  contacts: User[] = [];
+  filteredContacts: User[] = [];
   newGroupParticipants: string[] = [];
   newGroupName: string = '';
 
@@ -34,7 +36,7 @@ export class CreateGroupChatFormComponent implements OnInit {
     });
   }
 
-  onSearchQueryChanged(searchQuery: any) {
+  onSearchQueryChanged(searchQuery: string) {
     this.filteredContacts = this.contacts.filter((contact) => {
       // check if name contains searchQuery as a substring
       return contact.name.toLowerCase().includes(searchQuery.toLowerCase());

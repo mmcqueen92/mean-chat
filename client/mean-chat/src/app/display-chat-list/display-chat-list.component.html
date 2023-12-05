@@ -1,24 +1,29 @@
 <div class="chat-list">
-  <div
-    *ngFor="let chatroom of currentUser.chatrooms"
-    (click)="setActiveChat(chatroom)"
-  >
-    <div *ngIf="chatroom.name" class="chat-list-item">
-      {{ chatroom.name }}
-    </div>
-    <div *ngIf="!chatroom.name" class="chat-list-item">
-      <div class="participant-names">
-        <span
-          *ngFor="
-            let participant of chatroom.filteredParticipants;
-            let lastParticipant = last
-          "
-        >
-          {{ participant.user.name }}
-          <span *ngIf="!lastParticipant && chatroom.participants.length > 2"
-            >,
-          </span>
-        </span>
+  <div *ngIf="currentUser">
+    <div *ngIf="isChatRoomObjectArray(currentUser.chatrooms)">
+      <div
+        *ngFor="let chatroom of currentUser.chatrooms"
+        (click)="setActiveChat(chatroom)"
+      >
+        <div class="chat-list-item" *ngIf="chatroom.name">
+          {{ chatroom.name }}
+        </div>
+
+        <div *ngIf="!chatroom.name" class="chat-list-item">
+          <div class="participant-names">
+            <span
+              *ngFor="
+                let participant of getParticipants(chatroom);
+                let lastParticipant = last
+              "
+            >
+              {{ participant.user.name }}
+              <span *ngIf="!lastParticipant && chatroom.participants.length > 2"
+                >,
+              </span>
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   </div>

@@ -32,7 +32,7 @@ export class ContactsListComponent implements OnInit {
     const selectedContactID = contact._id;
 
     const chat = user.chatrooms.find((chatRoom: ChatRoom) => {
-      let participantIds: any[] = [];
+      let participantIds: string[] = [];
       const participants = chatRoom.participants;
 
       // loop through participants, add the ._id of each participant to the participantsIds array

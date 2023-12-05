@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../data.service';
+import { User } from '../interfaces/user.interface';
+import { ChatRoom } from '../interfaces/chatroom.interface';
+import { ChatRoomParticipant } from '../interfaces/chatroom-participant.interface';
 
 @Component({
   selector: 'app-display-chat-list',
@@ -7,13 +10,7 @@ import { DataService } from '../data.service';
   styleUrls: ['./display-chat-list.component.css'],
 })
 export class DisplayChatListComponent implements OnInit {
-  currentUser: any = {
-    _id: null,
-    chatrooms: [],
-    contacts: [],
-    email: null,
-    name: null,
-  };
+  currentUser!: User;
 
   constructor(private dataService: DataService) {}
 
@@ -21,12 +18,6 @@ export class DisplayChatListComponent implements OnInit {
     this.dataService.userData$.subscribe((userData) => {
       if (userData) {
         this.currentUser = userData;
-
-        for (const chatroom of this.currentUser.chatrooms) {
-          chatroom.filteredParticipants = chatroom.participants.filter(
-            (participant: any) => participant.user._id !== this.currentUser._id
-          );
-        }
 
         this.currentUser.chatrooms.sort((a: any, b: any) => {
           const dateA = new Date(a.lastUpdate);
@@ -38,7 +29,17 @@ export class DisplayChatListComponent implements OnInit {
     });
   }
 
-  setActiveChat(chat: any) {
+  isChatRoomObjectArray(
+    chatrooms: (ChatRoom | string)[]
+  ): chatrooms is ChatRoom[] {
+    return chatrooms.every((chatroom) => typeof chatroom !== 'string');
+  }
+
+  getParticipants(chatroom: string | ChatRoom): ChatRoomParticipant[] {
+    return typeof chatroom === 'string' ? [] : chatroom.participants;
+  }
+
+  setActiveChat(chat: ChatRoom) {
     this.dataService.setActiveChat(chat);
   }
 }
