@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../data.service';
 import { TokenService } from '../token.service';
+import { ApiService } from '../api.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User } from '../interfaces/user.interface';
 import { Message } from '../interfaces/message.interface';
@@ -24,7 +25,8 @@ export class ChatComponent implements OnInit {
   constructor(
     private dataService: DataService,
     private http: HttpClient,
-    private tokenService: TokenService
+    private tokenService: TokenService,
+    private apiService: ApiService
   ) {}
 
   ngOnInit(): void {
@@ -132,13 +134,10 @@ export class ChatComponent implements OnInit {
   sendMessage() {
     const messageData = {
       text: this.messageText,
-      chatRoom: this.activeChat._id,
-      sender: this.currentUser._id,
-      token: this.tokenService.getToken(),
+      chatRoomId: this.activeChat._id,
     };
 
-    this.http
-      .post('http://localhost:3001/messages/new', messageData)
+    this.apiService.sendMessage(messageData)
       .subscribe((response) => {
         this.messageText = '';
       });

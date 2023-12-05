@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { TokenService } from './token.service';
+import { ApiService } from './api.service';
 import { User } from './interfaces/user.interface';
 import { ChatRoom } from './interfaces/chatroom.interface';
 import { EmittedMessageData } from './interfaces/emitted-message-data.interface';
@@ -16,7 +17,7 @@ export class DataService {
   private activeChatSubject = new BehaviorSubject<any>(null);
   public activeChat$ = this.activeChatSubject.asObservable();
 
-  constructor(private http: HttpClient, private tokenService: TokenService) {}
+  constructor(private http: HttpClient, private tokenService: TokenService, private apiService: ApiService) {}
 
   setUserData(data: User) {
     this.userDataSubject.next(data);
@@ -37,11 +38,14 @@ export class DataService {
     const currentData = this.userDataSubject.value;
     const currentActiveChat = this.activeChatSubject.value;
 
-    if (currentData && currentData.chatrooms) {
-      const chatroomIndex = currentData.chatrooms.findIndex(
-        (chat: ChatRoom) => chat._id === messageData.newMessage.chatRoom
-      );
+    console.log("MESSAGE DATA: ", messageData)
 
+    if (currentData && currentData.chatrooms) {
+      
+      const chatroomIndex = currentData.chatrooms.findIndex(
+        (chat: ChatRoom) => chat._id === messageData.chatroom._id
+      );
+        console.log("CHATROOM INDEX: ", chatroomIndex)
       if (chatroomIndex > -1) {
         // Push the incoming message to the chatroom's messages array
         currentData.chatrooms[chatroomIndex].messages.push(
@@ -55,7 +59,7 @@ export class DataService {
 
         if (
           currentActiveChat &&
-          currentActiveChat._id === messageData.newMessage.chatRoom
+          currentActiveChat._id === messageData.chatroom._id
         ) {
           this.setActiveChat(currentActiveChat);
         }
@@ -142,16 +146,10 @@ export class DataService {
   }
 
   updateLastVisit(chatRoomId: string) {
-    const token = this.tokenService.getToken();
-    const headers = new HttpHeaders().set('Authorization', `${token}`);
+
     const currentData = this.userDataSubject.value;
 
-    this.http
-      .post(
-        'http://localhost:3001/update-last-visit',
-        { chatRoomId },
-        { headers }
-      )
+    this.apiService.updateLastVisit(chatRoomId)
       .subscribe({
         next: (response: any) => {
           if (response.success) {
@@ -159,26 +157,23 @@ export class DataService {
             const chatroomIndex = currentData.chatrooms.findIndex(
               (chatroom: ChatRoom) => chatroom._id === chatRoomId
             );
-            
-            console.log("CHATROOM INDEX: ", chatroomIndex)
 
             if (chatroomIndex !== -1) {
               // Find the participant element with a "user" value equal to currentData._id
-              console.log("CHATROOM: ", currentData.chatrooms[chatroomIndex])
+
               const participantIndex = currentData.chatrooms[
                 chatroomIndex
               ].participants.findIndex(
                 (participant: ChatRoomParticipant) =>
                   participant.user._id === currentData._id
               );
-                console.log("PARTICIPANT INDEX: ", participantIndex)
+
               if (participantIndex !== -1) {
                 // Update that element's "lastVisit" value with a new Date
                 currentData.chatrooms[chatroomIndex].participants[
                   participantIndex
                 ].lastVisit = new Date();
                 this.setUserData(currentData);
-                console.log("CURRENT DATA: ", currentData)
               }
             }
           }

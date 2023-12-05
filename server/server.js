@@ -428,21 +428,23 @@ app.post("/delete-chatroom", requireAuth, async (req, res, next) => {
   }
 });
 
-app.post("/messages/new", async (req, res, next) => {
-  const { text, sender, chatRoom } = req.body;
+app.post("/new-message", requireAuth, async (req, res, next) => {
   try {
+    const { messageData } = req.body;
+    const { text, chatRoomId } = messageData;
+    const userId = req.userId;
     // create new message
     const newMessage = new Message({
       text,
-      sender,
-      chatRoom,
+      sender: userId,
+      chatRoomId,
     });
 
     // save new message to db
     await newMessage.save();
 
     // find chatroom that message belongs in
-    const chatroom = await ChatRoom.findById(chatRoom).populate(
+    const chatroom = await ChatRoom.findById(chatRoomId).populate(
       "participants.user"
     );
 

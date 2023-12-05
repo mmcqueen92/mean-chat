@@ -39,6 +39,7 @@ export class HomeComponent implements OnInit {
 
           this.socket.on('initial-data', (data) => {
             this.dataService.setUserData(data);
+            console.log("INITIAL DATA: ", data)
           });
 
           this.webSocketInitialized = true;
