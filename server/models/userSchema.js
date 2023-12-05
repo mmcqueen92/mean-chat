@@ -15,6 +15,7 @@ const UserSchema = new Schema({
   hashedPassword: {
     type: String,
     required: [true, "The hashedPassword field is required"],
+    select: false
   },
   chatrooms: {
     type: [
@@ -38,9 +39,19 @@ const UserSchema = new Schema({
 
 UserSchema.methods.comparePassword = async function (candidatePassword) {
   try {
+    // Explicitly select the hashedPassword field
+    const user = await this.constructor
+      .findOne({ _id: this._id })
+      .select("+hashedPassword");
+
+    if (!user) {
+      // Handle the case where the user is not found
+      return false;
+    }
+
     const isMatch = await bcrypt.compare(
       candidatePassword,
-      this.hashedPassword
+      user.hashedPassword
     );
     return isMatch;
   } catch (err) {

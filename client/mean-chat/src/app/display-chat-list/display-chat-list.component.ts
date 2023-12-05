@@ -27,6 +27,13 @@ export class DisplayChatListComponent implements OnInit {
             (participant: any) => participant.user._id !== this.currentUser._id
           );
         }
+
+        this.currentUser.chatrooms.sort((a: any, b: any) => {
+          const dateA = new Date(a.lastUpdate);
+          const dateB = new Date(b.lastUpdate);
+
+          return dateB.getTime() - dateA.getTime();
+        });
       }
     });
   }
@@ -34,6 +41,4 @@ export class DisplayChatListComponent implements OnInit {
   setActiveChat(chat: any) {
     this.dataService.setActiveChat(chat);
   }
-
-  getLastTimestamp(chatroom: any) {}
 }

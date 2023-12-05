@@ -1,6 +1,6 @@
 <div class="chat-list">
   <div
-    *ngFor="let chatroom of currentUser.chatrooms; let last = last"
+    *ngFor="let chatroom of currentUser.chatrooms"
     (click)="setActiveChat(chatroom)"
   >
     <div *ngIf="chatroom.name" class="chat-list-item">

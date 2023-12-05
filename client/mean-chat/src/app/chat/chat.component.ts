@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DataService } from '../data.service';
 import { TokenService } from '../token.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { User } from '../interfaces/user.interface';
 
 @Component({
   selector: 'app-chat',
@@ -59,7 +60,7 @@ export class ChatComponent implements OnInit {
             return participant;
           });
         }
-        console.log("ACTIVE CHAT: ", this.activeChat)
+        console.log('ACTIVE CHAT: ', this.activeChat);
       } else {
         this.messages = [];
         this.participants = [];
@@ -94,14 +95,14 @@ export class ChatComponent implements OnInit {
     const newContactEmail = contactEmail;
 
     this.http
-      .post(
+      .post<User>(
         'http://localhost:3001/add-contact',
         { newContactEmail },
         { headers }
       )
       .subscribe({
-        next: (response: any) => {
-          this.dataService.handleContact(response.newContact);
+        next: (response: User) => {
+          this.dataService.handleContact(response);
           this.participants.forEach((participant) => {
             if (participant.user.email === contactEmail) {
               participant.user.inUserContacts = true;

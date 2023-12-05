@@ -4,6 +4,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { TokenService } from '../token.service';
 import { DataService } from '../data.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { User } from '../interfaces/user.interface';
 
 @Component({
   selector: 'app-new-contact-form',
@@ -56,14 +57,14 @@ export class NewContactFormComponent implements OnInit {
     const headers = new HttpHeaders().set('Authorization', `${token}`);
 
     this.http
-      .post(
+      .post<User>(
         'http://localhost:3001/add-contact',
         { newContactEmail },
         { headers }
       )
       .subscribe({
-        next: (response: any) => {
-          this.dataService.handleContact(response.newContact);
+        next: (response: User) => {
+          this.dataService.handleContact(response);
           this.toggleNewContactForm();
         },
         error: (error) => {

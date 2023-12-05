@@ -223,10 +223,7 @@ app.post("/add-contact", async (req, res, next) => {
     // save updated users
     await currentUser.save();
 
-    res.json({
-      message: "Contact added successfully",
-      newContact: newContactUser,
-    });
+    res.json(newContactUser);
   } catch (error) {
     console.error("Error adding contact:", error);
     res.status(500).json({ error: "Error adding contact" });
@@ -444,12 +441,16 @@ app.post("/messages/new", async (req, res, next) => {
     // save new message to db
     await newMessage.save();
 
-    // add message id to corresponding chatroom's message array
+    // find chatroom that message belongs in
     const chatroom = await ChatRoom.findById(chatRoom).populate(
       "participants.user"
     );
 
+    // add message id to corresponding chatroom's message array
     chatroom.messages.push(newMessage._id);
+
+    // update the chatroom's "lastUpdate" property
+    chatroom.lastUpdate = new Date();
     await chatroom.save();
 
     // get chatroom's participants
@@ -466,6 +467,43 @@ app.post("/messages/new", async (req, res, next) => {
     res.json({ message: "Message sent successfully" });
   } catch (error) {
     res.status(500).json({ error: "Error sending the message" });
+  }
+});
+
+app.post("/update-last-visit", requireAuth, async (req, res, next) => {
+  try {
+    const userId = req.userId;
+    const { chatRoomId } = req.body;
+
+    // Find the chatroom by ID
+    const chatroom = await ChatRoom.findById(chatRoomId);
+
+    if (!chatroom) {
+      return res.status(404).json({ error: "Chat room not found" });
+    }
+
+    // Find the participant in the participants array
+    const participant = chatroom.participants.find(
+      (participant) => participant.user == userId
+    );
+
+    if (!participant) {
+      return res
+        .status(404)
+        .json({ error: "Participant not found in the chat room" });
+    }
+
+    // Update the lastVisit property
+    participant.lastVisit = new Date();
+
+    // Save the updated chatroom
+    await chatroom.save();
+
+    // Respond with success
+    res.status(200).json({ success: true });
+  } catch (e) {
+    console.error("Error: ", e);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
