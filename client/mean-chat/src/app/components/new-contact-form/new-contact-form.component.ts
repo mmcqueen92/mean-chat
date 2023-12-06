@@ -1,10 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { TokenService } from '../../services/token.service';
 import { DataService } from '../../services/data.service';
 import { ApiService } from '../../services/api.service';
 import { User } from '../../interfaces/user.interface';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-new-contact-form',
@@ -15,9 +15,10 @@ export class NewContactFormComponent implements OnInit {
   @Input() toggleNewContactForm!: () => void;
   foundUsersList: User[] = [];
   searchForm!: FormGroup;
+  currentUser!: User;
+  private userDataSubscription: Subscription | null = null;
 
   constructor(
-    private tokenService: TokenService,
     private dataService: DataService,
     private apiService: ApiService,
     private fb: FormBuilder
@@ -33,6 +34,14 @@ export class NewContactFormComponent implements OnInit {
       .subscribe((value) => {
         this.searchUsers(value.query);
       });
+
+    this.userDataSubscription = this.dataService.userData$.subscribe(
+      (userData) => {
+        if (userData) {
+          this.currentUser = userData;
+        }
+      }
+    );
   }
 
   searchUsers(query: string): void {
@@ -61,5 +70,25 @@ export class NewContactFormComponent implements OnInit {
         console.error('Error: ', error);
       },
     });
+  }
+
+  userInContacts(user: User): boolean {
+    if (this.currentUser.contacts) {
+      return this.currentUser.contacts.some((contact) => {
+        if (typeof contact === 'string') {
+          return contact === user._id;
+        } else {
+          return contact._id === user._id;
+        }
+      });
+    }
+    return false;
+  }
+
+  userIsCurrentUser(user: User) {
+    if (this.currentUser) {
+      return user._id === this.currentUser._id;
+    }
+    return false;
   }
 }

@@ -57,7 +57,7 @@ export class ChatComponent implements OnInit {
     });
   }
 
-  getSenderData(senderId: string) {
+  getSenderData(senderId: string): {_id: string, name: string} | null {
     const sender = this.activeChat.participants.find(
       (participant: ChatRoomParticipant) => {
         return participant.user._id === senderId;
@@ -140,7 +140,7 @@ export class ChatComponent implements OnInit {
     return typeof sender === 'object' ? sender.name : sender;
   }
 
-  sendMessage() {
+  sendMessage(): void {
     const messageData = {
       text: this.messageText,
       chatRoomId: this.activeChat._id,
@@ -151,7 +151,7 @@ export class ChatComponent implements OnInit {
     });
   }
 
-  addToContacts(newContactEmail: string) {
+  addToContacts(newContactEmail: string): void {
     this.apiService.addNewContact(newContactEmail).subscribe({
       next: (response: User) => {
         this.dataService.handleContact(response);
@@ -162,7 +162,7 @@ export class ChatComponent implements OnInit {
     });
   }
 
-  deleteChatRoom(chatRoomId: string) {
+  deleteChatRoom(chatRoomId: string): void {
     this.apiService.deleteChatRoom(chatRoomId).subscribe({
       next: (response: { message: string; chatRoomId: string }) => {
         this.dataService.removeChat(response.chatRoomId);
@@ -173,19 +173,19 @@ export class ChatComponent implements OnInit {
     });
   }
 
-  toggleChatControls() {
+  toggleChatControls(): void {
     this.chatControls
       ? (this.chatControls = false)
       : (this.chatControls = true);
   }
 
-  togglePromoteMembers() {
+  togglePromoteMembers(): void {
     this.promoteMembers
       ? (this.promoteMembers = false)
       : (this.promoteMembers = true);
   }
 
-  promoteToAdmin(chatMemberId: string) {
+  promoteToAdmin(chatMemberId: string): void {
     const chatRoomId = this.activeChat._id;
 
     this.apiService.promoteToAdmin(chatMemberId, chatRoomId).subscribe({
@@ -199,7 +199,7 @@ export class ChatComponent implements OnInit {
     });
   }
 
-  leaveChat() {
+  leaveChat(): void {
     const chatRoomId = this.activeChat._id;
 
     this.apiService.leaveChat(chatRoomId).subscribe({

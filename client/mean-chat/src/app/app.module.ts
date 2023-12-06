@@ -11,7 +11,6 @@ import { ChatListComponent } from './components/chat-list/chat-list.component';
 import { ContactsComponent } from './components/contacts/contacts.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SearchBarComponent } from './components/search-bar/search-bar.component';
-import { SearchDisplayComponent } from './components/search-display/search-display.component';
 import { CreateGroupChatFormComponent } from './components/create-group-chat-form/create-group-chat-form.component';
 import { DisplayChatListComponent } from './components/display-chat-list/display-chat-list.component';
 import { NewContactFormComponent } from './components/new-contact-form/new-contact-form.component';
@@ -27,7 +26,6 @@ import { ContactsListComponent } from './components/contacts-list/contacts-list.
     ChatListComponent,
     ContactsComponent,
     SearchBarComponent,
-    SearchDisplayComponent,
     CreateGroupChatFormComponent,
     DisplayChatListComponent,
     NewContactFormComponent,

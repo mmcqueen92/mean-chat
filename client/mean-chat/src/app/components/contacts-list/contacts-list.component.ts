@@ -24,7 +24,7 @@ export class ContactsListComponent implements OnInit {
     });
   }
 
-  findChat(contact: User) {
+  findChat(contact: User): ChatRoom {
     const user = this.dataService.getUserData();
     const currentUserID = user._id;
     const selectedContactID = contact._id;
@@ -45,7 +45,7 @@ export class ContactsListComponent implements OnInit {
       );
     });
 
-    return chat ? chat : false;
+    return chat;
   }
 
   openChat(contact: User): void {

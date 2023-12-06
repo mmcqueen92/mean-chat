@@ -34,24 +34,24 @@ export class CreateGroupChatFormComponent implements OnInit {
     });
   }
 
-  onSearchQueryChanged(searchQuery: string) {
+  onSearchQueryChanged(searchQuery: string): void {
     this.filteredContacts = this.contacts.filter((contact) => {
       // check if name contains searchQuery as a substring
       return contact.name.toLowerCase().includes(searchQuery.toLowerCase());
     });
   }
 
-  addToGroupChat(id: string) {
+  addToGroupChat(id: string): void {
     this.newGroupParticipants.push(id);
   }
 
-  removeFromGroupChat(id: string) {
+  removeFromGroupChat(id: string): void {
     this.newGroupParticipants = this.newGroupParticipants.filter(
       (el) => el !== id
     );
   }
 
-  createGroupChat() {
+  createGroupChat(): void {
     const participantIds = this.newGroupParticipants;
     const chatName = this.newGroupName;
 

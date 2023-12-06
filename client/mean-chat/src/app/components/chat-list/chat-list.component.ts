@@ -8,7 +8,7 @@ import { Component } from '@angular/core';
 export class ChatListComponent {
   createGroupChatForm = false;
 
-  toggleGroupChatForm = () => {
+  toggleGroupChatForm = (): void => {
     if (!this.createGroupChatForm) {
       this.createGroupChatForm = true;
     } else {

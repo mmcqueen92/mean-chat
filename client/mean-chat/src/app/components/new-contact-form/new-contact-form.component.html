@@ -7,11 +7,15 @@
     <input type="text" formControlName="query" placeholder="Search users..." />
   </form>
   <div class="found-users">
-    <div *ngFor="let user of foundUsersList" class="found-user-item">
-      <div class="found-user-name">
-        {{ user.name }}
+    <div *ngFor="let user of foundUsersList">
+      <div *ngIf="!userInContacts(user) && !userIsCurrentUser(user)" class="found-user-item">
+        <div class="found-user-name">
+          {{ user.name }}
+        </div>
       </div>
-      <button (click)="addNewContact(user.email)" class="action-button">Add Contact</button>
+      <button (click)="addNewContact(user.email)" class="action-button">
+        Add Contact
+      </button>
     </div>
   </div>
 </div>
