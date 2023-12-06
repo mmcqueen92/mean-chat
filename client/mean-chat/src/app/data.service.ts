@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { TokenService } from './token.service';
 import { ApiService } from './api.service';
 import { User } from './interfaces/user.interface';
 import { ChatRoom } from './interfaces/chatroom.interface';
@@ -17,7 +15,7 @@ export class DataService {
   private activeChatSubject = new BehaviorSubject<any>(null);
   public activeChat$ = this.activeChatSubject.asObservable();
 
-  constructor(private http: HttpClient, private tokenService: TokenService, private apiService: ApiService) {}
+  constructor(private apiService: ApiService) {}
 
   setUserData(data: User) {
     this.userDataSubject.next(data);
@@ -38,14 +36,11 @@ export class DataService {
     const currentData = this.userDataSubject.value;
     const currentActiveChat = this.activeChatSubject.value;
 
-    console.log("MESSAGE DATA: ", messageData)
-
     if (currentData && currentData.chatrooms) {
-      
       const chatroomIndex = currentData.chatrooms.findIndex(
         (chat: ChatRoom) => chat._id === messageData.chatroom._id
       );
-        console.log("CHATROOM INDEX: ", chatroomIndex)
+
       if (chatroomIndex > -1) {
         // Push the incoming message to the chatroom's messages array
         currentData.chatrooms[chatroomIndex].messages.push(
@@ -146,39 +141,37 @@ export class DataService {
   }
 
   updateLastVisit(chatRoomId: string) {
-
     const currentData = this.userDataSubject.value;
 
-    this.apiService.updateLastVisit(chatRoomId)
-      .subscribe({
-        next: (response: any) => {
-          if (response.success) {
-            // Find the chatroom with "_id" value equal to chatRoomId in currentData.chatrooms
-            const chatroomIndex = currentData.chatrooms.findIndex(
-              (chatroom: ChatRoom) => chatroom._id === chatRoomId
+    this.apiService.updateLastVisit(chatRoomId).subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          // Find the chatroom with "_id" value equal to chatRoomId in currentData.chatrooms
+          const chatroomIndex = currentData.chatrooms.findIndex(
+            (chatroom: ChatRoom) => chatroom._id === chatRoomId
+          );
+
+          if (chatroomIndex !== -1) {
+            // Find the participant element with a "user" value equal to currentData._id
+
+            const participantIndex = currentData.chatrooms[
+              chatroomIndex
+            ].participants.findIndex(
+              (participant: ChatRoomParticipant) =>
+                participant.user._id === currentData._id
             );
 
-            if (chatroomIndex !== -1) {
-              // Find the participant element with a "user" value equal to currentData._id
-
-              const participantIndex = currentData.chatrooms[
-                chatroomIndex
-              ].participants.findIndex(
-                (participant: ChatRoomParticipant) =>
-                  participant.user._id === currentData._id
-              );
-
-              if (participantIndex !== -1) {
-                // Update that element's "lastVisit" value with a new Date
-                currentData.chatrooms[chatroomIndex].participants[
-                  participantIndex
-                ].lastVisit = new Date();
-                this.setUserData(currentData);
-              }
+            if (participantIndex !== -1) {
+              // Update that element's "lastVisit" value with a new Date
+              currentData.chatrooms[chatroomIndex].participants[
+                participantIndex
+              ].lastVisit = new Date();
+              this.setUserData(currentData);
             }
           }
-        },
-      });
+        }
+      },
+    });
   }
 
   clearAllData() {

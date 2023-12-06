@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { TokenService } from '../token.service';
 import { DataService } from '../data.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { ApiService } from '../api.service';
 import { User } from '../interfaces/user.interface';
 
 @Component({
@@ -17,9 +17,9 @@ export class NewContactFormComponent implements OnInit {
   searchForm!: FormGroup;
 
   constructor(
-    private http: HttpClient,
     private tokenService: TokenService,
     private dataService: DataService,
+    private apiService: ApiService,
     private fb: FormBuilder
   ) {}
 
@@ -36,40 +36,30 @@ export class NewContactFormComponent implements OnInit {
   }
 
   searchUsers(query: string): void {
-    const token = this.tokenService.getToken();
-    const headers = new HttpHeaders().set('Authorization', `${token}`);
     const userData = this.dataService.getUserData();
 
-    this.http
-      .post<User[]>('http://localhost:3001/search-users', { query }, { headers })
-      .subscribe({
-        next: (response: User[]) => {
-          this.foundUsersList = response;
-          this.foundUsersList = this.foundUsersList.filter((user: User) => {
-            return user._id !== userData._id && !userData.contacts.some((contact: User) => contact._id === user._id);
-          })
-        },
-      });
+    this.apiService.searchUsers(query).subscribe({
+      next: (response: User[]) => {
+        this.foundUsersList = response;
+        this.foundUsersList = this.foundUsersList.filter((user: User) => {
+          return (
+            user._id !== userData._id &&
+            !userData.contacts.some((contact: User) => contact._id === user._id)
+          );
+        });
+      },
+    });
   }
 
   addNewContact(newContactEmail: string): void {
-    const token = this.tokenService.getToken();
-    const headers = new HttpHeaders().set('Authorization', `${token}`);
-
-    this.http
-      .post<User>(
-        'http://localhost:3001/add-contact',
-        { newContactEmail },
-        { headers }
-      )
-      .subscribe({
-        next: (response: User) => {
-          this.dataService.handleContact(response);
-          this.toggleNewContactForm();
-        },
-        error: (error) => {
-          console.error('Error: ', error);
-        },
-      });
+    this.apiService.addNewContact(newContactEmail).subscribe({
+      next: (response: User) => {
+        this.dataService.handleContact(response);
+        this.toggleNewContactForm();
+      },
+      error: (error) => {
+        console.error('Error: ', error);
+      },
+    });
   }
 }

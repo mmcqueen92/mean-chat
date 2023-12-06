@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../data.service';
-import { TokenService } from '../token.service';
 import { ApiService } from '../api.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User } from '../interfaces/user.interface';
 import { Message } from '../interfaces/message.interface';
 import { ChatRoom } from '../interfaces/chatroom.interface';
@@ -24,8 +22,6 @@ export class ChatComponent implements OnInit {
 
   constructor(
     private dataService: DataService,
-    private http: HttpClient,
-    private tokenService: TokenService,
     private apiService: ApiService
   ) {}
 
@@ -137,56 +133,31 @@ export class ChatComponent implements OnInit {
       chatRoomId: this.activeChat._id,
     };
 
-    this.apiService.sendMessage(messageData)
-      .subscribe((response) => {
-        this.messageText = '';
-      });
+    this.apiService.sendMessage(messageData).subscribe((response) => {
+      this.messageText = '';
+    });
   }
 
-  addToContacts(contactEmail: string) {
-    const token = this.tokenService.getToken();
-    const headers = new HttpHeaders().set('Authorization', `${token}`);
-    const newContactEmail = contactEmail;
-
-    this.http
-      .post<User>(
-        'http://localhost:3001/add-contact',
-        { newContactEmail },
-        { headers }
-      )
-      .subscribe({
-        next: (response: User) => {
-          this.dataService.handleContact(response);
-          // this.participants.forEach((participant) => {
-          //   if (participant.user.email === contactEmail) {
-          //     participant.user.inUserContacts = true;
-          //   }
-          // });
-        },
-        error: (error) => {
-          console.error('Error: ', error);
-        },
-      });
+  addToContacts(newContactEmail: string) {
+    this.apiService.addNewContact(newContactEmail).subscribe({
+      next: (response: User) => {
+        this.dataService.handleContact(response);
+      },
+      error: (error) => {
+        console.error('Error: ', error);
+      },
+    });
   }
 
   deleteChatRoom(chatRoomId: string) {
-    const token = this.tokenService.getToken();
-    const headers = new HttpHeaders().set('Authorization', `${token}`);
-
-    this.http
-      .post<{ message: string; chatRoomId: string }>(
-        'http://localhost:3001/delete-chatroom',
-        { chatRoomId },
-        { headers }
-      )
-      .subscribe({
-        next: (response: { message: string; chatRoomId: string }) => {
-          this.dataService.removeChat(response.chatRoomId);
-        },
-        error: (error) => {
-          console.error('Error: ', error);
-        },
-      });
+    this.apiService.deleteChatRoom(chatRoomId).subscribe({
+      next: (response: { message: string; chatRoomId: string }) => {
+        this.dataService.removeChat(response.chatRoomId);
+      },
+      error: (error) => {
+        console.error('Error: ', error);
+      },
+    });
   }
 
   toggleChatControls() {
@@ -203,37 +174,22 @@ export class ChatComponent implements OnInit {
 
   promoteToAdmin(chatMemberId: string) {
     const chatRoomId = this.activeChat._id;
-    const token = this.tokenService.getToken();
-    const headers = new HttpHeaders().set('Authorization', `${token}`);
 
-    this.http
-      .post<ChatRoom>(
-        'http://localhost:3001/promote-to-admin',
-        { chatRoomId, chatMemberId },
-        { headers }
-      )
-      .subscribe({
-        next: (response: ChatRoom) => {
-          this.dataService.handleNewAdmin(response);
-          this.promoteMembers = false;
-        },
-        error: (error) => {
-          console.error('Error: ', error);
-        },
-      });
+    this.apiService.promoteToAdmin(chatMemberId, chatRoomId).subscribe({
+      next: (response: ChatRoom) => {
+        this.dataService.handleNewAdmin(response);
+        this.promoteMembers = false;
+      },
+      error: (error) => {
+        console.error('Error: ', error);
+      },
+    });
   }
 
   leaveChat() {
-    const token = this.tokenService.getToken();
-    const headers = new HttpHeaders().set('Authorization', `${token}`);
     const chatRoomId = this.activeChat._id;
 
-    this.http
-      .post<{ message: string; chatRoomId: string }>(
-        'http://localhost:3001/leave-chat',
-        { chatRoomId },
-        { headers }
-      )
+    this.apiService.leaveChat(chatRoomId)
       .subscribe({
         next: (response: { message: string; chatRoomId: string }) => {
           this.dataService.removeChat(response.chatRoomId);

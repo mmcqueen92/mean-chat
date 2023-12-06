@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DataService } from '../data.service';
-import { TokenService } from '../token.service';
+import { ApiService } from '../api.service';
 import { ChatRoom } from '../interfaces/chatroom.interface';
 import { User } from '../interfaces/user.interface';
 
@@ -20,8 +19,7 @@ export class CreateGroupChatFormComponent implements OnInit {
 
   constructor(
     private dataService: DataService,
-    private http: HttpClient,
-    private tokenService: TokenService
+    private apiService: ApiService
   ) {}
 
   ngOnInit(): void {
@@ -54,29 +52,21 @@ export class CreateGroupChatFormComponent implements OnInit {
   }
 
   createGroupChat() {
-    const token = this.tokenService.getToken();
-    const headers = new HttpHeaders().set('Authorization', `${token}`);
     const participantIds = this.newGroupParticipants;
     const chatName = this.newGroupName;
 
     const participants = participantIds.map((participantId) => {
-      return {user: participantId}
-    })
+      return { user: participantId };
+    });
 
-    this.http
-      .post<ChatRoom>(
-        `http://localhost:3001/create-group-chat`,
-        { participants, chatName },
-        { headers }
-      )
-      .subscribe({
-        next: (response: ChatRoom) => {
-          this.dataService.handleNewChat(response);
-          this.toggleGroupChatForm();
-        },
-        error: (error) => {
-          console.error('Group chat creation error: ', error);
-        },
-      });
+    this.apiService.createGroupChat(participants, chatName).subscribe({
+      next: (response: ChatRoom) => {
+        this.dataService.handleNewChat(response);
+        this.toggleGroupChatForm();
+      },
+      error: (error) => {
+        console.error('Group chat creation error: ', error);
+      },
+    });
   }
 }

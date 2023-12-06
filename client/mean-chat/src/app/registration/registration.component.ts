@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'; // Import required modules for forms
-import { Router } from '@angular/router'; // Import Router for navigation
-import { HttpClient } from '@angular/common/http';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-registration',
@@ -15,7 +15,7 @@ export class RegistrationComponent {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private http: HttpClient
+    private apiService: ApiService
   ) {
     this.registrationForm = this.formBuilder.group({
       name: ['', Validators.required],
@@ -32,9 +32,8 @@ export class RegistrationComponent {
     }
 
     const userData = this.registrationForm.value;
-    // send userData to backend
-    this.http
-      .post<{ token: string }>('http://localhost:3001/register', userData)
+
+    this.apiService.register(userData)
       .subscribe({
         next: (response: { token: string }) => {
           const token = response.token;

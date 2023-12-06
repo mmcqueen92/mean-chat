@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DataService } from '../data.service';
-import { TokenService } from '../token.service';
+import { ApiService } from '../api.service';
 import { User } from '../interfaces/user.interface';
 import { ChatRoom } from '../interfaces/chatroom.interface';
 import { ChatRoomParticipant } from '../interfaces/chatroom-participant.interface';
@@ -15,9 +14,8 @@ export class ContactsListComponent implements OnInit {
   contacts!: User[];
 
   constructor(
-    private http: HttpClient,
-    private tokenService: TokenService,
-    private dataService: DataService
+    private dataService: DataService,
+    private apiService: ApiService
   ) {}
 
   ngOnInit(): void {
@@ -57,43 +55,26 @@ export class ContactsListComponent implements OnInit {
       this.dataService.setActiveChat(chat);
     } else {
       const user = this.dataService.getUserData();
-      const token = this.tokenService.getToken();
-      const headers = new HttpHeaders().set('Authorization', `${token}`);
       const participants = [{ user: user._id }, { user: contact._id }];
-      const body = {
-        participants,
-      };
-
-      this.http
-        .post<ChatRoom>('http://localhost:3001/create-chat', body, { headers })
-        .subscribe({
-          next: (response: ChatRoom) => {
-            this.dataService.handleNewChat(response);
-          },
-          error: (error) => {
-            console.error('Chat creation error: ', error);
-          },
-        });
+      this.apiService.createChat(participants).subscribe({
+        next: (response: ChatRoom) => {
+          this.dataService.handleNewChat(response);
+        },
+        error: (error) => {
+          console.error('Chat creation error: ', error);
+        },
+      });
     }
   }
 
   deleteContact(contactId: string): void {
-    const token = this.tokenService.getToken();
-    const headers = new HttpHeaders().set('Authorization', `${token}`);
-
-    this.http
-      .post<{ message: string; deletedContactId: string }>(
-        'http://localhost:3001/delete-contact',
-        { contactId },
-        { headers }
-      )
-      .subscribe({
-        next: (response: { message: string; deletedContactId: string }) => {
-          this.dataService.handleContactDeletion(response.deletedContactId);
-        },
-        error: (error) => {
-          console.error('Error: ', error);
-        },
-      });
+    this.apiService.deleteContact(contactId).subscribe({
+      next: (response: { message: string; deletedContactId: string }) => {
+        this.dataService.handleContactDeletion(response.deletedContactId);
+      },
+      error: (error) => {
+        console.error('Error: ', error);
+      },
+    });
   }
 }
