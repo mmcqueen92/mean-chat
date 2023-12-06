@@ -72,12 +72,12 @@ export class ApiService {
     );
   }
 
-  public createChat(participants: { user: string }[]) {
+  public createChat(recipientId: string) {
     const url = `${this.apiUrl}/create-chat`;
     const token = this.tokenService.getToken();
     const headers = new HttpHeaders().set('Authorization', `${token}`);
 
-    return this.http.post<ChatRoom>(url, { participants }, { headers });
+    return this.http.post<ChatRoom>(url, { recipientId }, { headers });
   }
 
   public deleteContact(contactId: string) {

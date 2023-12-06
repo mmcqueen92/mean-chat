@@ -54,9 +54,7 @@ export class ContactsListComponent implements OnInit {
     if (chat) {
       this.dataService.setActiveChat(chat);
     } else {
-      const user = this.dataService.getUserData();
-      const participants = [{ user: user._id }, { user: contact._id }];
-      this.apiService.createChat(participants).subscribe({
+      this.apiService.createChat(contact._id).subscribe({
         next: (response: ChatRoom) => {
           this.dataService.handleNewChat(response);
         },

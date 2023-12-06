@@ -99,6 +99,19 @@ export class ChatComponent implements OnInit {
     return false;
   }
 
+  onlyAdmin(): boolean {
+    const userId = this.currentUser._id;
+    if (this.activeChat.admins.length === 1) {
+      const admin = this.activeChat.admins[0];
+      if (typeof admin === 'string') {
+        return admin === userId;
+      } else if (typeof admin === 'object' && admin !== null) {
+        return admin._id === userId;
+      }
+    }
+    return false;
+  }
+
   sentByUser(message: Message): boolean {
     const currentUser = this.currentUser;
 
@@ -189,14 +202,13 @@ export class ChatComponent implements OnInit {
   leaveChat() {
     const chatRoomId = this.activeChat._id;
 
-    this.apiService.leaveChat(chatRoomId)
-      .subscribe({
-        next: (response: { message: string; chatRoomId: string }) => {
-          this.dataService.removeChat(response.chatRoomId);
-        },
-        error: (error) => {
-          console.error('error: ', error);
-        },
-      });
+    this.apiService.leaveChat(chatRoomId).subscribe({
+      next: (response: { message: string; chatRoomId: string }) => {
+        this.dataService.removeChat(response.chatRoomId);
+      },
+      error: (error) => {
+        console.error('error: ', error);
+      },
+    });
   }
 }

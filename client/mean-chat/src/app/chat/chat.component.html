@@ -26,7 +26,7 @@
           {{ participant.user.name }}
           <button
             *ngIf="!inUserContacts(participant.user._id)"
-            (click)="addNewContact(participant.user.email)"
+            (click)="addToContacts(participant.user.email)"
             title="Add to Contacts"
           >
             +
@@ -66,7 +66,7 @@
           Back
         </button>
         <button
-          *ngIf="activeChat.name !== 'User-User'"
+          *ngIf="activeChat.name && !onlyAdmin()"
           (click)="leaveChat()"
           class="action-button warning-button"
         >

@@ -195,12 +195,9 @@ app.post("/search-users", async (req, res, next) => {
   }
 });
 
-app.post("/add-contact", async (req, res, next) => {
+app.post("/add-contact", requireAuth, async (req, res, next) => {
   try {
-    const currentUserId = await verifyToken(req.headers.authorization);
-    if (!currentUserId) {
-      return res.status(404).json({ error: "Authorization error" });
-    }
+    const userId = req.userId;
     const { newContactEmail } = req.body;
 
     // validate request body
@@ -217,7 +214,7 @@ app.post("/add-contact", async (req, res, next) => {
     }
 
     // add new contact to user's contacts list
-    const currentUser = await User.findById(currentUserId);
+    const currentUser = await User.findById(userId);
     currentUser.contacts.push(newContactUser._id);
 
     // save updated users
@@ -230,10 +227,10 @@ app.post("/add-contact", async (req, res, next) => {
   }
 });
 
-app.post("/delete-contact", async (req, res, next) => {
+app.post("/delete-contact", requireAuth, async (req, res, next) => {
   try {
-    const currentUserId = await verifyToken(req.headers.authorization);
-    if (!currentUserId) {
+    const userId = req.userId;
+    if (!userId) {
       return res.status(404).json({ error: "Authorization error" });
     }
     const { contactId } = req.body;
@@ -244,7 +241,7 @@ app.post("/delete-contact", async (req, res, next) => {
     }
 
     // find user and remove contact from contacts list
-    const currentUser = await User.findById(currentUserId);
+    const currentUser = await User.findById(userId);
     currentUser.contacts.pull(contactId);
 
     // save updated user
@@ -260,13 +257,14 @@ app.post("/delete-contact", async (req, res, next) => {
   }
 });
 
-app.post("/create-chat", async (req, res, next) => {
-  const { participants } = req.body;
-  participants.forEach((participant) => {
-    participant.lastVisit = new Date();
-  });
-
+app.post("/create-chat", requireAuth, async (req, res, next) => {
   try {
+    const userId = req.userId;
+    const { recipientId } = req.body;
+    const participants = [{ user: userId }, { user: recipientId }];
+    participants.forEach((participant) => {
+      participant.lastVisit = new Date();
+    });
     // create new chatroom with the provided participants
     const chatRoom = new ChatRoom({
       participants,
