@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ApiService } from './api.service';
-import { User } from './interfaces/user.interface';
-import { ChatRoom } from './interfaces/chatroom.interface';
-import { EmittedMessageData } from './interfaces/emitted-message-data.interface';
-import { ChatRoomParticipant } from './interfaces/chatroom-participant.interface';
+import { User } from '../interfaces/user.interface';
+import { ChatRoom } from '../interfaces/chatroom.interface';
+import { EmittedMessageData } from '../interfaces/emitted-message-data.interface';
+import { ChatRoomParticipant } from '../interfaces/chatroom-participant.interface';
 
 @Injectable({
   providedIn: 'root',

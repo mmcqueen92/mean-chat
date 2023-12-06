@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService } from '../data.service';
-import { ApiService } from '../api.service';
-import { User } from '../interfaces/user.interface';
-import { ChatRoom } from '../interfaces/chatroom.interface';
-import { ChatRoomParticipant } from '../interfaces/chatroom-participant.interface';
+import { DataService } from '../../services/data.service';
+import { ApiService } from '../../services/api.service';
+import { User } from '../../interfaces/user.interface';
+import { ChatRoom } from '../../interfaces/chatroom.interface';
+import { ChatRoomParticipant } from '../../interfaces/chatroom-participant.interface';
 
 @Component({
   selector: 'app-contacts-list',

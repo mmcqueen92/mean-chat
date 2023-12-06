@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService } from '../data.service';
-import { User } from '../interfaces/user.interface';
-import { ChatRoom } from '../interfaces/chatroom.interface';
-import { ChatRoomParticipant } from '../interfaces/chatroom-participant.interface';
+import { DataService } from '../../services/data.service';
+import { User } from '../../interfaces/user.interface';
+import { ChatRoom } from '../../interfaces/chatroom.interface';
+import { ChatRoomParticipant } from '../../interfaces/chatroom-participant.interface';
 
 @Component({
   selector: 'app-display-chat-list',

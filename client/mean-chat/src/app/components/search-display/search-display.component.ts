@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { User } from '../interfaces/user.interface';
+import { User } from '../../interfaces/user.interface';
 
 @Component({
   selector: 'app-search-display',

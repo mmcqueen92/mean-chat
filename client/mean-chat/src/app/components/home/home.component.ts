@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DataService } from '../data.service';
-import { TokenService } from '../token.service';
+import { DataService } from '../../services/data.service';
+import { TokenService } from '../../services/token.service';
 import { io, Socket } from 'socket.io-client';
-import { User } from '../interfaces/user.interface';
+import { User } from '../../interfaces/user.interface';
 
 @Component({
   selector: 'app-home',
@@ -39,7 +39,6 @@ export class HomeComponent implements OnInit {
 
           this.socket.on('initial-data', (data) => {
             this.dataService.setUserData(data);
-            console.log("INITIAL DATA: ", data)
           });
 
           this.webSocketInitialized = true;

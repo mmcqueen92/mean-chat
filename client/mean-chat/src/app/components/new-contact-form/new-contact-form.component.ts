@@ -1,10 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { TokenService } from '../token.service';
-import { DataService } from '../data.service';
-import { ApiService } from '../api.service';
-import { User } from '../interfaces/user.interface';
+import { TokenService } from '../../services/token.service';
+import { DataService } from '../../services/data.service';
+import { ApiService } from '../../services/api.service';
+import { User } from '../../interfaces/user.interface';
 
 @Component({
   selector: 'app-new-contact-form',

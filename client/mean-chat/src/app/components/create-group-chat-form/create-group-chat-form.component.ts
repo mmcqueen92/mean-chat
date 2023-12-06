@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { DataService } from '../data.service';
-import { ApiService } from '../api.service';
-import { ChatRoom } from '../interfaces/chatroom.interface';
-import { User } from '../interfaces/user.interface';
+import { DataService } from '../../services/data.service';
+import { ApiService } from '../../services/api.service';
+import { ChatRoom } from '../../interfaces/chatroom.interface';
+import { User } from '../../interfaces/user.interface';
 
 @Component({
   selector: 'app-create-group-chat-form',

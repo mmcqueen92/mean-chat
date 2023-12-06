@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { TokenService } from './token.service';
-import { User } from './interfaces/user.interface';
-import { ChatRoom } from './interfaces/chatroom.interface';
+import { User } from '../interfaces/user.interface';
+import { ChatRoom } from '../interfaces/chatroom.interface';
 
 @Injectable({
   providedIn: 'root',
