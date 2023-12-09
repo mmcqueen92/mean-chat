@@ -15,6 +15,8 @@ import { CreateGroupChatFormComponent } from './components/create-group-chat-for
 import { DisplayChatListComponent } from './components/display-chat-list/display-chat-list.component';
 import { NewContactFormComponent } from './components/new-contact-form/new-contact-form.component';
 import { ContactsListComponent } from './components/contacts-list/contacts-list.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -30,16 +32,17 @@ import { ContactsListComponent } from './components/contacts-list/contacts-list.
     DisplayChatListComponent,
     NewContactFormComponent,
     ContactsListComponent,
-
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MatIconModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

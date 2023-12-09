@@ -5,6 +5,7 @@ import { User } from '../../interfaces/user.interface';
 import { Message } from '../../interfaces/message.interface';
 import { ChatRoom } from '../../interfaces/chatroom.interface';
 import { ChatRoomParticipant } from '../../interfaces/chatroom-participant.interface';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-chat',
@@ -19,6 +20,8 @@ export class ChatComponent implements OnInit {
   currentUser!: User;
   promoteMembers: boolean = false;
   chatControls: boolean = false;
+  private userDataSubscription: Subscription | null = null;
+  private activeChatSubscription: Subscription | null = null;
 
   constructor(
     private dataService: DataService,
@@ -26,38 +29,54 @@ export class ChatComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.dataService.activeChat$.subscribe((activeChat) => {
-      this.activeChat = activeChat;
-      if (activeChat) {
-        this.messages = activeChat.messages.map((message: Message) => ({
-          ...message,
-          sender:
-            typeof message.sender === 'string'
-              ? this.getSenderData(message.sender)
-              : message.sender,
-        }));
+    this.activeChatSubscription = this.dataService.activeChat$.subscribe(
+      (activeChat) => {
+        this.activeChat = activeChat;
+        if (activeChat) {
+          this.messages = activeChat.messages.map((message: Message) => ({
+            ...message,
+            sender:
+              typeof message.sender === 'string'
+                ? this.getSenderData(message.sender)
+                : message.sender,
+          }));
 
-        this.messages.reverse();
+          this.messages.reverse();
 
-        this.participants = activeChat.participants.filter(
-          (participant: ChatRoomParticipant) => {
-            return participant.user._id !== this.dataService.getUserData()._id;
-          }
-        );
-      } else {
-        this.messages = [];
-        this.participants = [];
+          this.participants = activeChat.participants.filter(
+            (participant: ChatRoomParticipant) => {
+              return (
+                participant.user._id !== this.dataService.getUserData()._id
+              );
+            }
+          );
+        } else {
+          this.messages = [];
+          this.participants = [];
+        }
       }
-    });
+    );
 
-    this.dataService.userData$.subscribe((userData) => {
-      if (userData) {
-        this.currentUser = userData;
+    this.userDataSubscription = this.dataService.userData$.subscribe(
+      (userData) => {
+        if (userData) {
+          this.currentUser = userData;
+        }
       }
-    });
+    );
   }
 
-  getSenderData(senderId: string): {_id: string, name: string} | null {
+  ngOnDestroy(): void {
+    if (this.userDataSubscription) {
+      this.userDataSubscription.unsubscribe();
+    }
+
+    if (this.activeChatSubscription) {
+      this.activeChatSubscription.unsubscribe();
+    }
+  }
+
+  getSenderData(senderId: string): { _id: string; name: string } | null {
     const sender = this.activeChat.participants.find(
       (participant: ChatRoomParticipant) => {
         return participant.user._id === senderId;

@@ -9,7 +9,10 @@
           <div class="chat-list-item-name">
             {{ chatroom.name }}
           </div>
-          <div *ngIf="unreadMessages(chatroom)" class="unread-messages">Unread Messages</div>
+
+          <div *ngIf="unreadMessages(chatroom)" class="unread-messages">
+            <span class="material-icons"> mark_email_unread </span>
+          </div>
         </div>
 
         <div *ngIf="!chatroom.name" class="chat-list-item">
@@ -26,7 +29,9 @@
               </span>
             </span>
           </div>
-          <div *ngIf="unreadMessages(chatroom)" class="unread-messages">Unread Messages</div>
+          <div *ngIf="unreadMessages(chatroom)" class="unread-messages">
+            <span class="material-icons"> mark_email_unread </span>
+          </div>
         </div>
       </div>
     </div>

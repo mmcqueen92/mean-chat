@@ -4,6 +4,9 @@
 }
 
 .chat-list-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 5px;

@@ -1,17 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { ApiService } from '../../services/api.service';
 import { User } from '../../interfaces/user.interface';
 import { ChatRoom } from '../../interfaces/chatroom.interface';
 import { ChatRoomParticipant } from '../../interfaces/chatroom-participant.interface';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-contacts-list',
   templateUrl: './contacts-list.component.html',
   styleUrls: ['./contacts-list.component.css'],
 })
-export class ContactsListComponent implements OnInit {
+export class ContactsListComponent implements OnInit, OnDestroy {
   contacts!: User[];
+  private userDataSubscription: Subscription | null = null;
 
   constructor(
     private dataService: DataService,
@@ -19,9 +21,15 @@ export class ContactsListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.dataService.userData$.subscribe((data) => {
+    this.userDataSubscription = this.dataService.userData$.subscribe((data) => {
       this.contacts = data?.contacts;
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this.userDataSubscription) {
+      this.userDataSubscription.unsubscribe();
+    }
   }
 
   findChat(contact: User): ChatRoom {

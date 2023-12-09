@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { DataService } from '../../services/data.service';
@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './new-contact-form.component.html',
   styleUrls: ['./new-contact-form.component.css'],
 })
-export class NewContactFormComponent implements OnInit {
+export class NewContactFormComponent implements OnInit, OnDestroy {
   @Input() toggleNewContactForm!: () => void;
   foundUsersList: User[] = [];
   searchForm!: FormGroup;
@@ -42,6 +42,12 @@ export class NewContactFormComponent implements OnInit {
         }
       }
     );
+  }
+
+  ngOnDestroy(): void {
+    if (this.userDataSubscription) {
+      this.userDataSubscription.unsubscribe();
+    }
   }
 
   searchUsers(query: string): void {

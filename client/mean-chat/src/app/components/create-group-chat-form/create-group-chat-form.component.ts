@@ -1,21 +1,23 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { ApiService } from '../../services/api.service';
 import { ChatRoom } from '../../interfaces/chatroom.interface';
 import { User } from '../../interfaces/user.interface';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-create-group-chat-form',
   templateUrl: './create-group-chat-form.component.html',
   styleUrls: ['./create-group-chat-form.component.css'],
 })
-export class CreateGroupChatFormComponent implements OnInit {
+export class CreateGroupChatFormComponent implements OnInit, OnDestroy {
   @Input() toggleGroupChatForm!: () => void;
   chatrooms: ChatRoom[] = [];
   contacts: User[] = [];
   filteredContacts: User[] = [];
   newGroupParticipants: string[] = [];
   newGroupName: string = '';
+  private userDataSubscription: Subscription | null = null;
 
   constructor(
     private dataService: DataService,
@@ -23,15 +25,23 @@ export class CreateGroupChatFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.dataService.userData$.subscribe((userData) => {
-      if (userData) {
-        this.chatrooms = userData.chatrooms;
-        this.contacts = userData.contacts;
-        this.filteredContacts = userData.contacts;
-      } else {
-        this.chatrooms = [];
+    this.userDataSubscription = this.dataService.userData$.subscribe(
+      (userData) => {
+        if (userData) {
+          this.chatrooms = userData.chatrooms;
+          this.contacts = userData.contacts;
+          this.filteredContacts = userData.contacts;
+        } else {
+          this.chatrooms = [];
+        }
       }
-    });
+    );
+  }
+
+  ngOnDestroy(): void {
+    if (this.userDataSubscription) {
+      this.userDataSubscription.unsubscribe();
+    }
   }
 
   onSearchQueryChanged(searchQuery: string): void {
