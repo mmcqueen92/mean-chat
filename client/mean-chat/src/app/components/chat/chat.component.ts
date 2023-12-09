@@ -50,6 +50,7 @@ export class ChatComponent implements OnInit {
               );
             }
           );
+
         } else {
           this.messages = [];
           this.participants = [];
@@ -88,6 +89,13 @@ export class ChatComponent implements OnInit {
     }
 
     return null; // if sender data is not found
+  }
+
+  showChatControlButton() {
+    if(this.activeChat.admins.length > 0) {
+      return true
+    }
+    return false;
   }
 
   inUserContacts(userId: string): boolean {
