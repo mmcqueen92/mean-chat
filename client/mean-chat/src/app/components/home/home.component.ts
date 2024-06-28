@@ -40,6 +40,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           });
 
           this.socket.on('initial-data', (data) => {
+            console.log("SET INITIAL DATA: ", data)
             this.dataService.setUserData(data);
           });
 

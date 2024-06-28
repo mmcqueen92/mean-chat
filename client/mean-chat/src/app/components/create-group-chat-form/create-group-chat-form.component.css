@@ -1,9 +1,10 @@
 .create-group-chat-form {
-  background-color: #fff;
+  background-color: rgb(192, 192, 192);
   border: 1px solid #ddd;
   border-radius: 5px;
   padding: 20px;
   margin: 20px 0px;
+  max-height: 80%;
 }
 
 .form-group {
@@ -26,21 +27,24 @@
 
 /* Style the participants list */
 .participants-list {
-  list-style-type: none;
-  padding: 0;
+  padding: 5px 5px 0px 5px;
   height: 45vh;
   overflow-y: auto;
+  border: 3px solid rgb(66, 66, 66);
 }
 
-.participants-list li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #ddd;
-  padding: 10px;
-}
-
-.participants-list li button {
+.contact-button {
   margin-left: 10px;
 }
 
+.contact-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 5px;
+  background-color: rgb(192, 192, 192);
+
+  /* color: rgb(255, 255, 255); */
+}

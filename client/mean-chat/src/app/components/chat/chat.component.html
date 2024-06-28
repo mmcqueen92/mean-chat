@@ -1,14 +1,18 @@
-<div class="chat-container" *ngIf="activeChat">
+<mat-card class="chat-container" *ngIf="activeChat">
   <!-- chat header section -->
   <div class="chat-header">
     <div *ngIf="this.promoteMembers">
-      <h3 class="participants-container">
+      <mat-card class="participants-container">
         <ng-container
           *ngFor="let participant of participants; let last = last"
           class="participant-item"
         >
-          {{ participant.user.name }}
+          <h3>
+            {{ participant.user.name }}
+          </h3>
           <button
+            mat-raised-button
+            color="primary"
             *ngIf="!inActiveChatAdmins(participant.user._id)"
             (click)="promoteToAdmin(participant.user._id)"
             class="action-button"
@@ -17,7 +21,7 @@
           </button>
           <span *ngIf="!last">, </span>
         </ng-container>
-      </h3>
+      </mat-card>
     </div>
 
     <div *ngIf="!this.promoteMembers">
@@ -25,6 +29,8 @@
         <ng-container *ngFor="let participant of participants; let last = last">
           {{ participant.user.name }}
           <button
+            mat-raised-button
+            color="primary"
             *ngIf="!inUserContacts(participant.user._id)"
             (click)="addToContacts(participant.user.email)"
             title="Add to Contacts"
@@ -37,6 +43,8 @@
     </div>
     <div *ngIf="showChatControlButton()" class="chat-buttons">
       <button
+        mat-raised-button
+        color="primary"
         class="action-button settings-button"
         (click)="toggleChatControls()"
       >
@@ -44,6 +52,8 @@
       </button>
       <div class="chat-controls" *ngIf="chatControls">
         <button
+          mat-raised-button
+          color="primary"
           *ngIf="
             activeChat.admins &&
             inActiveChatAdmins(currentUser._id) &&
@@ -55,6 +65,8 @@
           Promote Members
         </button>
         <button
+          mat-raised-button
+          color="primary"
           *ngIf="
             activeChat.admins &&
             inActiveChatAdmins(currentUser._id) &&
@@ -66,6 +78,8 @@
           Back
         </button>
         <button
+          mat-raised-button
+          color="primary"
           *ngIf="activeChat.name && !onlyAdmin()"
           (click)="leaveChat()"
           class="action-button warning-button"
@@ -73,6 +87,8 @@
           Leave Chat
         </button>
         <button
+          mat-raised-button
+          color="primary"
           *ngIf="activeChat.admins && inActiveChatAdmins(currentUser._id)"
           (click)="deleteChatRoom(activeChat._id)"
           class="action-button danger-button"
@@ -84,40 +100,49 @@
   </div>
 
   <!-- list of chat messages -->
-  <div class="chat-messages">
+  <mat-card class="chat-messages">
     <div class="message-container" *ngFor="let message of messages">
-      <div *ngIf="!sentByUser(message)" class="participant-message">
+      <mat-card *ngIf="!sentByUser(message)" class="participant-message">
         <div class="message-sender">
           {{ getMessageSenderName(message.sender) }}:
         </div>
         <div class="message-content">{{ message.text }}</div>
-      </div>
-      <div *ngIf="sentByUser(message)" class="user-message">
+      </mat-card>
+      <mat-card *ngIf="sentByUser(message)" class="user-message">
         <div class="message-sender">
           {{ getMessageSenderName(message.sender) }}:
         </div>
         <div class="message-content">{{ message.text }}</div>
-      </div>
+      </mat-card>
     </div>
     <div *ngIf="messages.length === 0" class="no-messages">
       <div class="no-message-text">Send a message to get started</div>
     </div>
-  </div>
+  </mat-card>
 
   <!-- chat input section -->
   <div class="chat-input-container">
     <textarea
       type="text"
+      matInput
       rows="4"
       [(ngModel)]="messageText"
       placeholder="Type your message..."
-      (keyup.enter)="sendMessage()"
+      cdkTextareaAutosize
       class="chat-input"
+      (keydown.enter)="sendMessage()"
     ></textarea>
-    <button (click)="sendMessage()" class="send-button">Send</button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="sendMessage()"
+      type="submit"
+    >
+      Send
+    </button>
   </div>
-</div>
+</mat-card>
 
-<div class="no-chat-container" *ngIf="!activeChat">
-  <div class="no-chat-selected">No chat selected</div>
-</div>
+<mat-card class="chat-container" *ngIf="!activeChat">
+  <div class="no-chat-selected"><h2>No chat selected</h2></div>
+</mat-card>

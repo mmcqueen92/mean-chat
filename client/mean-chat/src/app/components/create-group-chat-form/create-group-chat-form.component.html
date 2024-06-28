@@ -1,4 +1,4 @@
-<div class="create-group-chat-form">
+<mat-card class="create-group-chat-form">
   <div class="form-group">
     <label for="new_group_name">Title: </label>
     <input
@@ -15,10 +15,12 @@
   ></app-search-bar>
 
   <!-- Participants List -->
-  <ul class="participants-list">
-    <li *ngFor="let contact of filteredContacts">
+  <mat-card class="participants-list">
+    <mat-card *ngFor="let contact of filteredContacts" class="contact-item">
       {{ contact.name }}
       <button
+        mat-raised-button
+        color="primary"
         *ngIf="!newGroupParticipants.includes(contact._id)"
         class="action-button"
         (click)="addToGroupChat(contact._id)"
@@ -26,15 +28,22 @@
         Add to Chat
       </button>
       <button
+        mat-raised-button
+        color="primary"
         *ngIf="newGroupParticipants.includes(contact._id)"
-        class="action-button danger-button"
+        class="contact-button"
         (click)="removeFromGroupChat(contact._id)"
       >
         Remove
       </button>
-    </li>
-  </ul>
-  <button class="action-button create-button" (click)="createGroupChat()">
+    </mat-card>
+  </mat-card>
+  <button
+    mat-raised-button
+    color="primary"
+    class="action-button create-button"
+    (click)="createGroupChat()"
+  >
     Create
   </button>
-</div>
+</mat-card>

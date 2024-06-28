@@ -1,21 +1,25 @@
-<div class="side-section-container">
-  <h3>Your Chats:</h3>
+<mat-card class="side-section-container">
+  <h2>Your Chats:</h2>
 
   <!-- create new chat button -->
-  <div *ngIf="!createGroupChatForm">
-    <button class="action-button" (click)="toggleGroupChatForm()">
+  <mat-card-content *ngIf="!createGroupChatForm">
+    <button mat-raised-button color="primary" (click)="toggleGroupChatForm()">
       Create New Chat
     </button>
     <app-display-chat-list></app-display-chat-list>
-  </div>
+  </mat-card-content>
 
   <!-- create group chat form -->
-  <div *ngIf="createGroupChatForm" class="create-group-chat-form">
-    <button class="action-button" (click)="toggleGroupChatForm()">
+  <mat-card-content *ngIf="createGroupChatForm" class="create-group-chat-form">
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="toggleGroupChatForm()"
+    >
       Discard
     </button>
     <app-create-group-chat-form
       [toggleGroupChatForm]="toggleGroupChatForm"
     ></app-create-group-chat-form>
-  </div>
-</div>
+  </mat-card-content>
+</mat-card>
