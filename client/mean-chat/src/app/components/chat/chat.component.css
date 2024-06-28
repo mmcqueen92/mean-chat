@@ -1,11 +1,14 @@
 .chat-container {
   width: 45vw;
-  max-height: 80vh;
+  height: 80vh;
+  max-height: 90vh;
   margin: 20px auto;
   padding: 20px;
-  /* background-color: #fff; */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .participants-container {
@@ -61,11 +64,11 @@
 }
 
 .user-message {
-  background-color: #228B22;
+  background-color: rgb(194, 24, 91);
 }
 
 .message-sender {
-
+  /* font-weight: */
 }
 
 .message-content {
@@ -75,7 +78,7 @@
   background-color: #e9e7e7;
   width: 90%;
   padding: 5px;
-  color:#333333
+  color: #333333;
 }
 
 .send-button {
@@ -97,7 +100,7 @@
   display: flex;
   flex-direction: column-reverse;
   justify-content: flex-start;
-  height: 55vh;
+  height: 100%;
   overflow-y: auto;
   background-color: #c0c0c0;
   padding: 5px;
@@ -129,4 +132,13 @@
 .no-messages {
   display: flex;
   justify-content: center;
+}
+
+.add-to-contacts-fab {
+  width: 25px;
+  height: 25px;
+}
+
+.participants-container {
+  height: 34px;
 }

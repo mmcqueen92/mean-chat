@@ -1,49 +1,52 @@
 <!-- <mat-card class="create-group-chat-form"> -->
-  <div class="form-group">
-    <label for="new_group_name">Title: </label>
+<div class="form-group">
+  <mat-form-field>
+    <mat-label>Title</mat-label>
     <input
+    matInput
       type="text"
       id="new_group_name"
       name="new_group_name"
       [(ngModel)]="newGroupName"
     />
-  </div>
+  </mat-form-field>
+</div>
 
-  <!-- Search Bar and Display -->
-  <app-search-bar
-    (searchQueryChanged)="onSearchQueryChanged($event)"
-  ></app-search-bar>
+<!-- Search Bar and Display -->
+<app-search-bar
+  (searchQueryChanged)="onSearchQueryChanged($event)"
+></app-search-bar>
 
-  <!-- Participants List -->
-  <mat-card class="participants-list">
-    <mat-card *ngFor="let contact of filteredContacts" class="contact-item">
-      {{ contact.name }}
-      <button
-        mat-raised-button
-        color="primary"
-        *ngIf="!newGroupParticipants.includes(contact._id)"
-        class="action-button"
-        (click)="addToGroupChat(contact._id)"
-      >
-        Add to Chat
-      </button>
-      <button
-        mat-raised-button
-        color="primary"
-        *ngIf="newGroupParticipants.includes(contact._id)"
-        class="contact-button"
-        (click)="removeFromGroupChat(contact._id)"
-      >
-        Remove
-      </button>
-    </mat-card>
+<!-- Participants List -->
+<mat-card class="participants-list">
+  <mat-card *ngFor="let contact of filteredContacts" class="contact-item">
+    {{ contact.name }}
+    <button
+      mat-raised-button
+      color="primary"
+      *ngIf="!newGroupParticipants.includes(contact._id)"
+      class="action-button"
+      (click)="addToGroupChat(contact._id)"
+    >
+      Add to Chat
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      *ngIf="newGroupParticipants.includes(contact._id)"
+      class="contact-button"
+      (click)="removeFromGroupChat(contact._id)"
+    >
+      Remove
+    </button>
   </mat-card>
-  <button
-    mat-raised-button
-    color="primary"
-    class="create-chat-button"
-    (click)="createGroupChat()"
-  >
-    Create
-  </button>
+</mat-card>
+<button
+  mat-raised-button
+  color="primary"
+  class="create-chat-button"
+  (click)="createGroupChat()"
+>
+  Create
+</button>
 <!-- </mat-card> -->

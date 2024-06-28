@@ -1,8 +1,15 @@
-<mat-card class="new-contact-form">
+<div class="new-contact-form">
   <h2>Search for a user</h2>
 
   <form [formGroup]="searchForm">
-    <input type="text" formControlName="query" placeholder="Search users..."/>
+    <mat-form-field>
+      <input
+        matInput
+        type="text"
+        formControlName="query"
+        placeholder="Search users..."
+      />
+    </mat-form-field>
   </form>
   <mat-card class="found-users">
     <div *ngFor="let user of foundUsersList" class="found-user-item">
@@ -10,9 +17,13 @@
 
       <div class="found-user-name">{{ user.name }}</div>
 
-      <button mat-raised-button color="primary" (click)="addNewContact(user.email)">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="addNewContact(user.email)"
+      >
         Add Contact
       </button>
     </div>
   </mat-card>
-</mat-card>
+</div>

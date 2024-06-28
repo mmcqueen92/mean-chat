@@ -8,4 +8,5 @@
 .home-top {
   display: flex;
   justify-content: flex-end;
+  padding: 5px;
 }

@@ -29,11 +29,12 @@
         <ng-container *ngFor="let participant of participants; let last = last">
           {{ participant.user.name }}
           <button
-            mat-raised-button
+            mat-fab
             color="primary"
             *ngIf="!inUserContacts(participant.user._id)"
             (click)="addToContacts(participant.user.email)"
             title="Add to Contacts"
+            class="add-to-contacts-fab"
           >
             +
           </button>

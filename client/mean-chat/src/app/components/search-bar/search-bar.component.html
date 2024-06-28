@@ -1,1 +1,8 @@
-<input type="text" [(ngModel)]="searchQuery" placeholder="Search contacts..." />
+<mat-form-field>
+  <mat-label>Search Contacts</mat-label>
+  <input
+    matInput
+    type="text"
+    [(ngModel)]="searchQuery"
+  />
+</mat-form-field>
