@@ -9,6 +9,7 @@
 
 .form-group {
   margin-bottom: 15px;
+  padding-top: 5px;
 }
 
 /* Style the input and label */
@@ -47,4 +48,8 @@
   background-color: rgb(192, 192, 192);
 
   /* color: rgb(255, 255, 255); */
+}
+
+.create-chat-button {
+  margin-top: 5px;
 }

@@ -1,27 +1,25 @@
-<div class="contacts-list">
-  <mat-card *ngFor="let contact of contacts">
-    <div class="contacts-list-item">
-      <div class="contact-name">
-        {{ contact.name }}
-      </div>
-      <div class="contact-buttons">
-        <button
-          mat-raised-button
-          color="primary"
-          class="action-button create-button"
-          (click)="openChat(contact)"
-        >
-          Chat
-        </button>
-        <button
-          mat-raised-button
-          color="primary"
-          class="action-button danger-button"
-          (click)="deleteContact(contact._id)"
-        >
-          Delete
-        </button>
-      </div>
+<mat-card class="contacts-list">
+  <mat-card *ngFor="let contact of contacts" class="contacts-list-item">
+    <div class="contact-name">
+      {{ contact.name }}
+    </div>
+    <div class="contact-buttons">
+      <button
+        mat-raised-button
+        color="primary"
+        class="action-button create-button"
+        (click)="openChat(contact)"
+      >
+        Chat
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        class="action-button danger-button"
+        (click)="deleteContact(contact._id)"
+      >
+        Delete
+      </button>
     </div>
   </mat-card>
-</div>
+</mat-card>

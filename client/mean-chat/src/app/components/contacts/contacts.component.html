@@ -1,9 +1,28 @@
 <mat-card class="side-section-container">
   <h2>Contacts</h2>
-  <button mat-raised-button color="primary" *ngIf="!newContactForm" (click)="toggleNewContactForm()" class="add-new-contact-button">
-    Add New Contact
-  </button>
-  <button mat-raised-button color="primary" *ngIf="newContactForm" (click)="toggleNewContactForm()" class="action-button">Back</button>
-  <app-new-contact-form *ngIf="newContactForm" [toggleNewContactForm]="toggleNewContactForm"></app-new-contact-form>
-  <app-contacts-list *ngIf="!newContactForm"></app-contacts-list>
+  <mat-card class="contacts-section-content">
+    <button
+      mat-raised-button
+      color="primary"
+      *ngIf="!newContactForm"
+      (click)="toggleNewContactForm()"
+      class="add-new-contact-button"
+    >
+      Add New Contact
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      *ngIf="newContactForm"
+      (click)="toggleNewContactForm()"
+      class="action-button"
+    >
+      Back
+    </button>
+    <app-new-contact-form
+      *ngIf="newContactForm"
+      [toggleNewContactForm]="toggleNewContactForm"
+    ></app-new-contact-form>
+    <app-contacts-list *ngIf="!newContactForm"></app-contacts-list>
+  </mat-card>
 </mat-card>

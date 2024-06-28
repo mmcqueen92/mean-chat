@@ -1,12 +1,10 @@
-<div class="new-contact-form">
+<mat-card class="new-contact-form">
   <h2>Search for a user</h2>
 
-  <h3>New form</h3>
-
   <form [formGroup]="searchForm">
-    <input type="text" formControlName="query" placeholder="Search users..." />
+    <input type="text" formControlName="query" placeholder="Search users..."/>
   </form>
-  <div class="found-users">
+  <mat-card class="found-users">
     <div *ngFor="let user of foundUsersList" class="found-user-item">
       <!-- <div *ngIf="!userInContacts(user) && !userIsCurrentUser(user)" class="found-user-item"> -->
 
@@ -16,5 +14,5 @@
         Add Contact
       </button>
     </div>
-  </div>
-</div>
+  </mat-card>
+</mat-card>

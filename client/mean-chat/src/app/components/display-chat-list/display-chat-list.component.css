@@ -1,6 +1,7 @@
 .chat-list {
-  height: 70vh;
   overflow-y: auto;
+  background-color: rgb(66, 66, 66);
+  padding: 0 5px;
 }
 
 .chat-list-item {

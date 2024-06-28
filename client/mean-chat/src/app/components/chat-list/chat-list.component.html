@@ -2,24 +2,22 @@
   <h2>Your Chats:</h2>
 
   <!-- create new chat button -->
-  <mat-card-content *ngIf="!createGroupChatForm">
-    <button mat-raised-button color="primary" (click)="toggleGroupChatForm()">
-      Create New Chat
-    </button>
-    <app-display-chat-list></app-display-chat-list>
-  </mat-card-content>
+  <mat-card class="chat-list-section-content">
+    <mat-card-content *ngIf="!createGroupChatForm">
+      <button mat-raised-button color="primary" (click)="toggleGroupChatForm()" class="new-chat-button">
+        Create New Chat
+      </button>
+      <app-display-chat-list></app-display-chat-list>
+    </mat-card-content>
 
-  <!-- create group chat form -->
-  <mat-card-content *ngIf="createGroupChatForm" class="create-group-chat-form">
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="toggleGroupChatForm()"
-    >
-      Discard
-    </button>
-    <app-create-group-chat-form
-      [toggleGroupChatForm]="toggleGroupChatForm"
-    ></app-create-group-chat-form>
-  </mat-card-content>
+    <!-- create group chat form -->
+    <mat-card-content *ngIf="createGroupChatForm">
+      <button mat-raised-button color="primary" (click)="toggleGroupChatForm()">
+        Discard
+      </button>
+      <app-create-group-chat-form
+        [toggleGroupChatForm]="toggleGroupChatForm"
+      ></app-create-group-chat-form>
+    </mat-card-content>
+  </mat-card>
 </mat-card>
