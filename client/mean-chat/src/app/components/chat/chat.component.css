@@ -1,6 +1,6 @@
 .chat-container {
   width: 45vw;
-  height: 80vh;
+  height: 85vh;
   max-height: 90vh;
   margin: 20px auto;
   padding: 20px;
@@ -28,12 +28,29 @@
 
 .chat-buttons {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
 
 .chat-controls {
+  margin: 5px 0px;
   display: flex;
   align-items: center;
+  color: #333333;
+}
+
+.chat-controls-container {
+  background-color: #c0c0c0;
+  margin-bottom: 5px;
+  color: #333333;
+}
+
+.chat-controls-title {
+  color: #333333;
+}
+
+.chat-controls-header {
+  padding-left: 5px;
+  color: #333333;
 }
 
 .message-container {
@@ -141,4 +158,10 @@
 
 .participants-container {
   height: 34px;
+}
+
+
+
+::ng-deep .chat-controls-header .mat-expansion-indicator::after {
+  border-color: #333333;
 }

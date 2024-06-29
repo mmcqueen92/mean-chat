@@ -16,6 +16,7 @@ export class CreateGroupChatFormComponent implements OnInit, OnDestroy {
   contacts: User[] = [];
   filteredContacts: User[] = [];
   newGroupParticipants: string[] = [];
+  newGroupParticipantsNames: string[] = [];
   newGroupName: string = '';
   private userDataSubscription: Subscription | null = null;
 
@@ -51,13 +52,17 @@ export class CreateGroupChatFormComponent implements OnInit, OnDestroy {
     });
   }
 
-  addToGroupChat(id: string): void {
-    this.newGroupParticipants.push(id);
+  addToGroupChat(contact: any): void {
+    this.newGroupParticipants.push(contact._id);
+    this.newGroupParticipantsNames.push(contact.name);
   }
 
-  removeFromGroupChat(id: string): void {
+  removeFromGroupChat(contact: any): void {
     this.newGroupParticipants = this.newGroupParticipants.filter(
-      (el) => el !== id
+      (el) => el !== contact._id
+    );
+    this.newGroupParticipantsNames = this.newGroupParticipantsNames.filter(
+      (el) => el !== contact.name
     );
   }
 

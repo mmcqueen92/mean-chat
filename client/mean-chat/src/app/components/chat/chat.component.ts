@@ -200,7 +200,8 @@ export class ChatComponent implements OnInit {
     });
   }
 
-  toggleChatControls(): void {
+  toggleChatControls(e: any): void {
+    console.log("EVENT: ", e)
     this.chatControls
       ? (this.chatControls = false)
       : (this.chatControls = true);
@@ -210,6 +211,10 @@ export class ChatComponent implements OnInit {
     this.promoteMembers
       ? (this.promoteMembers = false)
       : (this.promoteMembers = true);
+  }
+
+  toggleAddNewMember(): void {
+    console.log("ADD NEW MEMBER")
   }
 
   promoteToAdmin(chatMemberId: string): void {

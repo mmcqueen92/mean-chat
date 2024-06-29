@@ -3,7 +3,7 @@
   <mat-form-field>
     <mat-label>Title</mat-label>
     <input
-    matInput
+      matInput
       type="text"
       id="new_group_name"
       name="new_group_name"
@@ -16,9 +16,20 @@
 <app-search-bar
   (searchQueryChanged)="onSearchQueryChanged($event)"
 ></app-search-bar>
+<mat-card
+  class="participants-container"
+  *ngIf="newGroupParticipants.length > 0"
+>
+  <h3>
+    <ng-container
+      *ngFor="let participant of newGroupParticipantsNames; let last = last"
+      >{{ participant }}<span *ngIf="!last">, </span>
+    </ng-container>
+  </h3>
+</mat-card>
 
 <!-- Participants List -->
-<mat-card class="participants-list">
+<mat-card class="contacts-list">
   <mat-card *ngFor="let contact of filteredContacts" class="contact-item">
     {{ contact.name }}
     <button
@@ -26,7 +37,7 @@
       color="primary"
       *ngIf="!newGroupParticipants.includes(contact._id)"
       class="action-button"
-      (click)="addToGroupChat(contact._id)"
+      (click)="addToGroupChat(contact)"
     >
       Add to Chat
     </button>
@@ -35,7 +46,7 @@
       color="primary"
       *ngIf="newGroupParticipants.includes(contact._id)"
       class="contact-button"
-      (click)="removeFromGroupChat(contact._id)"
+      (click)="removeFromGroupChat(contact)"
     >
       Remove
     </button>

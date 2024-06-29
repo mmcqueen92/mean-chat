@@ -8,7 +8,7 @@
 }
 
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 5px;
   padding-top: 5px;
 }
 
@@ -27,7 +27,7 @@
 }
 
 /* Style the participants list */
-.participants-list {
+.contacts-list {
   padding: 5px 5px 0px 5px;
   height: 35vh;
   overflow-y: auto;
@@ -52,4 +52,10 @@
 
 .create-chat-button {
   margin-top: 5px;
+}
+
+.participants-container {
+  background-color: rgb(66, 66, 66);
+  margin-bottom: 2px;
+  padding: 2px;
 }

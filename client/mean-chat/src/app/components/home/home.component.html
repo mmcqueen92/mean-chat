@@ -1,5 +1,6 @@
 <div class="home-container">
   <div class="home-top">
+    <div class="welcome-container"><h1 class="welcome-message" *ngIf="userData">Welcome, {{userData.name}}</h1></div>
     <button mat-raised-button color="accent" class="btn btn-logout" (click)="logout()">Logout</button>
   </div>
   <div class="main-container">

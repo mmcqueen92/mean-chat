@@ -43,15 +43,86 @@
       </h3>
     </div>
     <div *ngIf="showChatControlButton()" class="chat-buttons">
-      <button
+      <!-- <button
         mat-raised-button
         color="primary"
         class="action-button settings-button"
         (click)="toggleChatControls()"
       >
         Chat Controls
-      </button>
-      <div class="chat-controls" *ngIf="chatControls">
+      </button> -->
+
+      <!-- <mat-slide-toggle (change)="toggleChatControls($event)"
+        >Chat Controls</mat-slide-toggle
+      > -->
+
+      <mat-expansion-panel class="chat-controls-container">
+        <mat-expansion-panel-header class="chat-controls-header">
+          <mat-panel-title class="chat-controls-title">Chat Settings</mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="chat-controls">
+          <button
+            mat-raised-button
+            color="primary"
+            *ngIf="
+              activeChat.admins &&
+              inActiveChatAdmins(currentUser._id)
+            "
+            (click)="toggleAddNewMember()"
+            class="action-button"
+          >
+            Add New Member
+          </button>
+
+          <button
+            mat-raised-button
+            color="primary"
+            *ngIf="
+              activeChat.admins &&
+              inActiveChatAdmins(currentUser._id) &&
+              !this.promoteMembers
+            "
+            (click)="togglePromoteMembers()"
+            class="action-button"
+          >
+            Promote Members
+          </button>
+          <button
+            mat-raised-button
+            color="primary"
+            *ngIf="
+              activeChat.admins &&
+              inActiveChatAdmins(currentUser._id) &&
+              this.promoteMembers
+            "
+            (click)="togglePromoteMembers()"
+            class="action-button"
+          >
+            Back
+          </button>
+          <button
+            mat-raised-button
+            color="primary"
+            *ngIf="activeChat.name && !onlyAdmin()"
+            (click)="leaveChat()"
+            class="action-button warning-button"
+          >
+            Leave Chat
+          </button>
+          <button
+            mat-raised-button
+            color="warn"
+            *ngIf="activeChat.admins && inActiveChatAdmins(currentUser._id)"
+            (click)="deleteChatRoom(activeChat._id)"
+            class="action-button danger-button"
+          >
+            Delete Chatroom
+          </button>
+        </div>
+      </mat-expansion-panel>
+
+      <!-- <div class="chat-controls" *ngIf="chatControls">
         <button
           mat-raised-button
           color="primary"
@@ -89,14 +160,14 @@
         </button>
         <button
           mat-raised-button
-          color="primary"
+          color="warn"
           *ngIf="activeChat.admins && inActiveChatAdmins(currentUser._id)"
           (click)="deleteChatRoom(activeChat._id)"
           class="action-button danger-button"
         >
           Delete Chatroom
         </button>
-      </div>
+      </div> -->
     </div>
   </div>
 
